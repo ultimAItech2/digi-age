@@ -2,6 +2,7 @@
 .tools/
 builds/*
 !builds/.gitkeep
-*.tmp
-
 !builds/.gdignore
+__pycache__/
+*.pyc
+*.tmp
