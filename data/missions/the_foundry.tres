@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="DAMissionDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/mission_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+mission_id = "the_foundry"
+title = "The Foundry"
+briefing = "The extraction intelligence has built a fortress around the archive core. Advance to Singularity and bring it down."
+map_id = "foundry_fortress"
+player_faction_id = "origin"
+enemy_faction_id = "foundry"
+difficulty = "normal"
+objectives = [{"id": "reach_singularity", "title": "Reach Singularity", "kind": "age", "target": "age", "required": 2, "optional": false}, {"id": "destroy_fortress", "title": "Destroy the Foundry fortress", "kind": "destroy", "target": "building", "required": 5, "optional": false}]
+starting_resources = [Vector3(700.0, 400.0, 80.0), Vector3(900.0, 500.0, 120.0)]
+technology_floor = [0, 1]
+technology_ceiling = [2, 2]
+time_limit = 0.0
+dialogue_entries = [{"id": "opening", "speaker": "archivist", "text": "They walled the archive. Reach Singularity, then tear the fortress down."}, {"id": "foundry_wall", "speaker": "foundry", "text": "Walkers will break on this perimeter."}, {"id": "singularity", "speaker": "system", "text": "Singularity unlocked. Siege Walkers are cleared for deployment."}]
+events = [{"id": "opening", "kind": "dialogue", "entry": "opening", "trigger": {"at_seconds": 0.4}}, {"id": "foundry_wall", "kind": "dialogue", "entry": "foundry_wall", "trigger": {"at_seconds": 10.0}}, {"id": "reveal_fort", "kind": "reveal", "trigger": {"at_seconds": 15.0}, "pos": Vector2(56.0, 20.0), "radius": 10}, {"id": "singularity", "kind": "dialogue", "entry": "singularity", "trigger": {"on_objective": "reach_singularity"}}, {"id": "siege_ai", "kind": "ai_override", "trigger": {"at_seconds": 60.0}, "profile": {"attack_start": 180.0, "min_army": 10, "worker_target": 18}}]
+checkpoint_ids = ["opening", "reach_singularity", "destroy_fortress"]
+victory_text = "The fortress falls. The archive core is no longer theirs."
+defeat_text = "The Foundry holds. Our advance ends at the walls."

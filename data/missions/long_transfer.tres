@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="DAMissionDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/mission_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+mission_id = "long_transfer"
+title = "The Long Transfer"
+briefing = "An archive convoy must cross the silent grid. Build an escort force and keep the transfer alive."
+map_id = "transfer_corridor"
+player_faction_id = "origin"
+enemy_faction_id = "foundry"
+difficulty = "normal"
+objectives = [{"id": "build_escort", "title": "Build an escort force", "kind": "train", "target": "sentinel", "required": 6, "optional": false}, {"id": "survive_transfer", "title": "Survive the transfer", "kind": "survive", "required": 300.0, "optional": false}]
+starting_resources = [Vector3(600.0, 350.0, 0.0), Vector3(600.0, 350.0, 0.0)]
+technology_floor = [0, 0]
+technology_ceiling = [2, 2]
+time_limit = 0.0
+dialogue_entries = [{"id": "opening", "speaker": "archivist", "text": "Six Sentinels. That is the escort minimum. The corridor is a kill box."}, {"id": "convoy", "speaker": "system", "text": "Transfer window open. Hold both ends of the road."}, {"id": "ambush", "speaker": "foundry", "text": "Convoy sighted. Cut the escort and take the archive."}]
+events = [{"id": "opening", "kind": "dialogue", "entry": "opening", "trigger": {"at_seconds": 0.4}}, {"id": "convoy", "kind": "dialogue", "entry": "convoy", "trigger": {"on_objective": "build_escort"}}, {"id": "mid_transfer", "kind": "checkpoint", "trigger": {"at_seconds": 150.0}}, {"id": "ambush_wave", "kind": "spawn_wave", "trigger": {"at_seconds": 160.0}, "side": 1, "origin": "enemy", "order": "attack_move", "units": [{"kind": "sentinel", "count": 5, "offset": Vector2(-8.0, 0.0)}, {"kind": "disruptor", "count": 1, "offset": Vector2(-4.0, 3.0)}]}, {"id": "ambush", "kind": "dialogue", "entry": "ambush", "trigger": {"at_seconds": 160.0}}, {"id": "push", "kind": "ai_override", "trigger": {"at_seconds": 140.0}, "profile": {"attack_start": 150.0, "min_army": 6, "attack_cooldown": 50.0}}]
+checkpoint_ids = ["opening", "build_escort", "mid_transfer", "survive_transfer"]
+victory_text = "The convoy reaches the far archive. The transfer holds."
+defeat_text = "The corridor closes. The convoy never arrives."

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="DAMissionDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/mission_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+mission_id = "ghost_protocol"
+title = "Ghost Protocol"
+briefing = "The Lattice is rewriting the old network. Capture its relays, hold the sites, and prevent a total takeover."
+map_id = "lattice_web"
+player_faction_id = "origin"
+enemy_faction_id = "lattice"
+difficulty = "normal"
+objectives = [{"id": "map_network", "title": "Map the network", "kind": "explore", "target": "network", "required": 0.28, "optional": false}, {"id": "hold_sites", "title": "Hold the network", "kind": "survive", "required": 420.0, "optional": false}]
+starting_resources = [Vector3(650.0, 380.0, 60.0), Vector3(700.0, 420.0, 100.0)]
+technology_floor = [0, 0]
+technology_ceiling = [2, 2]
+time_limit = 0.0
+dialogue_entries = [{"id": "opening", "speaker": "archivist", "text": "Map every node. If Lattice finishes the rewrite, we lose the network."}, {"id": "lattice_rewrite", "speaker": "lattice", "text": "You are already indexed. Resistance is latency."}, {"id": "hold", "speaker": "system", "text": "Network mapped. Hold the sites through the rewrite window."}]
+events = [{"id": "opening", "kind": "dialogue", "entry": "opening", "trigger": {"at_seconds": 0.4}}, {"id": "lattice_rewrite", "kind": "dialogue", "entry": "lattice_rewrite", "trigger": {"at_seconds": 18.0}}, {"id": "hold", "kind": "dialogue", "entry": "hold", "trigger": {"on_objective": "map_network"}}, {"id": "rewrite_wave", "kind": "spawn_wave", "trigger": {"on_objective": "map_network"}, "side": 1, "origin": "enemy", "order": "attack_move", "units": [{"kind": "disruptor", "count": 2, "offset": Vector2(-5.0, 0.0)}, {"kind": "sentinel", "count": 4, "offset": Vector2(-8.0, 2.0)}]}, {"id": "network_ai", "kind": "ai_override", "trigger": {"at_seconds": 40.0}, "profile": {"scout_interval": 20.0, "attack_start": 200.0, "min_army": 8}}]
+checkpoint_ids = ["opening", "map_network", "hold_sites"]
+victory_text = "The web holds Origin colors. Lattice withdraws the rewrite."
+defeat_text = "Lattice finishes the rewrite. We become a node in their grid."

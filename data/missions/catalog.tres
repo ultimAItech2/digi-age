@@ -1,0 +1,5 @@
+[gd_resource type="Resource" script_class="DAMissionCatalog" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/mission_catalog.gd" id="1"]
+[resource]
+script = ExtResource("1")
+missions = ["res://data/missions/first_signal.tres", "res://data/missions/salvage_rights.tres", "res://data/missions/broken_transmission.tres", "res://data/missions/long_transfer.tres", "res://data/missions/blackout.tres", "res://data/missions/the_foundry.tres", "res://data/missions/ghost_protocol.tres", "res://data/missions/inheritance.tres"]

@@ -1,0 +1,28 @@
+{
+  "sfx": [
+    {"id": "ui_click", "file": "sfx/ui_click.mp3", "duration": 0.5, "prompt": "Short muted industrial UI click, soft metal tap, no voice, dry, close mic."},
+    {"id": "ui_confirm", "file": "sfx/ui_confirm.mp3", "duration": 0.6, "prompt": "Soft digital confirm beep with a low machine hum, short, clean, no melody."},
+    {"id": "ui_error", "file": "sfx/ui_error.mp3", "duration": 0.6, "prompt": "Low rejected command tone, two short dull pulses, industrial, no voice."},
+    {"id": "order", "file": "sfx/order.mp3", "duration": 0.55, "prompt": "Subtle servo acknowledge chirp from a machine unit, short, dry, no voice."},
+    {"id": "shot_sentinel", "file": "sfx/shot_sentinel.mp3", "duration": 0.55, "prompt": "Compact energy rifle shot, tight plasma crack, no explosion, no voice."},
+    {"id": "shot_disruptor", "file": "sfx/shot_disruptor.mp3", "duration": 0.55, "prompt": "Electromagnetic artillery pulse, buzzing discharge, short, no voice."},
+    {"id": "shot_walker", "file": "sfx/shot_walker.mp3", "duration": 0.7, "prompt": "Heavy siege cannon thump with a short energy aftertone, no voice."},
+    {"id": "shot_tower", "file": "sfx/shot_tower.mp3", "duration": 0.5, "prompt": "Automated defense turret shot, sharp electric snap, short, no voice."},
+    {"id": "impact", "file": "sfx/impact.mp3", "duration": 0.55, "prompt": "Small metallic impact on armor plating, dry, short, no voice."},
+    {"id": "unit_destroyed", "file": "sfx/unit_destroyed.mp3", "duration": 0.8, "prompt": "Small machine collapsing with sparks and a brief electrical fizz, no voice."},
+    {"id": "structure_destroyed", "file": "sfx/structure_destroyed.mp3", "duration": 1.2, "prompt": "Industrial structure collapsing, metal groan and debris, no voice, no music."},
+    {"id": "construction", "file": "sfx/construction.mp3", "duration": 0.7, "prompt": "Servo assembly finish, hydraulic click and a soft power-up, no voice."},
+    {"id": "research", "file": "sfx/research.mp3", "duration": 0.8, "prompt": "Data research complete chime, cool digital, restrained, no melody loop."},
+    {"id": "alert", "file": "sfx/alert.mp3", "duration": 0.7, "prompt": "Urgent but restrained machine alarm, two pulses, no siren sweep, no voice."},
+    {"id": "objective", "file": "sfx/objective.mp3", "duration": 0.9, "prompt": "Objective complete sting, low hopeful digital tone, short, no voice."},
+    {"id": "mission_won", "file": "sfx/mission_won.mp3", "duration": 2.2, "prompt": "Short victorious industrial sting, restrained, no orchestra, no voice."},
+    {"id": "mission_failed", "file": "sfx/mission_failed.mp3", "duration": 2.0, "prompt": "Low dark failure sting, fading machine power-down, no voice."},
+    {"id": "ambient_hum", "file": "sfx/ambient_hum.mp3", "duration": 4.0, "loop": true, "prompt": "Loopable distant ruin wind and electrical hum, no melody, no voice, seamless."}
+  ],
+  "music": [
+    {"id": "menu", "file": "music/menu.mp3", "duration_ms": 90000, "prompt": "Loopable dark industrial ambient for a machine civilization menu. Slow pulses, distant metal, restrained synth bass, no vocals, no drums that rush."},
+    {"id": "ambient", "file": "music/ambient.mp3", "duration_ms": 90000, "prompt": "Loopable exploration underscore for an abandoned machine city. Sparse, tense, analog pads and quiet percussion, no vocals."},
+    {"id": "combat", "file": "music/combat.mp3", "duration_ms": 80000, "prompt": "Loopable combat cue for a machine war, driving but not chaotic, metallic percussion and low brass-like synth, no vocals."},
+    {"id": "result", "file": "music/result.mp3", "duration_ms": 60000, "prompt": "Loopable aftermath cue, hollow and resolved, industrial ambient, no vocals."}
+  ]
+}

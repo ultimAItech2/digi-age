@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="DAMissionDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/mission_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+mission_id = "broken_transmission"
+title = "Broken Transmission"
+briefing = "Relay fragments are broadcasting from the old road. Find them before the Lattice turns their signal against us."
+map_id = "relay_road"
+player_faction_id = "origin"
+enemy_faction_id = "lattice"
+difficulty = "normal"
+objectives = [{"id": "explore_road", "title": "Explore the relay road", "kind": "explore", "target": "road", "required": 0.22, "optional": false}, {"id": "secure_data", "title": "Recover 300 data", "kind": "gather", "target": "data", "required": 300, "optional": false}]
+starting_resources = [Vector3(600.0, 350.0, 0.0), Vector3(600.0, 350.0, 0.0)]
+technology_floor = [0, 0]
+technology_ceiling = [2, 2]
+time_limit = 0.0
+dialogue_entries = [{"id": "opening", "speaker": "archivist", "text": "The old road still sings. Walk it. Recover every fragment."}, {"id": "lattice_warn", "speaker": "lattice", "text": "Your map is incomplete. Stay on your side of the grid."}, {"id": "fragments", "speaker": "system", "text": "Relay fragments aligned. Data yield increasing."}]
+events = [{"id": "opening", "kind": "dialogue", "entry": "opening", "trigger": {"at_seconds": 0.4}}, {"id": "lattice_warn", "kind": "dialogue", "entry": "lattice_warn", "trigger": {"at_seconds": 20.0}}, {"id": "grant_scan", "kind": "grant_resources", "trigger": {"on_objective": "explore_road"}, "side": 0, "resources": Vector3(0.0, 0.0, 40.0)}, {"id": "fragments", "kind": "dialogue", "entry": "fragments", "trigger": {"on_objective": "explore_road"}}, {"id": "harass", "kind": "spawn_wave", "trigger": {"at_seconds": 200.0}, "side": 1, "origin": "enemy", "order": "attack_move", "units": [{"kind": "scout", "count": 2, "offset": Vector2(-4.0, 0.0)}, {"kind": "sentinel", "count": 2, "offset": Vector2(-6.0, 2.0)}]}]
+checkpoint_ids = ["opening", "explore_road", "secure_data"]
+victory_text = "The fragments resolve into a map. Lattice cannot hide the next hop."
+defeat_text = "Lattice overwrites the road. The fragments go silent."

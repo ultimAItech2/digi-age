@@ -1,0 +1,14 @@
+// Replace the placeholder AppID and depot IDs in the private release pipeline.
+// This file is intentionally metadata only; Steam is never required to run the game.
+"AppBuild"
+{
+    "AppID" "<YOUR_STEAM_APP_ID>"
+    "Desc" "Digital Age 0.2.0"
+    "BuildOutput" "builds/steam"
+    "ContentRoot" "."
+    "Depots"
+    {
+        "<YOUR_LINUX_DEPOT_ID>" "steam/depot_linux.vdf"
+        "<YOUR_WINDOWS_DEPOT_ID>" "steam/depot_windows.vdf"
+    }
+}

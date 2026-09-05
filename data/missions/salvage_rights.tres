@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="DAMissionDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/mission_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+mission_id = "salvage_rights"
+title = "Salvage Rights"
+briefing = "The Foundry has claimed the nearest industrial reserve. Rebuild the economy, seize contested salvage, and break their outposts."
+map_id = "salvage_basin"
+player_faction_id = "origin"
+enemy_faction_id = "foundry"
+difficulty = "normal"
+objectives = [{"id": "recover_metal", "title": "Recover 400 metal", "kind": "gather", "target": "metal", "required": 400, "optional": false}, {"id": "destroy_outpost", "title": "Destroy a Foundry outpost", "kind": "destroy", "target": "outpost", "required": 1, "optional": false}]
+starting_resources = [Vector3(550.0, 300.0, 0.0), Vector3(700.0, 400.0, 40.0)]
+technology_floor = [0, 0]
+technology_ceiling = [2, 2]
+time_limit = 0.0
+dialogue_entries = [{"id": "opening", "speaker": "archivist", "text": "The basin is marked Foundry. Take the metal anyway. Their outpost is the claim."}, {"id": "foundry_claim", "speaker": "foundry", "text": "This reserve is scheduled. Leave the wreckage."}, {"id": "raid", "speaker": "system", "text": "Foundry raid inbound from the eastern towers."}]
+events = [{"id": "opening", "kind": "dialogue", "entry": "opening", "trigger": {"at_seconds": 0.4}}, {"id": "foundry_claim", "kind": "dialogue", "entry": "foundry_claim", "trigger": {"at_seconds": 8.0}}, {"id": "reveal_outpost", "kind": "reveal", "trigger": {"at_seconds": 12.0}, "pos": Vector2(49.0, 36.0), "radius": 8}, {"id": "early_raid", "kind": "spawn_wave", "trigger": {"at_seconds": 150.0}, "side": 1, "origin": "enemy", "order": "attack_move", "units": [{"kind": "sentinel", "count": 3, "offset": Vector2(-8.0, 0.0)}]}, {"id": "raid", "kind": "dialogue", "entry": "raid", "trigger": {"at_seconds": 150.0}}, {"id": "pressure", "kind": "ai_override", "trigger": {"at_seconds": 90.0}, "profile": {"attack_start": 160.0, "min_army": 8, "attack_cooldown": 60.0}}]
+checkpoint_ids = ["opening", "recover_metal", "destroy_outpost"]
+victory_text = "The basin is Origin ground again. The Foundry will have to mine elsewhere."
+defeat_text = "The Foundry keeps the reserve. Our forges stay cold."

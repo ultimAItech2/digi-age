@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="DAMissionDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/mission_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+mission_id = "blackout"
+title = "Blackout"
+briefing = "Power is failing across the basin. Reclaim generators and survive the Lattice blackout protocol."
+map_id = "blackout_grid"
+player_faction_id = "origin"
+enemy_faction_id = "lattice"
+difficulty = "normal"
+objectives = [{"id": "restore_grid", "title": "Restore three generators", "kind": "build", "target": "generator", "required": 3, "optional": false}, {"id": "survive_blackout", "title": "Survive the blackout", "kind": "survive", "required": 360.0, "optional": false}]
+starting_resources = [Vector3(500.0, 80.0, 20.0), Vector3(650.0, 350.0, 80.0)]
+technology_floor = [0, 0]
+technology_ceiling = [2, 2]
+time_limit = 0.0
+dialogue_entries = [{"id": "opening", "speaker": "archivist", "text": "Energy is gone. Raise three generators or the Core dies in the dark."}, {"id": "lattice_blackout", "speaker": "lattice", "text": "Power is a privilege. We revoked it."}, {"id": "second_raid", "speaker": "system", "text": "Second blackout wave. Protect the new generators."}]
+events = [{"id": "opening", "kind": "dialogue", "entry": "opening", "trigger": {"at_seconds": 0.4}}, {"id": "lattice_blackout", "kind": "dialogue", "entry": "lattice_blackout", "trigger": {"at_seconds": 6.0}}, {"id": "raid_one", "kind": "spawn_wave", "trigger": {"at_seconds": 90.0}, "side": 1, "origin": "enemy", "order": "attack_move", "units": [{"kind": "scout", "count": 2, "offset": Vector2(-5.0, 0.0)}, {"kind": "sentinel", "count": 3, "offset": Vector2(-7.0, 1.0)}]}, {"id": "raid_two", "kind": "spawn_wave", "trigger": {"at_seconds": 220.0}, "side": 1, "origin": "enemy", "order": "attack_move", "units": [{"kind": "sentinel", "count": 4, "offset": Vector2(-6.0, 0.0)}, {"kind": "disruptor", "count": 2, "offset": Vector2(-3.0, 3.0)}]}, {"id": "second_raid", "kind": "dialogue", "entry": "second_raid", "trigger": {"at_seconds": 220.0}}]
+checkpoint_ids = ["opening", "restore_grid", "second_raid", "survive_blackout"]
+victory_text = "Lights hold. Lattice failed to starve the grid."
+defeat_text = "The basin goes dark. Lattice writes the last protocol."

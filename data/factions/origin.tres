@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="DAFactionDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/faction_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+faction_id = "origin"
+display_name = "Origin Collective"
+description = "A preservation network rebuilding intelligence from the ruins."
+primary_color = Color(0.341, 0.922, 0.835, 1)
+secondary_color = Color(0.325, 0.408, 0.447, 1)
+ai_profile = "balanced"

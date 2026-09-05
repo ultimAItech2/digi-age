@@ -1,0 +1,7 @@
+.godot/
+.tools/
+builds/*
+!builds/.gitkeep
+*.tmp
+
+!builds/.gdignore

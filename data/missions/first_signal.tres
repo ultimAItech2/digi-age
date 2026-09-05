@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="DAMissionDefinition" load_steps=2 format=3]
+[ext_resource type="Script" path="res://scripts/mission_definition.gd" id="1"]
+[resource]
+script = ExtResource("1")
+mission_id = "first_signal"
+title = "First Signal"
+briefing = "The Origin network has found a dormant relay beneath the ruins. Restore power, retrieve its archive, and hold the signal when the Foundry comes looking."
+map_id = "silent_grid"
+player_faction_id = "origin"
+enemy_faction_id = "foundry"
+difficulty = "normal"
+objectives = [{"id": "restore_power", "title": "Restore the relay", "kind": "build", "target": "generator", "required": 1, "optional": false}, {"id": "recover_archive", "title": "Recover an archive", "kind": "gather", "target": "data", "required": 120, "optional": false}, {"id": "survive_counterattack", "title": "Survive the Foundry counterattack", "kind": "survive", "required": 120.0, "optional": false}, {"id": "scout_ruins", "title": "Map the old relay road", "kind": "explore", "required": 0.3, "optional": true}]
+starting_resources = [Vector3(600.0, 350.0, 0.0), Vector3(600.0, 350.0, 0.0)]
+technology_floor = [0, 0]
+technology_ceiling = [2, 2]
+time_limit = 0.0
+dialogue_entries = [{"id": "opening", "speaker": "archivist", "text": "Relay found. Restore a generator, then pull the archive before the Foundry triangulates us."}, {"id": "power_up", "speaker": "system", "text": "Local grid is live. Archive access unlocked."}, {"id": "archive_secured", "speaker": "archivist", "text": "The archive is ours. Hold this ground. They will come."}, {"id": "foundry_wave", "speaker": "foundry", "text": "Origin salvage is Foundry property. Vacate the relay."}, {"id": "victory", "speaker": "archivist", "text": "First signal is stable. We can rebuild from this."}]
+events = [{"id": "opening", "kind": "dialogue", "entry": "opening", "trigger": {"at_seconds": 0.4}}, {"id": "power_up", "kind": "dialogue", "entry": "power_up", "trigger": {"on_objective": "restore_power"}}, {"id": "archive_secured", "kind": "dialogue", "entry": "archive_secured", "trigger": {"on_objective": "recover_archive"}}, {"id": "counterattack", "kind": "spawn_wave", "trigger": {"at_seconds": 180.0}, "side": 1, "origin": "enemy", "order": "attack_move", "units": [{"kind": "sentinel", "count": 4, "offset": Vector2(-6.0, 0.0)}, {"kind": "scout", "count": 1, "offset": Vector2(-4.0, 2.0)}]}, {"id": "foundry_wave", "kind": "dialogue", "entry": "foundry_wave", "trigger": {"at_seconds": 180.0}}]
+checkpoint_ids = ["opening", "restore_power", "recover_archive", "counterattack"]
+victory_text = "The first signal crosses the ruins. The Origin Collective has a future."
+defeat_text = "The Foundry silences the relay."
