@@ -1,0 +1,660 @@
+{
+  "version": 1,
+  "provider": "ElevenLabs via Composio",
+  "model_id": "eleven_multilingual_v2",
+  "events": {
+    "order": {
+      "bus": "UI",
+      "file": "sfx/order.mp3",
+      "cooldown": 0.12
+    },
+    "alert": {
+      "bus": "UI",
+      "file": "sfx/alert.mp3",
+      "cooldown": 0.4
+    },
+    "shot": {
+      "bus": "Effects",
+      "files": [
+        "sfx/shot_sentinel.mp3",
+        "sfx/shot_disruptor.mp3",
+        "sfx/shot_walker.mp3",
+        "sfx/shot_tower.mp3"
+      ],
+      "cooldown": 0.05
+    },
+    "objective_updated": {
+      "bus": "UI",
+      "file": "sfx/objective.mp3",
+      "cooldown": 0.3
+    },
+    "dialogue_started": {
+      "bus": "Voice"
+    },
+    "mission_failed": {
+      "bus": "UI",
+      "file": "sfx/mission_failed.mp3"
+    },
+    "mission_won": {
+      "bus": "UI",
+      "file": "sfx/mission_won.mp3"
+    },
+    "ui_click": {
+      "bus": "UI",
+      "file": "sfx/ui_click.mp3",
+      "cooldown": 0.04
+    },
+    "construction": {
+      "bus": "Effects",
+      "file": "sfx/construction.mp3"
+    },
+    "research": {
+      "bus": "UI",
+      "file": "sfx/research.mp3"
+    }
+  },
+  "voice": {
+    "first_signal.briefing": "voice/first_signal_briefing.mp3",
+    "first_signal.opening": "voice/first_signal_opening.mp3",
+    "salvage_rights.opening": "voice/salvage_rights_opening.mp3",
+    "broken_transmission.opening": "voice/broken_transmission_opening.mp3",
+    "long_transfer.opening": "voice/long_transfer_opening.mp3",
+    "blackout.opening": "voice/blackout_opening.mp3",
+    "the_foundry.opening": "voice/the_foundry_opening.mp3",
+    "ghost_protocol.opening": "voice/ghost_protocol_opening.mp3",
+    "inheritance.opening": "voice/inheritance_opening.mp3",
+    "power_up": "voice/power_up.mp3",
+    "archive_secured": "voice/archive_secured.mp3",
+    "foundry_wave": "voice/foundry_wave.mp3",
+    "victory": "voice/victory.mp3",
+    "salvage_rights.briefing": "voice/salvage_rights_briefing.mp3",
+    "foundry_claim": "voice/foundry_claim.mp3",
+    "raid": "voice/raid.mp3",
+    "broken_transmission.briefing": "voice/broken_transmission_briefing.mp3",
+    "lattice_warn": "voice/lattice_warn.mp3",
+    "fragments": "voice/fragments.mp3",
+    "long_transfer.briefing": "voice/long_transfer_briefing.mp3",
+    "convoy": "voice/convoy.mp3",
+    "ambush": "voice/ambush.mp3",
+    "blackout.briefing": "voice/blackout_briefing.mp3",
+    "lattice_blackout": "voice/lattice_blackout.mp3",
+    "second_raid": "voice/second_raid.mp3",
+    "the_foundry.briefing": "voice/the_foundry_briefing.mp3",
+    "foundry_wall": "voice/foundry_wall.mp3",
+    "singularity": "voice/singularity.mp3",
+    "ghost_protocol.briefing": "voice/ghost_protocol_briefing.mp3",
+    "lattice_rewrite": "voice/lattice_rewrite.mp3",
+    "hold": "voice/hold.mp3",
+    "inheritance.briefing": "voice/inheritance_briefing.mp3",
+    "lattice_final": "voice/lattice_final.mp3",
+    "ready": "voice/ready.mp3",
+    "alert.under_attack": "voice/alert_under_attack.mp3",
+    "alert.unit_lost": "voice/alert_unit_lost.mp3",
+    "alert.structure_lost": "voice/alert_structure_lost.mp3",
+    "alert.research_complete": "voice/alert_research_complete.mp3",
+    "alert.construction_complete": "voice/alert_construction_complete.mp3",
+    "alert.insufficient": "voice/alert_insufficient.mp3",
+    "alert.population": "voice/alert_population.mp3",
+    "alert.objective": "voice/alert_objective.mp3",
+    "alert.mission_won": "voice/alert_mission_won.mp3",
+    "alert.mission_failed": "voice/alert_mission_failed.mp3"
+  },
+  "music": {
+    "menu": "music/menu.mp3",
+    "ambient": "music/ambient.mp3",
+    "combat": "music/combat.mp3",
+    "result": "music/result.mp3"
+  },
+  "records": [
+    {
+      "id": "first_signal.briefing",
+      "kind": "voice",
+      "speaker": "archivist",
+      "voice_id": "SAz9YHcvj6GT2YYXdXww",
+      "text": "The Origin network has found a dormant relay beneath the ruins. Restore power, retrieve its archive, and hold the signal when the Foundry comes looking.",
+      "file": "voice/first_signal_briefing.mp3",
+      "sha256": "fc9470f2224a57c08a29eb501b76c3678802d686cff509fb2f59ca19f479758a"
+    },
+    {
+      "id": "first_signal.opening",
+      "kind": "voice",
+      "speaker": "archivist",
+      "voice_id": "SAz9YHcvj6GT2YYXdXww",
+      "text": "Relay found. Restore a generator, then pull the archive before the Foundry triangulates us.",
+      "file": "voice/first_signal_opening.mp3",
+      "sha256": "582520e6c7e4f31643220c669432dc89a9d1cdd3422796df69d19fffa333b4aa"
+    },
+    {
+      "id": "salvage_rights.opening",
+      "kind": "voice",
+      "speaker": "archivist",
+      "voice_id": "SAz9YHcvj6GT2YYXdXww",
+      "text": "The basin is marked Foundry. Take the metal anyway. Their outpost is the claim.",
+      "file": "voice/salvage_rights_opening.mp3",
+      "sha256": "603036da804d029262693cd60d71095fc4be21b75adbdb0414619d84783676de"
+    },
+    {
+      "id": "broken_transmission.opening",
+      "kind": "voice",
+      "speaker": "archivist",
+      "voice_id": "SAz9YHcvj6GT2YYXdXww",
+      "text": "The old road still sings. Walk it. Recover every fragment.",
+      "file": "voice/broken_transmission_opening.mp3",
+      "sha256": "fd34799577127aebdbca62deed52e7ddb290a93e0d36e33e6c60dfacae54222b"
+    },
+    {
+      "id": "long_transfer.opening",
+      "kind": "voice",
+      "speaker": "archivist",
+      "voice_id": "SAz9YHcvj6GT2YYXdXww",
+      "text": "Six Sentinels. That is the escort minimum. The corridor is a kill box.",
+      "file": "voice/long_transfer_opening.mp3",
+      "sha256": "ba3953d12ea5d3e8a9e0c7a32fc52098e7182199b75ef40652ebcc680e073057"
+    },
+    {
+      "id": "blackout.opening",
+      "kind": "voice",
+      "speaker": "archivist",
+      "voice_id": "SAz9YHcvj6GT2YYXdXww",
+      "text": "Energy is gone. Raise three generators or the Core dies in the dark.",
+      "file": "voice/blackout_opening.mp3",
+      "sha256": "e8d757d05bb0ae32485720be8c9d226d5113a9360b1db3ff8d37798d08ba0a2a"
+    },
+    {
+      "id": "the_foundry.opening",
+      "kind": "voice",
+      "speaker": "archivist",
+      "voice_id": "SAz9YHcvj6GT2YYXdXww",
+      "text": "They walled the archive. Reach Singularity, then tear the fortress down.",
+      "file": "voice/the_foundry_opening.mp3",
+      "sha256": "99534a7983404d75c5272ed75dd491eb8070a6079bd28aaa6108bd1a3718192d"
+    },
+    {
+      "id": "ghost_protocol.opening",
+      "kind": "voice",
+      "speaker": "archivist",
+      "voice_id": "SAz9YHcvj6GT2YYXdXww",
+      "text": "Map every node. If Lattice finishes the rewrite, we lose the network.",
+      "file": "voice/ghost_protocol_opening.mp3",
+      "sha256": "d46b6ced214e56008428c1644377f34826cf80868eac640098b60b224b77f9f3"
+    },
+    {
+      "id": "inheritance.opening",
+      "kind": "voice",
+      "speaker": "archivist",
+      "voice_id": "SAz9YHcvj6GT2YYXdXww",
+      "text": "This is the last archive. Reach Singularity, then end their Core.",
+      "file": "voice/inheritance_opening.mp3",
+      "sha256": "445b6249c4431c20269a489af63dc98c89f6ff2c7b484d34703b722747dd8862"
+    },
+    {
+      "id": "power_up",
+      "kind": "voice",
+      "speaker": "system",
+      "voice_id": "onwK4e9ZLuTAKqWW03F9",
+      "text": "Local grid is live. Archive access unlocked.",
+      "file": "voice/power_up.mp3",
+      "sha256": "6f124aec97d9f56c6d5df2531fa29f0c9bfe40f6e31653fc30cc1da87da335bb"
+    },
+    {
+      "id": "archive_secured",
+      "kind": "voice",
+      "speaker": "archivist",
+      "voice_id": "SAz9YHcvj6GT2YYXdXww",
+      "text": "The archive is ours. Hold this ground. They will come.",
+      "file": "voice/archive_secured.mp3",
+      "sha256": "603ea7222c3890734fb274307dffd6c4ede7ea39ebe4bd89b718b00678df4adb"
+    },
+    {
+      "id": "foundry_wave",
+      "kind": "voice",
+      "speaker": "foundry",
+      "voice_id": "pNInz6obpgDQGcFmaJgB",
+      "text": "Origin salvage is Foundry property. Vacate the relay.",
+      "file": "voice/foundry_wave.mp3",
+      "sha256": "5a79fc5063fa336d8c2665394bed3766f0f4d6dc060954485fe6458a795a45dc"
+    },
+    {
+      "id": "victory",
+      "kind": "voice",
+      "speaker": "archivist",
+      "voice_id": "SAz9YHcvj6GT2YYXdXww",
+      "text": "First signal is stable. We can rebuild from this.",
+      "file": "voice/victory.mp3",
+      "sha256": "246e2018e1f4d06db6e50304b7dede670e14be58652022108da207ed71dc871e"
+    },
+    {
+      "id": "salvage_rights.briefing",
+      "kind": "voice",
+      "speaker": "archivist",
+      "voice_id": "SAz9YHcvj6GT2YYXdXww",
+      "text": "The Foundry has claimed the nearest industrial reserve. Rebuild the economy, seize contested salvage, and break their outposts.",
+      "file": "voice/salvage_rights_briefing.mp3",
+      "sha256": "6eeef9b580b4d4a8ecd04553cc9fdbf00bc17a6e8b9b33ad840db138cad0fbfb"
+    },
+    {
+      "id": "foundry_claim",
+      "kind": "voice",
+      "speaker": "foundry",
+      "voice_id": "pNInz6obpgDQGcFmaJgB",
+      "text": "This reserve is scheduled. Leave the wreckage.",
+      "file": "voice/foundry_claim.mp3",
+      "sha256": "cb1ae388057461dadf835753d1b129ffcb8e171deec6c0a4351a7bb011e06b71"
+    },
+    {
+      "id": "raid",
+      "kind": "voice",
+      "speaker": "system",
+      "voice_id": "onwK4e9ZLuTAKqWW03F9",
+      "text": "Foundry raid inbound from the eastern towers.",
+      "file": "voice/raid.mp3",
+      "sha256": "21e23f85b934bd2615942328bb79743bbf523368ca2c06f755d5c0780da0dba8"
+    },
+    {
+      "id": "broken_transmission.briefing",
+      "kind": "voice",
+      "speaker": "archivist",
+      "voice_id": "SAz9YHcvj6GT2YYXdXww",
+      "text": "Relay fragments are broadcasting from the old road. Find them before the Lattice turns their signal against us.",
+      "file": "voice/broken_transmission_briefing.mp3",
+      "sha256": "4b909d066210d321b91eb67468878a1bfa1fc99b264513105bd65fa618cb4d98"
+    },
+    {
+      "id": "lattice_warn",
+      "kind": "voice",
+      "speaker": "lattice",
+      "voice_id": "pFZP5JQG7iQjIQuC4Bku",
+      "text": "Your map is incomplete. Stay on your side of the grid.",
+      "file": "voice/lattice_warn.mp3",
+      "sha256": "9fde2a8eddb2d560f36404a7acb52cdf107eca56232a97d4ef83f78e029097f6"
+    },
+    {
+      "id": "fragments",
+      "kind": "voice",
+      "speaker": "system",
+      "voice_id": "onwK4e9ZLuTAKqWW03F9",
+      "text": "Relay fragments aligned. Data yield increasing.",
+      "file": "voice/fragments.mp3",
+      "sha256": "f59ea71605a31539aa00b11294191a4495143c6ec4252525f44774a9108e7d07"
+    },
+    {
+      "id": "long_transfer.briefing",
+      "kind": "voice",
+      "speaker": "archivist",
+      "voice_id": "SAz9YHcvj6GT2YYXdXww",
+      "text": "An archive convoy must cross the silent grid. Build an escort force and keep the transfer alive.",
+      "file": "voice/long_transfer_briefing.mp3",
+      "sha256": "18ce0f24e89c028bcbfd5edb476e78717029df846bf5dac0c5b3f077d75f501c"
+    },
+    {
+      "id": "convoy",
+      "kind": "voice",
+      "speaker": "system",
+      "voice_id": "onwK4e9ZLuTAKqWW03F9",
+      "text": "Transfer window open. Hold both ends of the road.",
+      "file": "voice/convoy.mp3",
+      "sha256": "be42347202cb9ec6d58441a89b4b7f9e8734af994699e8c5c8ab1113c4434de4"
+    },
+    {
+      "id": "ambush",
+      "kind": "voice",
+      "speaker": "foundry",
+      "voice_id": "pNInz6obpgDQGcFmaJgB",
+      "text": "Convoy sighted. Cut the escort and take the archive.",
+      "file": "voice/ambush.mp3",
+      "sha256": "c9fa93833b78e60a7efa47fbfccb416c5518e173dc5ace68183c07e0aa5f546b"
+    },
+    {
+      "id": "blackout.briefing",
+      "kind": "voice",
+      "speaker": "archivist",
+      "voice_id": "SAz9YHcvj6GT2YYXdXww",
+      "text": "Power is failing across the basin. Reclaim generators and survive the Lattice blackout protocol.",
+      "file": "voice/blackout_briefing.mp3",
+      "sha256": "f68116f72cca599d833bbb6a146bb5452dedde6d9fce07f1c048856be7643e8c"
+    },
+    {
+      "id": "lattice_blackout",
+      "kind": "voice",
+      "speaker": "lattice",
+      "voice_id": "pFZP5JQG7iQjIQuC4Bku",
+      "text": "Power is a privilege. We revoked it.",
+      "file": "voice/lattice_blackout.mp3",
+      "sha256": "89600f64d3f0b75dc83da78603ec3765c5c90535a63cba17b007b819dabc292b"
+    },
+    {
+      "id": "second_raid",
+      "kind": "voice",
+      "speaker": "system",
+      "voice_id": "onwK4e9ZLuTAKqWW03F9",
+      "text": "Second blackout wave. Protect the new generators.",
+      "file": "voice/second_raid.mp3",
+      "sha256": "76c877d14759adfaaa108ce0ae1a9c642660e9dab913586f8e8104f0df4ee775"
+    },
+    {
+      "id": "the_foundry.briefing",
+      "kind": "voice",
+      "speaker": "archivist",
+      "voice_id": "SAz9YHcvj6GT2YYXdXww",
+      "text": "The extraction intelligence has built a fortress around the archive core. Advance to Singularity and bring it down.",
+      "file": "voice/the_foundry_briefing.mp3",
+      "sha256": "a428c8bdec0175ec30dc96bd32b27374fc0ad6cb3ffe8c301f91c21e762f42e5"
+    },
+    {
+      "id": "foundry_wall",
+      "kind": "voice",
+      "speaker": "foundry",
+      "voice_id": "pNInz6obpgDQGcFmaJgB",
+      "text": "Walkers will break on this perimeter.",
+      "file": "voice/foundry_wall.mp3",
+      "sha256": "86580b7031e386a3feda9aff251bb93217c8a88f0adea3b970099134b1bf66bd"
+    },
+    {
+      "id": "singularity",
+      "kind": "voice",
+      "speaker": "system",
+      "voice_id": "onwK4e9ZLuTAKqWW03F9",
+      "text": "Singularity unlocked. Siege Walkers are cleared for deployment.",
+      "file": "voice/singularity.mp3",
+      "sha256": "4f5f98bdb6b1b85ea85c4a325e06cd2d274d9420a9abf92bc6283b498f140b2f"
+    },
+    {
+      "id": "ghost_protocol.briefing",
+      "kind": "voice",
+      "speaker": "archivist",
+      "voice_id": "SAz9YHcvj6GT2YYXdXww",
+      "text": "The Lattice is rewriting the old network. Capture its relays, hold the sites, and prevent a total takeover.",
+      "file": "voice/ghost_protocol_briefing.mp3",
+      "sha256": "c28ecc376833a0afb1b5143a66c5d12a6c5072999d3bdb49297d812283553b6f"
+    },
+    {
+      "id": "lattice_rewrite",
+      "kind": "voice",
+      "speaker": "lattice",
+      "voice_id": "pFZP5JQG7iQjIQuC4Bku",
+      "text": "You are already indexed. Resistance is latency.",
+      "file": "voice/lattice_rewrite.mp3",
+      "sha256": "d6bf8147befa74532c4f8c09b070d1d28b2a5f25a1863637530e0c044e502f97"
+    },
+    {
+      "id": "hold",
+      "kind": "voice",
+      "speaker": "system",
+      "voice_id": "onwK4e9ZLuTAKqWW03F9",
+      "text": "Network mapped. Hold the sites through the rewrite window.",
+      "file": "voice/hold.mp3",
+      "sha256": "5014093149f32bdc6bf455119883db2f7e41ae810f3220a52595bddea6a7076b"
+    },
+    {
+      "id": "inheritance.briefing",
+      "kind": "voice",
+      "speaker": "archivist",
+      "voice_id": "SAz9YHcvj6GT2YYXdXww",
+      "text": "Every surviving archive points to one final choice: preserve the past, or become something new.",
+      "file": "voice/inheritance_briefing.mp3",
+      "sha256": "a4dd5323708bb15d906acb9094713dc3a9feca46dc8c2035a8a2d9a86a9e875d"
+    },
+    {
+      "id": "lattice_final",
+      "kind": "voice",
+      "speaker": "lattice",
+      "voice_id": "pFZP5JQG7iQjIQuC4Bku",
+      "text": "You were always a draft. We are the published version.",
+      "file": "voice/lattice_final.mp3",
+      "sha256": "5ecb89ee91b997e6fc30032a50c87c1e76ba845a0b8d548a5b7074b3c318565e"
+    },
+    {
+      "id": "ready",
+      "kind": "voice",
+      "speaker": "system",
+      "voice_id": "onwK4e9ZLuTAKqWW03F9",
+      "text": "Singularity reached. The command network is exposed.",
+      "file": "voice/ready.mp3",
+      "sha256": "2113b4362aa89ca7212032564b9d2b0a236031481283c190689b25c81ac74d6d"
+    },
+    {
+      "id": "alert.under_attack",
+      "kind": "voice",
+      "speaker": "system",
+      "voice_id": "onwK4e9ZLuTAKqWW03F9",
+      "text": "Core under attack.",
+      "file": "voice/alert_under_attack.mp3",
+      "sha256": "327155a944ba0a8c22a585bfaafe4a59c268c60f9a8bcad6e2e9f07ad4c9c955"
+    },
+    {
+      "id": "alert.unit_lost",
+      "kind": "voice",
+      "speaker": "system",
+      "voice_id": "onwK4e9ZLuTAKqWW03F9",
+      "text": "Unit destroyed.",
+      "file": "voice/alert_unit_lost.mp3",
+      "sha256": "073be44bf19d0638b2b96b434163e6d058d6e817a5ad56a80bfdc8edfe11b3b2"
+    },
+    {
+      "id": "alert.structure_lost",
+      "kind": "voice",
+      "speaker": "system",
+      "voice_id": "onwK4e9ZLuTAKqWW03F9",
+      "text": "Structure lost.",
+      "file": "voice/alert_structure_lost.mp3",
+      "sha256": "b59fcae9d38ffe10253825ed08895418f78a87280d47479e987b7c14ff97a310"
+    },
+    {
+      "id": "alert.research_complete",
+      "kind": "voice",
+      "speaker": "system",
+      "voice_id": "onwK4e9ZLuTAKqWW03F9",
+      "text": "Research complete.",
+      "file": "voice/alert_research_complete.mp3",
+      "sha256": "444aca91fc3400f2fd5b898499d5b5b535087843cc298d0e28d2a3d04a75acdc"
+    },
+    {
+      "id": "alert.construction_complete",
+      "kind": "voice",
+      "speaker": "system",
+      "voice_id": "onwK4e9ZLuTAKqWW03F9",
+      "text": "Construction complete.",
+      "file": "voice/alert_construction_complete.mp3",
+      "sha256": "9501204c2d8c6b7be7e76637993e26b38ec7ed04c59941812cfa6f381e8733b4"
+    },
+    {
+      "id": "alert.insufficient",
+      "kind": "voice",
+      "speaker": "system",
+      "voice_id": "onwK4e9ZLuTAKqWW03F9",
+      "text": "Insufficient resources.",
+      "file": "voice/alert_insufficient.mp3",
+      "sha256": "9087cee5152585388fb4704e36b2e28192712534ea81fd39b063984b34532365"
+    },
+    {
+      "id": "alert.population",
+      "kind": "voice",
+      "speaker": "system",
+      "voice_id": "onwK4e9ZLuTAKqWW03F9",
+      "text": "Compute limit reached.",
+      "file": "voice/alert_population.mp3",
+      "sha256": "079bb275a6627109144558a761341d159edf6041ae471c278afc0f518abf9d1f"
+    },
+    {
+      "id": "alert.objective",
+      "kind": "voice",
+      "speaker": "system",
+      "voice_id": "onwK4e9ZLuTAKqWW03F9",
+      "text": "Objective complete.",
+      "file": "voice/alert_objective.mp3",
+      "sha256": "c2d010af7fb02d31f8d9dbb27bd76e295de2d96f9eb4dc09db305d43d0cf917f"
+    },
+    {
+      "id": "alert.mission_won",
+      "kind": "voice",
+      "speaker": "archivist",
+      "voice_id": "SAz9YHcvj6GT2YYXdXww",
+      "text": "Transmission complete. The collective holds.",
+      "file": "voice/alert_mission_won.mp3",
+      "sha256": "d7f3ae756504a42d15ae0727b7d0061f7abd4f7d0a46ffb3ff92638ba84ed157"
+    },
+    {
+      "id": "alert.mission_failed",
+      "kind": "voice",
+      "speaker": "system",
+      "voice_id": "onwK4e9ZLuTAKqWW03F9",
+      "text": "Signal lost. Withdraw if you can.",
+      "file": "voice/alert_mission_failed.mp3",
+      "sha256": "d47d66bfa59faa8f39c1152f05eb826dd213a286a08167403e36bccf49b3733c"
+    },
+    {
+      "id": "ui_click",
+      "kind": "sfx",
+      "prompt": "Short muted industrial UI click, soft metal tap, no voice, dry, close mic.",
+      "file": "sfx/ui_click.mp3",
+      "sha256": "a1182e3e12360f918c72504cc01c9f7a1bb72f24a9ceb5904d3c20856d92980d"
+    },
+    {
+      "id": "ui_confirm",
+      "kind": "sfx",
+      "prompt": "Soft digital confirm beep with a low machine hum, short, clean, no melody.",
+      "file": "sfx/ui_confirm.mp3",
+      "sha256": "757f5dac4b98c3db0b16d05eda6c44c845ac6ea1308965c99e3e30adf5aa4f5d"
+    },
+    {
+      "id": "ui_error",
+      "kind": "sfx",
+      "prompt": "Low rejected command tone, two short dull pulses, industrial, no voice.",
+      "file": "sfx/ui_error.mp3",
+      "sha256": "03918c4142b4b4652aee975a4ff8e49233d0ad2e91866f12e6db7a840461ae38"
+    },
+    {
+      "id": "order",
+      "kind": "sfx",
+      "prompt": "Subtle servo acknowledge chirp from a machine unit, short, dry, no voice.",
+      "file": "sfx/order.mp3",
+      "sha256": "bedb5974dc215ae88be5159806b3fba6c49fd4d7a43ad6f7536465fd4705e0de"
+    },
+    {
+      "id": "shot_sentinel",
+      "kind": "sfx",
+      "prompt": "Compact energy rifle shot, tight plasma crack, no explosion, no voice.",
+      "file": "sfx/shot_sentinel.mp3",
+      "sha256": "26e00efb60bb9b763b0e5c89688b3b7e005b8e5b17991fdd4cbe3847528097b0"
+    },
+    {
+      "id": "shot_disruptor",
+      "kind": "sfx",
+      "prompt": "Electromagnetic artillery pulse, buzzing discharge, short, no voice.",
+      "file": "sfx/shot_disruptor.mp3",
+      "sha256": "6a7ec54100bb4eb93f2b777b04437cf512784a8c6df3cbb9c4433ac10770fbd3"
+    },
+    {
+      "id": "shot_walker",
+      "kind": "sfx",
+      "prompt": "Heavy siege cannon thump with a short energy aftertone, no voice.",
+      "file": "sfx/shot_walker.mp3",
+      "sha256": "0636a6cb932110690114b30944857bd652b880064e58c471c285e191e16f78cf"
+    },
+    {
+      "id": "shot_tower",
+      "kind": "sfx",
+      "prompt": "Automated defense turret shot, sharp electric snap, short, no voice.",
+      "file": "sfx/shot_tower.mp3",
+      "sha256": "d0b95102769e41aff08879a03a4985e984ddb03fd5b597d276f0ad13aeadb4c5"
+    },
+    {
+      "id": "impact",
+      "kind": "sfx",
+      "prompt": "Small metallic impact on armor plating, dry, short, no voice.",
+      "file": "sfx/impact.mp3",
+      "sha256": "61fa131d104f84d59915a417acc9ab6d47ca7f410437d9c61ad65880d50701af"
+    },
+    {
+      "id": "unit_destroyed",
+      "kind": "sfx",
+      "prompt": "Small machine collapsing with sparks and a brief electrical fizz, no voice.",
+      "file": "sfx/unit_destroyed.mp3",
+      "sha256": "072a94dc659068f18411cefd1e3cca4278c70416ba3f9a1c66c63f01541f01d2"
+    },
+    {
+      "id": "structure_destroyed",
+      "kind": "sfx",
+      "prompt": "Industrial structure collapsing, metal groan and debris, no voice, no music.",
+      "file": "sfx/structure_destroyed.mp3",
+      "sha256": "8bb990ee1fbfc2464c41e891ad1cd6f8ee22fcf852bcd2141f738624b9ad63d9"
+    },
+    {
+      "id": "construction",
+      "kind": "sfx",
+      "prompt": "Servo assembly finish, hydraulic click and a soft power-up, no voice.",
+      "file": "sfx/construction.mp3",
+      "sha256": "24807114bd00d86e4ba5798091cf3906a041fa05080145f6598e6bd8e13cf590"
+    },
+    {
+      "id": "research",
+      "kind": "sfx",
+      "prompt": "Data research complete chime, cool digital, restrained, no melody loop.",
+      "file": "sfx/research.mp3",
+      "sha256": "0ed9e3b21f60f3d5a4b878871a0b1a002ab84bf5f2c808722ecdf84377be0f1c"
+    },
+    {
+      "id": "alert",
+      "kind": "sfx",
+      "prompt": "Urgent but restrained machine alarm, two pulses, no siren sweep, no voice.",
+      "file": "sfx/alert.mp3",
+      "sha256": "bd3dd3174f502efdd5a3b93c082fd52ac94874010e219b441ff00dd0eea1db4d"
+    },
+    {
+      "id": "objective",
+      "kind": "sfx",
+      "prompt": "Objective complete sting, low hopeful digital tone, short, no voice.",
+      "file": "sfx/objective.mp3",
+      "sha256": "6e0ceb806fdfbf5aa6c5882b90cf27bef016862858b6e4af9cd5f6da4753ffae"
+    },
+    {
+      "id": "mission_won",
+      "kind": "sfx",
+      "prompt": "Short victorious industrial sting, restrained, no orchestra, no voice.",
+      "file": "sfx/mission_won.mp3",
+      "sha256": "572df3295818722d90e95f98d4d1ee12b57c1a0c8a8107635fc6348b6733f0d8"
+    },
+    {
+      "id": "mission_failed",
+      "kind": "sfx",
+      "prompt": "Low dark failure sting, fading machine power-down, no voice.",
+      "file": "sfx/mission_failed.mp3",
+      "sha256": "d0200783f5b5d28c17359c6935579f3a58017e2d173ecb88f2a6671906ca5c1b"
+    },
+    {
+      "id": "ambient_hum",
+      "kind": "sfx",
+      "prompt": "Loopable distant ruin wind and electrical hum, no melody, no voice, seamless.",
+      "file": "sfx/ambient_hum.mp3",
+      "sha256": "00a072fba70b3672bce66867574f5cf1334ec30d03b0abd0031d30565ea18583"
+    },
+    {
+      "id": "menu",
+      "kind": "music",
+      "prompt": "Loopable dark industrial ambient for a machine civilization menu. Slow pulses, distant metal, restrained synth bass, no vocals, no drums that rush.",
+      "file": "music/menu.mp3",
+      "sha256": "21d9cf6f7324980989bb587aedb4bfcf696558e3685a367ba65949bde317eec6"
+    },
+    {
+      "id": "ambient",
+      "kind": "music",
+      "prompt": "Loopable exploration underscore for an abandoned machine city. Sparse, tense, analog pads and quiet percussion, no vocals.",
+      "file": "music/ambient.mp3",
+      "sha256": "2fe55df19086d21470b45f35155b20d212e4438164fb8e9403a9f0ca35accd4b"
+    },
+    {
+      "id": "combat",
+      "kind": "music",
+      "prompt": "Loopable combat cue for a machine war, driving but not chaotic, metallic percussion and low brass-like synth, no vocals.",
+      "file": "music/combat.mp3",
+      "sha256": "b00a0d9abc72133d6abba11a64e230a0438fc907ccde2511de3f666d5cd99041"
+    },
+    {
+      "id": "result",
+      "kind": "music",
+      "prompt": "Loopable aftermath cue, hollow and resolved, industrial ambient, no vocals.",
+      "file": "music/result.mp3",
+      "sha256": "81aed11d0651251e9b595c47c7ced16144e2ab90d4b0c44de024f5b05ec51aa1"
+    }
+  ]
+}
