@@ -6,3 +6,4 @@ builds/*
 __pycache__/
 *.pyc
 *.tmp
+assets/third_party/polyhaven/raw/

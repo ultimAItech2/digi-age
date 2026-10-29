@@ -1,0 +1,199 @@
+{
+  "blender": "4.5.3 LTS",
+  "assets": [
+    {
+      "asset": "core",
+      "triangles": 696
+    },
+    {
+      "asset": "worker",
+      "triangles": 392
+    },
+    {
+      "asset": "sentinel",
+      "triangles": 464
+    },
+    {
+      "asset": "generator",
+      "triangles": 604
+    },
+    {
+      "asset": "fabricator",
+      "triangles": 820
+    },
+    {
+      "asset": "scout",
+      "triangles": 340
+    },
+    {
+      "asset": "disruptor",
+      "triangles": 500
+    },
+    {
+      "asset": "walker",
+      "triangles": 976
+    },
+    {
+      "asset": "depot",
+      "triangles": 676
+    },
+    {
+      "asset": "data_center",
+      "triangles": 752
+    },
+    {
+      "asset": "tower",
+      "triangles": 624
+    },
+    {
+      "asset": "metal",
+      "triangles": 396
+    },
+    {
+      "asset": "road",
+      "triangles": 72
+    },
+    {
+      "asset": "cable",
+      "triangles": 48
+    },
+    {
+      "asset": "substation",
+      "triangles": 488
+    },
+    {
+      "asset": "archive",
+      "triangles": 400
+    },
+    {
+      "asset": "ruin",
+      "triangles": 200
+    },
+    {
+      "asset": "barrier",
+      "triangles": 56
+    },
+    {
+      "asset": "tree",
+      "triangles": 360
+    },
+    {
+      "asset": "bush",
+      "triangles": 320
+    },
+    {
+      "asset": "rubble",
+      "triangles": 300
+    },
+    {
+      "asset": "highrise_a",
+      "triangles": 372
+    },
+    {
+      "asset": "highrise_b",
+      "triangles": 432
+    },
+    {
+      "asset": "highrise_c",
+      "triangles": 552
+    },
+    {
+      "asset": "core_low",
+      "triangles": 312
+    },
+    {
+      "asset": "worker_low",
+      "triangles": 104
+    },
+    {
+      "asset": "sentinel_low",
+      "triangles": 144
+    },
+    {
+      "asset": "generator_low",
+      "triangles": 204
+    },
+    {
+      "asset": "fabricator_low",
+      "triangles": 216
+    },
+    {
+      "asset": "scout_low",
+      "triangles": 148
+    },
+    {
+      "asset": "disruptor_low",
+      "triangles": 204
+    },
+    {
+      "asset": "walker_low",
+      "triangles": 308
+    },
+    {
+      "asset": "depot_low",
+      "triangles": 228
+    },
+    {
+      "asset": "data_center_low",
+      "triangles": 360
+    },
+    {
+      "asset": "tower_low",
+      "triangles": 264
+    },
+    {
+      "asset": "metal_low",
+      "triangles": 108
+    },
+    {
+      "asset": "road_low",
+      "triangles": 72
+    },
+    {
+      "asset": "cable_low",
+      "triangles": 48
+    },
+    {
+      "asset": "substation_low",
+      "triangles": 200
+    },
+    {
+      "asset": "archive_low",
+      "triangles": 176
+    },
+    {
+      "asset": "ruin_low",
+      "triangles": 72
+    },
+    {
+      "asset": "barrier_low",
+      "triangles": 24
+    },
+    {
+      "asset": "tree_low",
+      "triangles": 100
+    },
+    {
+      "asset": "bush_low",
+      "triangles": 60
+    },
+    {
+      "asset": "rubble_low",
+      "triangles": 60
+    },
+    {
+      "asset": "highrise_a_low",
+      "triangles": 192
+    },
+    {
+      "asset": "highrise_b_low",
+      "triangles": 228
+    },
+    {
+      "asset": "highrise_c_low",
+      "triangles": 216
+    }
+  ],
+  "coordinates": "GLB: Y up, +Z forward; metres",
+  "generator": "tools/create_industrial_assets.py"
+}

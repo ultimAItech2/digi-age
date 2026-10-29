@@ -13,7 +13,7 @@ with zipfile.ZipFile(builds / "DigitalAge-windows-x86_64.zip", "w", zipfile.ZIP_
         archive.write(path, "DigitalAge/" + path.name)
 source_archive = builds / "DigitalAge-source.zip"
 with zipfile.ZipFile(source_archive, "w", zipfile.ZIP_DEFLATED) as archive:
-    for folder in ["assets", "data", "docs", "scenes", "scripts", "steam", "tests", "tools"]:
+    for folder in ["art", "assets", "data", "docs", "scenes", "scripts", "steam", "tests", "tools"]:
         for path in sorted((root / folder).rglob("*")):
             if path.is_file() and "__pycache__" not in path.parts:
                 archive.write(path, "DigitalAge/" + str(path.relative_to(root)))

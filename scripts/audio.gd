@@ -2,7 +2,7 @@ class_name DAAudio
 extends Node
 ## Offline audio mixer. Assets are generated ahead of time; missing files stay silent.
 signal event_requested(event_id: String, payload: Dictionary)
-signal subtitle_shown(text: String, speaker: String, duration: float)
+signal subtitle_shown(speaker: String, text: String, duration: float)
 
 const MANIFEST_PATH := "res://assets/audio/manifest.json"
 const MAX_SHOTS_PER_WINDOW := 4
@@ -20,6 +20,8 @@ var combat_left: float = 0.0
 var voice_player: AudioStreamPlayer
 var voice_queue: Array[Dictionary] = []
 var warned_missing: Dictionary = {}
+var caption_left: float = 0.0
+var caption_pages: Array[Dictionary] = []
 
 func _ready() -> void:
 	_load_manifest()
@@ -34,6 +36,11 @@ func _ready() -> void:
 		pools[bus] = []
 
 func _process(dt: float) -> void:
+	if caption_left > 0:
+		caption_left = maxf(0, caption_left-dt)
+		if caption_left <= 0:
+			if not caption_pages.is_empty(): _next_caption()
+			elif not voice_player.playing: _play_next_voice()
 	shot_window = maxf(0.0, shot_window - dt)
 	if shot_window <= 0.0:
 		shots_in_window = 0
@@ -79,10 +86,6 @@ func play(kind: String, payload: Dictionary = {}) -> void:
 
 func speak(dialogue_id: String, text: String = "", speaker: String = "archivist") -> void:
 	play("dialogue_started", {"id": dialogue_id, "text": text, "speaker": speaker})
-	if text != "":
-		subtitle_shown.emit(text, speaker, clampf(text.length() * 0.06, 2.5, 8.0))
-	if not enabled or DisplayServer.get_name() == "headless":
-		return
 	var voices: Dictionary = manifest.get("voice", {})
 	var path = str(voices.get(dialogue_id, ""))
 	if path == "" and dialogue_id.contains("."):
@@ -92,7 +95,7 @@ func speak(dialogue_id: String, text: String = "", speaker: String = "archivist"
 	if path == "" and text == "":
 		return
 	voice_queue.append({"path": path, "text": text, "speaker": speaker})
-	if not voice_player.playing:
+	if not voice_player.playing and caption_left <= 0:
 		_play_next_voice()
 
 func set_music(state: String) -> void:
@@ -134,7 +137,6 @@ func apply_settings(values: Dictionary) -> void:
 	if not enabled and music_player:
 		music_player.stop()
 		voice_player.stop()
-		voice_queue.clear()
 
 func _set_linear(bus: String, linear: float) -> void:
 	var index = AudioServer.get_bus_index(bus)
@@ -209,14 +211,37 @@ func _play_next_voice() -> void:
 		return
 	var next: Dictionary = voice_queue.pop_front()
 	var stream = _stream(str(next.get("path", "")))
-	if stream == null:
-		_play_next_voice()
-		return
-	voice_player.stream = stream
-	voice_player.play()
+	var words = str(next.get("text", "")).split(" ")
+	var pages: Array[String] = []
+	var page = ""
+	for word in words:
+		if (page+" "+word).length() > 145 and page != "":
+			pages.append(page)
+			page = ""
+		page += (" " if page != "" else "") + word
+	if page != "": pages.append(page)
+	var duration = maxf(stream.get_length() if stream else 0.0, maxf(3.5,str(next.text).length()*.065))
+	for caption in pages:
+		caption_pages.append({"text":caption,"speaker":next.speaker,"duration":duration*caption.length()/maxi(1,str(next.text).length())})
+	if not caption_pages.is_empty(): _next_caption()
+	if stream and enabled and DisplayServer.get_name() != "headless":
+		voice_player.stream = stream
+		voice_player.play()
+	elif caption_left <= 0: _play_next_voice()
+
+func _next_caption() -> void:
+	var caption: Dictionary = caption_pages.pop_front()
+	caption_left = caption.duration
+	subtitle_shown.emit(caption.speaker, caption.text, caption.duration)
+
+func clear_dialogue() -> void:
+	voice_queue.clear()
+	caption_pages.clear()
+	caption_left = 0
+	if voice_player: voice_player.stop()
 
 func _on_voice_finished() -> void:
-	_play_next_voice()
+	if caption_left <= 0 and caption_pages.is_empty(): _play_next_voice()
 
 func _exit_tree() -> void:
 	voice_queue.clear()

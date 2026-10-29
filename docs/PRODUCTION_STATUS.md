@@ -1,6 +1,6 @@
 # Production status
 
-## Implemented in 1.0.0-rc1
+## Implemented in 1.0.0-rc2
 
 - Godot 4.6.3 Compatibility renderer with Linux and Windows export presets.
 - Eight authored missions on eight distinct 72×72 maps, with dialogue, scripted
@@ -20,6 +20,18 @@
   integration. CI runs tests and a Linux export smoke.
 - Offline-safe Steam adapter surface. Depot templates remain placeholders until
   a Steamworks AppID exists.
+- Production UI pass: responsive layout and hit testing, keyboard focus,
+  modal input isolation, measured text wrapping, safe settings persistence,
+  session-loss confirmations, queued captions, and Blender model integration.
+- Desktop UI validation across five resolutions and three scales; real Godot
+  captures under Xvfb/Mesa. See `UI_VERIFICATION.md` for evidence and limits.
+- World look pass (presentation only, no gameplay cell changes): triplanar
+  procedural ground materials, kit-scattered trees, shrubs and rubble, kit
+  rubble/barriers/ruins and ruined towers on blocked cells, a perspective
+  camera, the world continued 110 units past the map with rivers and a ruined
+  skyline, fog of war as a smooth world-space tint, procedural sky ambient,
+  AgX tonemap, depth fog and glow on emissive machine parts. `low` and reduced-effects profiles drop
+  glow, fog, water animation and most of the scatter.
 
 ## Remaining gates (not claimed by this RC)
 

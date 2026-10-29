@@ -47,6 +47,9 @@ func run() -> void:
 	advance(sim, 10)
 	expect(sim.population(0) == 7, "production completes")
 	expect(sim.resources[0].y > before.y - 15, "generators accumulate energy")
+	sim.tick()
+	var generators = own(sim,"generator").filter(func(e): return e.complete).size()
+	expect(generators > 0 and absf(sim.income_per_minute(0).y - generators*sim.catalog.energy_per_second*60.0) < 1.0, "income rate reports energy per minute")
 	var fabricator_id = sim.spawn("fabricator",0,Vector2(20,45))
 	before = sim.resources[0]
 	expect(sim.command(0,"train",[fabricator_id],{"kind":"disruptor"}) != "" and sim.resources[0] == before, "age prerequisite enforced without spending")

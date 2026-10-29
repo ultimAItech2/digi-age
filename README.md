@@ -3,14 +3,15 @@
 An original, offline, single-player desktop RTS built with Godot 4.6.3 and
 typed GDScript. Lead the Origin Collective through an eight-mission campaign,
 three technological ages, and a war against the Foundry and Lattice machine
-factions. Version 1.0.0-rc1 ships eight distinct maps, authored encounters,
+factions. Version 1.0.0-rc2 ships eight distinct maps, authored encounters,
 offline voice, music, and effects. No network services are required to play.
 
 ## Play
 
 - **Linux:** extract `DigitalAge-linux-x86_64.tar.gz`, then double-click
   `DigitalAge.x86_64` (or run `./DigitalAge.x86_64`). From this source workspace,
-  run `./run.sh`.
+  run `./run.sh`. This always launches the current source; use `./run.sh --packaged`
+  explicitly to launch the last Linux export.
 - **Windows:** extract `DigitalAge-windows-x86_64.zip` and run `DigitalAge.exe`.
 - Choose **Launch Campaign** to begin **First Signal**. The in-game **Field
   Manual** explains the economy, age progression, unit counters, and controls.
@@ -22,6 +23,22 @@ offline voice, music, and effects. No network services are required to play.
 The desktop builds are self-contained; players do not need Godot installed.
 Windows runtime testing status and measured performance are in
 `docs/VALIDATION.md` in the source project (or `VALIDATION.md` in a desktop archive).
+
+The in-game HUD is a translucent top bar (resources with income per minute,
+population, the AGE OF AI title, TECH / UNITS / BUILD / OBJECTIVES and the
+pause menu), a floating minimap with quick-action buttons, and a selection
+panel with a rendered portrait, health bar, build/production thumbnails, icon
+commands (attack, stop, age and weapons research, rally) and the active job.
+Icons are SVGs in `assets/ui/icons/`; portraits are Blender renders in
+`assets/ui/portraits/` (`tools/render_thumbnails.py`).
+
+The desktop UI supports 1280×720 through 3440×1440, with 100%, 115%, and 125%
+UI scale. Tab/Shift+Tab navigate controls, Enter activates, and Escape closes
+the top overlay. Settings and the manual scroll with the wheel, arrows, or
+Page Up/Down; Tab also reveals offscreen controls. Settings pause gameplay.
+Restarting or leaving an unsaved mission offers save-and-continue. Loading asks
+before replacing unsaved progress and preserves the existing save file.
+See `docs/UI_VERIFICATION.md` for the complete verification matrix.
 
 ## Start a civilization
 
@@ -97,7 +114,9 @@ and clear or replace the Linux-local custom template paths in the export presets
   economy, construction, A* navigation, vision, combat, production and victory.
 - `scripts/opponent.gd`: computer strategy issuing the same commands as the player.
 - `scripts/battlefield.gd` and `scripts/models.gd`: camera, procedural scenery,
-  cached combined machine meshes, fog, placement preview and effects.
+  imported Blender models combined into cached meshes, fog, placement preview and effects.
+- `art/`: editable Blender sources, a rendered asset gallery, and triangle counts.
+  `assets/models/` contains the corresponding game-ready GLB exports.
 - `scripts/interface.gd`, `scripts/main.gd`: HUD, campaign briefing/objectives,
   save/load controls, menus, and input/controller.
 - `scripts/mission_definition.gd`, `scripts/mission_controller.gd`,

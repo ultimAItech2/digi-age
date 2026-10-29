@@ -11,12 +11,35 @@ jobs:
       - name: Install Godot 4.6.3
         run: |
           sudo apt-get update
-          sudo apt-get install -y unzip curl
+          sudo apt-get install -y unzip curl xvfb libgl1-mesa-dri mesa-vulkan-drivers libvulkan1
           ./tools/setup.sh
+      - name: Verify committed CC0 assets
+        run: python3 -I tools/fetch_cc0_assets.py --verify
+      - name: Import resources
+        run: ./tools/godot.sh --headless --editor --import --quit 2>&1 | tee builds/import.log
       - name: Headless tests
         run: ./tools/test.sh
+      - name: Rendered UI matrix
+        run: ./tools/render_ui.sh
+      - name: Rendered scene (OpenGL gate)
+        run: ./tools/render_scene.sh --gl
+      - name: Rendered scene (Forward+ on lavapipe)
+        continue-on-error: true
+        run: ./tools/render_scene.sh --vulkan
+      - name: Scene captures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scene-captures
+          path: builds/scene-*
+      - name: UI verification artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-verification
+          path: builds/ui/
       - name: Linux export smoke
         run: |
           ./tools/godot.sh --headless --export-release "Linux Desktop"
           test -x builds/linux/DigitalAge.x86_64
-          ./builds/linux/DigitalAge.x86_64 --headless --quit
+          XDG_DATA_HOME="$(mktemp -d)" ./builds/linux/DigitalAge.x86_64 --headless -- --ui-smoke

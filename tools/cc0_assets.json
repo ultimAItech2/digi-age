@@ -1,0 +1,42 @@
+{
+  "source": "https://polyhaven.com",
+  "license": "CC0 1.0 Universal",
+  "textures": {
+    "aerial_grass_rock": {"res": "2k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "terrain grass"},
+    "forest_floor": {"res": "2k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "terrain forest floor"},
+    "brown_mud_leaves_01": {"res": "2k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "terrain mud"},
+    "asphalt_02": {"res": "2k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "terrain roads"},
+    "rock_face": {"res": "2k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "terrain cliffs"},
+    "cracked_concrete_wall": {"res": "2k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "ruins and high-rises"},
+    "metal_plate": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "kit hull metal"},
+    "rusty_metal_02": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "kit dark steel and rust"},
+    "concrete_wall_006": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "kit concrete"},
+    "painted_metal_shutter": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "kit painted hull"},
+    "corrugated_iron": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "kit facades"},
+    "rubber_tiles": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "kit tracks"},
+    "bark_willow": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "kit bark"},
+    "mossy_rock": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "kit moss"}
+  },
+  "models": {
+    "island_tree_01": {"res": "1k", "class": "tree"},
+    "island_tree_02": {"res": "1k", "class": "tree"},
+    "island_tree_03": {"res": "1k", "class": "tree"},
+    "tree_small_02": {"res": "1k", "class": "tree"},
+    "jacaranda_tree": {"res": "1k", "class": "tree"},
+    "shrub_01": {"res": "1k", "class": "shrub"},
+    "shrub_02": {"res": "1k", "class": "shrub"},
+    "shrub_03": {"res": "1k", "class": "shrub"},
+    "shrub_04": {"res": "1k", "class": "shrub"},
+    "fern_02": {"res": "1k", "class": "shrub"},
+    "grass_medium_01": {"res": "1k", "class": "grass"},
+    "rock_moss_set_01": {"res": "1k", "class": "prop"},
+    "boulder_01": {"res": "1k", "class": "prop"},
+    "concrete_road_barrier": {"res": "1k", "class": "prop"},
+    "modular_industrial_pipes_01": {"res": "1k", "class": "prop"},
+    "dead_tree_trunk": {"res": "1k", "class": "prop"},
+    "covered_car": {"res": "1k", "class": "prop"}
+  },
+  "hdris": {
+    "kloofendal_48d_partly_cloudy_puresky": {"res": "2k", "fmt": "hdr", "use": "sky lighting"}
+  }
+}

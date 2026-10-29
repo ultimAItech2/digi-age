@@ -1,6 +1,20 @@
 class_name DAModels
 extends RefCounted
-## Original procedural low-poly assets. No external asset dependencies.
+## Blender-authored assets combined into shared meshes for RTS instancing.
+const BLENDER_ASSETS = {
+	"core": "core", "worker": "worker", "scout": "scout", "sentinel": "sentinel",
+	"disruptor": "disruptor", "walker": "walker", "generator": "generator",
+	"depot": "depot", "data_center": "data_center", "fabricator": "fabricator",
+	"tower": "tower", "metal": "metal", "data": "archive", "ruin": "ruin",
+	"barrier": "barrier", "tree": "tree", "bush": "bush", "rubble": "rubble",
+	"highrise_a": "highrise_a", "highrise_b": "highrise_b", "highrise_c": "highrise_c",
+}
+## Scenery kinds that never carry a faction colour (baked once with side -1).
+const SCENERY_KINDS = ["ruin", "barrier", "tree", "bush", "rubble", "highrise_a", "highrise_b", "highrise_c"]
+## Ruined towers, 7-14 units tall, for the skyline outside the map and clustered obstacle cells.
+const HIGHRISE_KINDS = ["highrise_a", "highrise_b", "highrise_c"]
+## Emission strength of team/amber/violet parts so the environment glow picks them up.
+const GLOW_ENERGY = 2.0
 const CYAN = Color("57ebd5")
 const RED = Color("ff795c")
 const DARK = Color("1b2c35")
@@ -8,6 +22,45 @@ const STEEL = Color("536872")
 static var materials: Dictionary = {}
 static var baked_meshes: Dictionary = {}
 static var baked_material: ShaderMaterial
+static var source_scenes: Dictionary = {}
+
+static func blender_entity(kind: String, side: int, accent: Color) -> Node3D:
+	var root = Node3D.new()
+	var cache_key = kind + str(side) + accent.to_html()
+	if not baked_meshes.has(cache_key):
+		var asset_name: String = BLENDER_ASSETS[kind]
+		if not source_scenes.has(asset_name):
+			source_scenes[asset_name] = load("res://assets/models/%s.glb" % asset_name)
+		var scene: PackedScene = source_scenes[asset_name]
+		if not scene:
+			root.free()
+			return null
+		var source = scene.instantiate()
+		append_blender_parts(source, Transform3D.IDENTITY, root, accent)
+		source.free()
+	return bake(root, kind, side, accent)
+
+static func append_blender_parts(node: Node, parent_transform: Transform3D, root: Node3D, accent: Color) -> void:
+	var transform = parent_transform
+	if node is Node3D:
+		transform = parent_transform * node.transform
+	if node is MeshInstance3D and node.mesh:
+		for surface in node.mesh.get_surface_count():
+			var source_material = node.get_active_material(surface) as StandardMaterial3D
+			var color = STEEL
+			var glow = false
+			if source_material:
+				color = accent if source_material.resource_name == "team" else source_material.albedo_color
+				glow = source_material.emission_enabled
+			var part = MeshInstance3D.new()
+			var mesh = ArrayMesh.new()
+			mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, node.mesh.surface_get_arrays(surface))
+			part.mesh = mesh
+			part.transform = transform
+			part.material_override = material(color, glow)
+			root.add_child(part)
+	for child in node.get_children():
+		append_blender_parts(child, transform, root, accent)
 
 static func material(color: Color, glow: bool = false) -> StandardMaterial3D:
 	var key = str(color) + str(glow)
@@ -19,9 +72,83 @@ static func material(color: Color, glow: bool = false) -> StandardMaterial3D:
 	if color.a < 1:
 		m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	if glow:
-		m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		# Lit base plus strong emission: readable under shadow and bright enough
+		# for the environment glow threshold. bake() reads `emission` back.
+		m.albedo_color = Color(color.r * 0.3, color.g * 0.3, color.b * 0.3, color.a)
+		m.emission_enabled = true
+		m.emission = Color(color.r, color.g, color.b, 1.0)
+		m.emission_energy_multiplier = GLOW_ENERGY
 	materials[key] = m
 	return m
+
+## Shared scenery mesh (trees, rubble, ...) for MultiMesh scatter; cached by kind.
+## `low` bakes the kit's _low export instead, for the dense scatter outside the map.
+static func scenery_mesh(kind: String, low: bool = false) -> ArrayMesh:
+	var name = kind + ("_low" if low else "")
+	var key = name + "-1"
+	if not baked_meshes.has(key):
+		if low:
+			var root = Node3D.new()
+			var scene: PackedScene = load("res://assets/models/%s_low.glb" % BLENDER_ASSETS[kind])
+			var source = scene.instantiate()
+			append_blender_parts(source, Transform3D.IDENTITY, root, RED)
+			source.free()
+			bake(root, name, -1).free()
+		else:
+			entity(kind, -1).free()
+	return baked_meshes[key]
+
+## The one lit shader shared by every baked mesh and scatter batch. Created on
+## demand so the battlefield can bind its fog-of-war texture before any bake.
+static func shared_material() -> ShaderMaterial:
+	if baked_material:
+		return baked_material
+	baked_material = ShaderMaterial.new()
+	var shader = Shader.new()
+	# COLOR.a == 0 marks emissive palette parts (team strips, amber, violet).
+	# MultiMesh instance colours multiply in for per-instance scenery tinting.
+	# Baked vertex colours are sRGB (palette hex / faction colours), so the
+	# shader converts them to linear instead of lighting them one lift too pale.
+	# fog_tex is the battlefield's fog-of-war map sampled by world XZ (white when
+	# unbound, e.g. in the asset tests): unexplored ground darkens and desaturates.
+	shader.code = """shader_type spatial;
+render_mode diffuse_burley, specular_schlick_ggx;
+uniform float glow_energy = %.1f;
+%s
+varying vec3 world_pos;
+vec3 to_linear(vec3 c) {
+	return mix(c / 12.92, pow((c + 0.055) / 1.055, vec3(2.4)), step(0.04045, c));
+}
+void vertex() {
+	world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
+}
+void fragment() {
+	float glow = 1.0 - COLOR.a;
+	vec3 srgb = clamp(COLOR.rgb, 0.0, 1.0);
+	// Lift the mid-greys of the steel palette toward the portrait renders; AgX
+	// otherwise compresses them into a flat slate.
+	vec3 base = mix(to_linear(srgb), srgb, 0.35);
+	float f = fog_level(world_pos);
+	ALBEDO = fog_tint(base * (1.0 - glow * 0.7), f);
+	ROUGHNESS = 0.8 - glow * 0.4;
+	SPECULAR = 0.5 * mix(0.3, 1.0, f);
+	EMISSION = base * glow * glow_energy * pow(mix(0.2, 1.0, f), 2.0);
+}""" % [GLOW_ENERGY, FOG_SHADER]
+	baked_material.shader = shader
+	return baked_material
+
+## Fog-of-war sampling shared by the model, ground and water shaders. The texture
+## covers the map plus a one-cell border (74 x 74 texels, one per world unit;
+## texel 1 is cell 0); outside the map it clamps to the border's explored level.
+const FOG_SHADER = """uniform sampler2D fog_tex : hint_default_white, filter_linear, repeat_disable;
+float fog_level(vec3 p) {
+	return texture(fog_tex, (p.xz + vec2(1.5)) / 74.0).r;
+}
+vec3 fog_tint(vec3 c, float f) {
+	float grey = dot(c, vec3(0.3, 0.59, 0.11));
+	float light = pow(mix(0.45, 1.0, f), 1.25);
+	return mix(vec3(grey), c, mix(0.5, 1.0, f)) * light;
+}"""
 
 static func box(parent: Node3D, size: Vector3, p: Vector3, color: Color, glow: bool = false) -> MeshInstance3D:
 	var n = MeshInstance3D.new()
@@ -64,6 +191,11 @@ static func entity(kind: String, side: int, accent_override: Color = Color(0, 0,
 	var accent = CYAN if side == 0 else RED
 	if accent_override.a > 0:
 		accent = accent_override
+	if BLENDER_ASSETS.has(kind):
+		var authored = blender_entity(kind, side, accent)
+		if authored:
+			root.free()
+			return authored
 	if side == -1:
 		if kind == "metal":
 			for i in 5:
@@ -146,10 +278,10 @@ static func entity(kind: String, side: int, accent_override: Color = Color(0, 0,
 		for x in [-1, 1]:
 			for z in [-1, 1]:
 				box(root, Vector3(0.2, 0.4 if kind != "walker" else 0.7, 0.3), Vector3(x*0.4, 0.23 if kind != "walker" else 0.4, z*0.35), DARK)
-	return bake(root, kind, side)
+	return bake(root, kind, side, accent)
 
-static func bake(root: Node3D, kind: String, side: int, _accent: Color = Color.WHITE) -> Node3D:
-	var key = kind + str(side)
+static func bake(root: Node3D, kind: String, side: int, accent: Color = Color.WHITE) -> Node3D:
+	var key = kind + str(side) + accent.to_html()
 	if not baked_meshes.has(key):
 		var vertices = PackedVector3Array()
 		var normals = PackedVector3Array()
@@ -160,11 +292,13 @@ static func bake(root: Node3D, kind: String, side: int, _accent: Color = Color.W
 				continue
 			var arrays = child.mesh.surface_get_arrays(0)
 			var offset = vertices.size()
-			var color: Color = child.material_override.albedo_color
-			color.a = 0.0 if child.material_override.shading_mode == BaseMaterial3D.SHADING_MODE_UNSHADED else 1.0
+			var glow: bool = child.material_override.emission_enabled
+			var color: Color = child.material_override.emission if glow else child.material_override.albedo_color
+			# Alpha 0 marks emissive parts for the shared shader below.
+			color.a = 0.0 if glow else 1.0
 			for i in arrays[Mesh.ARRAY_VERTEX].size():
 				vertices.append(child.transform * arrays[Mesh.ARRAY_VERTEX][i])
-				normals.append((child.basis * arrays[Mesh.ARRAY_NORMAL][i]).normalized())
+				normals.append((child.basis.inverse().transposed() * arrays[Mesh.ARRAY_NORMAL][i]).normalized())
 				colors.append(color)
 			for i in arrays[Mesh.ARRAY_INDEX]:
 				indices.append(offset + i)
@@ -177,11 +311,9 @@ static func bake(root: Node3D, kind: String, side: int, _accent: Color = Color.W
 		var mesh = ArrayMesh.new()
 		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, data)
 		baked_meshes[key] = mesh
-	if not baked_material:
-		baked_material = ShaderMaterial.new()
-		var shader = Shader.new()
-		shader.code = "shader_type spatial; render_mode diffuse_burley; void fragment(){ ALBEDO = COLOR.rgb; ROUGHNESS = 0.8; EMISSION = COLOR.rgb * (1.0-COLOR.a)*0.4; }"
-		baked_material.shader = shader
+	# Battlefield batches use the current faction's mesh for each kind and side.
+	baked_meshes[kind + str(side)] = baked_meshes[key]
+	shared_material()
 	for child in root.get_children():
 		root.remove_child(child)
 		child.free()

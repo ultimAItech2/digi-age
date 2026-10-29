@@ -9,6 +9,10 @@ var bases: Array[Vector2] = [Vector2(12, 36), Vector2(59, 36)]
 var catalog: DACatalog = preload("res://data/catalog.tres")
 var entities: Dictionary = {}
 var resources: Array[Vector3] = []
+## Transient income tracking: resources credited during the current window, and the last per-minute rate.
+var income: Array[Vector3] = [Vector3.ZERO, Vector3.ZERO]
+var income_rate: Array[Vector3] = [Vector3.ZERO, Vector3.ZERO]
+var income_window: float = 0.0
 var ages: Array[int] = [0, 0]
 var upgrades: Array[int] = [0, 0]
 var visible: Array = []
@@ -54,9 +58,22 @@ func clear_world() -> void:
 	entities.clear()
 	obstacles.clear()
 	next_id = 1
+	reset_income()
 	visible = [{}, {}]
 	explored = [{}, {}]
 	rebuild_navigation()
+
+func reset_income() -> void:
+	income = [Vector3.ZERO, Vector3.ZERO]
+	income_rate = [Vector3.ZERO, Vector3.ZERO]
+	income_window = 0.0
+
+func credit(side: int, delta: Vector3) -> void:
+	resources[side] += delta
+	income[side] += delta
+
+func income_per_minute(side: int) -> Vector3:
+	return income_rate[side]
 
 func faction_modifier(side: int, key: String, default: float = 1.0) -> float:
 	if side < 0 or side >= active_factions.size() or active_factions[side] == null:
@@ -450,6 +467,12 @@ func tick(dt: float = 0.1) -> void:
 		return
 	elapsed += dt
 	ticks += 1
+	if income_window >= 10.0 - dt * 0.5:
+		for side in 2:
+			income_rate[side] = income[side] * (60.0 / income_window)
+			income[side] = Vector3.ZERO
+		income_window = 0.0
+	income_window += dt
 	if ticks % 5 == 0:
 		update_visibility()
 	for id in entities.keys():
@@ -470,7 +493,7 @@ func tick_building(e: Dictionary, dt: float) -> void:
 	if not e.complete:
 		return
 	if e.kind == "generator":
-		resources[e.owner].y += catalog.energy_per_second * dt
+		credit(e.owner, Vector3(0, catalog.energy_per_second * dt, 0))
 	if e.research != "":
 		e.research_left -= dt
 		if e.research_left <= 0:
@@ -540,9 +563,9 @@ func tick_worker(e: Dictionary, dt: float) -> void:
 		if walk(e, depot.pos, dt, catalog.buildings[depot.kind].radius + 1.1):
 			var amount: float = e.cargo
 			if e.cargo_kind == "metal":
-				resources[e.owner].x += amount
+				credit(e.owner, Vector3(amount, 0, 0))
 			else:
-				resources[e.owner].z += amount
+				credit(e.owner, Vector3(0, 0, amount))
 			stats[e.owner].gathered += amount
 			e.cargo = 0.0
 			e.order = "gather"
@@ -674,4 +697,5 @@ func restore_state(state: Dictionary) -> String:
 	for entity in entities.values():
 		if entity.owner >= 0 and entity.building:
 			set_footprint(entity.pos, catalog.buildings[entity.kind].radius, true)
+	reset_income()
 	return ""
