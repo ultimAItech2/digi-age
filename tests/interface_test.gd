@@ -134,7 +134,25 @@ func run() -> void:
 	expect(game.field.ghost != null and DASprites.is_card(game.field.ghost) and game.field.ghost.get_child(0).get_instance_shader_parameter("tint") != null, "placement ghost is a tinted card")
 	var tint = sentinel_node.get_child(0).get_instance_shader_parameter("tint")
 	expect(tint == null or Color(tint) == Color(1, 1, 1, 1), "entity cards keep white tint while a ghost is shown")
+	expect(game.field.ghost.get_node_or_null("Fx/Ground") == null, "placement ghost has no owner disc or contact shadow")
 	game.field.preview("", Vector2.ZERO, false)
+	var archive = game.sim.entities.values().filter(func(e): return e.kind == "data")[0]
+	game.field.sync(0.1, game.selected)
+	expect(game.field.models[archive.id].get_node_or_null("Ground") != null, "archive model gets the contact shadow quad")
+	# Clicking the drawn base of a building card (anchor_offset toward the camera,
+	# below the node's ground point on screen) selects it when no unit stands there.
+	var lone_id = game.sim.spawn("fabricator", 0, Vector2(60, 12))
+	var lone = game.sim.entities[lone_id]
+	var saved_focus = game.field.focus
+	game.field.focus = lone.pos
+	game.field.update_camera()
+	game.field.sync(0.1, game.selected)
+	var base_point: Vector2 = lone.pos + Vector2(sin(game.field.yaw), cos(game.field.yaw)) * DASprites.anchor_offset("fabricator", 5)
+	game.selected.clear()
+	click(game.field.screen_at(base_point, 0.3))
+	expect(game.selected.has(lone_id), "clicking the card's drawn base selects the building")
+	game.field.focus = saved_focus
+	game.field.update_camera()
 	expect(game.save_game("test_cards") == "" and game.load_game("test_cards") == "", "save and load round trip")
 	game.field.sync(0.1, game.selected)
 	expect(game.field.models.has(sentinel_id) and DASprites.is_card(game.field.models[sentinel_id]), "cards rebuilt after load")

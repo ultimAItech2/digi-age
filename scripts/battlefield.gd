@@ -1009,19 +1009,21 @@ func camera_right_ground() -> Vector2:
 	return Vector2(cos(yaw), -sin(yaw))
 
 ## The visual for an entity: a photoreal sprite card when the kind has one,
-## otherwise the Blender model with the same ground disc under it so mixed
-## kinds share the depth cues. `accent.a == 0` draws no owner disc (ghosts).
-func entity_node(e: Dictionary, accent: Color = Color(0, 0, 0, 0)) -> Node3D:
+## otherwise the Blender model with the same contact shadow and owner disc
+## under it so mixed kinds share the depth cues. A ghost (placement preview)
+## gets neither disc nor contact shadow.
+func entity_node(e: Dictionary, ghost: bool = false) -> Node3D:
 	var owner: int = e.get("owner", -1)
-	var color: Color = accent if accent.a > 0 else (sim.faction_color(owner) if owner >= 0 else Color.WHITE)
-	var disc = color if owner >= 0 and accent.a == 0 else Color(color.r, color.g, color.b, 0.0)
-	var cells = (sim.catalog.buildings[e.kind].radius * 2 + 1) if e.get("building", false) else 1
+	var building: bool = e.get("building", false)
+	var color: Color = sim.faction_color(owner) if owner >= 0 else Color.WHITE
+	var disc = color if owner >= 0 else Color(color.r, color.g, color.b, 0.0)
+	var cells = (sim.catalog.buildings[e.kind].radius * 2 + 1) if building else 1
 	if DASprites.has_sprite(e.kind):
-		return DASprites.card(e.kind, owner, cells, disc)
+		return DASprites.card(e.kind, owner, cells, disc, not ghost)
 	var n = DAModels.entity(e.kind, owner, color)
-	if owner >= 0 and accent.a == 0:
-		var diameter = DASprites.CONTACT_SCALE * (1.0 if not e.get("building", false) else cells * sqrt(2.0))
-		var ring_radius = 0.65 if not e.get("building", false) else (cells - 1) * 0.5 + 0.4
+	if not ghost:
+		var diameter = DASprites.CONTACT_SCALE * (cells * sqrt(2.0) if building else 1.0)
+		var ring_radius = (cells - 1) * 0.5 + 0.4 if building else 0.65
 		DASprites.ground_only(n, disc, diameter, ring_radius)
 	return n
 
@@ -1118,7 +1120,7 @@ func preview(kind: String, p: Vector2, valid: bool) -> void:
 		ghost_kind = kind
 		ghost = null
 		if kind != "":
-			ghost = entity_node({"kind": kind, "owner": 0, "building": true}, Color(1, 1, 1, 0))
+			ghost = entity_node({"kind": kind, "owner": 0, "building": true}, true)
 			add_child(ghost)
 	if ghost:
 		ghost.position = Vector3(roundf(p.x), 0, roundf(p.y))

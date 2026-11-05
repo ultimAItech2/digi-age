@@ -120,6 +120,12 @@ func launch_smoke() -> void:
 	await get_tree().process_frame
 	hud.prepare_layout(true)
 	var passed = menu_ready and mode == "playing" and not field.models.is_empty() and hud.buttons.any(func(b): return b.action == "pause")
+	# The packaged build must carry the sprite look: exports ship the imported
+	# textures, not the PNGs, so prove a Worker is a card and has its portrait.
+	var worker_cards = field.models.values().filter(func(n): return n.name == "worker" and DASprites.is_card(n))
+	var sprites_ok = DASprites.has_sprite("worker") and not worker_cards.is_empty() and hud.portrait("worker") == DASprites.portrait("worker")
+	print("UI_EXPORT_SMOKE sprites: ", "PASS" if sprites_ok else "FAIL")
+	passed = passed and sprites_ok
 	print("UI_EXPORT_SMOKE: ", "PASS" if passed else "FAIL")
 	get_tree().quit(0 if passed else 1)
 
@@ -496,17 +502,26 @@ func pick_screen(screen: Vector2) -> int:
 		var model: Node3D = field.models[e.id]
 		var first = true
 		var bounds = Rect2()
-		for child in model.get_children():
-			if not child is MeshInstance3D:
-				continue
-			var aabb = child.get_aabb()
-			for i in 8:
-				var point = field.camera.unproject_position(child.global_transform*aabb.get_endpoint(i))
-				if first:
-					bounds = Rect2(point,Vector2.ZERO)
-					first = false
-				else:
-					bounds = bounds.expand(point)
+		var points: PackedVector3Array = []
+		if DASprites.is_card(model):
+			# A sprite card is drawn leaning toward the camera from a base that sits
+			# ahead of the node, so its real corners replace the mesh box.
+			var cells = (sim.catalog.buildings[e.kind].radius * 2 + 1) if e.building else 1
+			points = DASprites.card_corners(model, e.kind, cells, field.camera)
+		else:
+			for child in model.get_children():
+				if not child is MeshInstance3D:
+					continue
+				var aabb = child.get_aabb()
+				for i in 8:
+					points.append(child.global_transform*aabb.get_endpoint(i))
+		for p3 in points:
+			var point = field.camera.unproject_position(p3)
+			if first:
+				bounds = Rect2(point,Vector2.ZERO)
+				first = false
+			else:
+				bounds = bounds.expand(point)
 		if not first and bounds.grow(4).has_point(screen):
 			var distance = screen.distance_to(bounds.get_center())
 			if distance < best_distance:

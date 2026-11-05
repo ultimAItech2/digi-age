@@ -94,8 +94,13 @@ contact shadows and faction discs; Siege Walker and the data archive keep
 their Blender models. `tests/sprite_cards_test.gd` covers the catalogue, card
 geometry, pick boxes and the sun helpers; `tests/interface_test.gd` covers
 facing flip against the camera yaw, construction rise, ghost tint isolation,
-rebuild after load and the low-profile shadow toggle. Reference capture:
-`docs/images/sprite-look.jpg` (`tools/render_scene.sh --gl --zoom 24`).
+rebuild after load, the low-profile shadow toggle and picking a card by its
+drawn base. Reference capture: `docs/images/sprite-look.jpg`
+(gl_compatibility, `--demo --zoom 24`); the same scene was captured on
+Forward+ (lavapipe) and inspected. Exported packages ship the imported
+textures rather than the PNGs, so `--ui-smoke` on the exported binary now
+asserts that a Worker is drawn as a card with its sprite portrait
+(`UI_EXPORT_SMOKE sprites: PASS` on the Linux export of this commit).
 Headless `--benchmark` (188 sentinels, dummy renderer, this workstation):
 39.9 ms CPU per frame before the sprite work, 37.9 ms after, so the cards do
 not add CPU cost; GPU cost on the recommended PC is not measured.

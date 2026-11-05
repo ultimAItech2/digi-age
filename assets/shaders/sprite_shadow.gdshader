@@ -4,7 +4,9 @@ render_mode unshaded, cull_disabled, depth_draw_never, blend_mix;
 
 // Sun-cast shadow of a sprite card: the card's silhouette laid flat on the
 // ground, each point `t` above the base moved `t * shadow_length` along the
-// sun's ground direction (Age of AI's sheared silhouette shadow).
+// sun's ground direction (Age of AI's sheared silhouette shadow). The width
+// runs along the world axis perpendicular to the sun, mirrored to follow the
+// camera's right, so rotating the view never collapses the shadow to a line.
 uniform sampler2D tex : source_color, filter_linear_mipmap, repeat_disable;
 uniform float anchor_offset = 0.0;
 uniform float card_height = 1.0;
@@ -25,9 +27,11 @@ void vertex() {
 	vec3 fwd = -INV_VIEW_MATRIX[2].xyz;
 	fwd.y = 0.0;
 	fwd = normalize(fwd);
+	vec3 across = vec3(sun_dir.y, 0.0, -sun_dir.x);
+	across *= dot(across, right) < 0.0 ? -1.0 : 1.0;
 	origin = MODEL_MATRIX[3].xyz;
 	vec3 base = origin - fwd * anchor_offset;
-	vec3 world = base + right * VERTEX.x + vec3(sun_dir.x, 0.0, sun_dir.y) * VERTEX.y * shadow_length;
+	vec3 world = base + across * VERTEX.x + vec3(sun_dir.x, 0.0, sun_dir.y) * VERTEX.y * shadow_length;
 	world.y = origin.y + 0.02;
 	height_frac = VERTEX.y / card_height;
 	POSITION = PROJECTION_MATRIX * VIEW_MATRIX * vec4(world, 1.0);

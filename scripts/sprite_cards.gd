@@ -33,9 +33,14 @@ static func sprite_path(kind: String) -> String:
 		return ""
 	return "res://assets/sprites/%s.png" % SPRITES[kind]
 
+## A sprite is usable when its PNG is on disk (source runs, clean clones) or
+## when Godot's imported artefact exists: exported packages ship the import,
+## not the PNG, so the source file alone must never gate the feature.
+static func sprite_available(path: String) -> bool:
+	return path != "" and (DABattlefield.imported(path) or FileAccess.file_exists(path))
+
 static func has_sprite(kind: String) -> bool:
-	var path = sprite_path(kind)
-	return path != "" and FileAccess.file_exists(path)
+	return sprite_available(sprite_path(kind))
 
 ## The sprite as a texture: the imported (mipmapped) resource when Godot has
 ## imported it, otherwise the PNG decoded directly so headless runs on a clean
@@ -45,35 +50,42 @@ static func texture(kind: String) -> Texture2D:
 		return textures[kind]
 	var result: Texture2D = null
 	var path = sprite_path(kind)
-	if has_sprite(kind):
-		if DABattlefield.imported(path):
-			result = load(path)
-		else:
-			var image = Image.new()
-			if image.load_png_from_buffer(FileAccess.get_file_as_bytes(path)) == OK:
-				result = ImageTexture.create_from_image(image)
+	if DABattlefield.imported(path):
+		result = load(path)
+	elif FileAccess.file_exists(path):
+		var image = Image.new()
+		if image.load_png_from_buffer(FileAccess.get_file_as_bytes(path)) == OK:
+			result = ImageTexture.create_from_image(image)
 	textures[kind] = result
 	return result
 
-## Square HUD portrait cut from the sprite: padded to its longer side, then
-## scaled to PORTRAIT_SIZE. Null when the kind has no sprite.
+## Square HUD portrait cut from the sprite's texture, so it works wherever the
+## texture does (exports included). Null when the kind has no sprite.
 static func portrait(kind: String) -> Texture2D:
 	if portraits.has(kind):
 		return portraits[kind]
-	var result: Texture2D = null
-	if has_sprite(kind):
-		var image = Image.new()
-		if image.load_png_from_buffer(FileAccess.get_file_as_bytes(sprite_path(kind))) == OK:
-			var side = maxi(image.get_width(), image.get_height())
-			var square = Image.create(side, side, false, Image.FORMAT_RGBA8)
-			square.fill(Color(0, 0, 0, 0))
-			image.convert(Image.FORMAT_RGBA8)
-			var offset = Vector2i((side - image.get_width()) / 2, (side - image.get_height()) / 2)
-			square.blit_rect(image, Rect2i(Vector2i.ZERO, image.get_size()), offset)
-			square.resize(PORTRAIT_SIZE, PORTRAIT_SIZE, Image.INTERPOLATE_LANCZOS)
-			result = ImageTexture.create_from_image(square)
+	var result = portrait_from_texture(texture(kind))
 	portraits[kind] = result
 	return result
+
+## Pads a texture's image to a square on its longer side and scales it to PORTRAIT_SIZE.
+static func portrait_from_texture(tex: Texture2D) -> Texture2D:
+	if tex == null:
+		return null
+	var image: Image = tex.get_image()
+	if image == null or image.is_empty():
+		return null
+	image = image.duplicate()
+	if image.is_compressed():
+		image.decompress()
+	image.convert(Image.FORMAT_RGBA8)
+	var side = maxi(image.get_width(), image.get_height())
+	var square = Image.create(side, side, false, Image.FORMAT_RGBA8)
+	square.fill(Color(0, 0, 0, 0))
+	var offset = Vector2i((side - image.get_width()) / 2, (side - image.get_height()) / 2)
+	square.blit_rect(image, Rect2i(Vector2i.ZERO, image.get_size()), offset)
+	square.resize(PORTRAIT_SIZE, PORTRAIT_SIZE, Image.INTERPOLATE_LANCZOS)
+	return ImageTexture.create_from_image(square)
 
 # --- Cards ------------------------------------------------------------------
 
@@ -190,14 +202,16 @@ static func ground_only(parent: Node3D, disc: Color, diameter: float, ring_radiu
 
 ## A sprite card entity: child(0) "Card" (the MeshInstance3D main.gd picks
 ## against), then "Fx" with the cast "Shadow" and the "Ground" disc.
-static func card(kind: String, side: int, footprint_cells: int, accent: Color) -> Node3D:
+static func card(kind: String, side: int, footprint_cells: int, accent: Color, with_ground: bool = true) -> Node3D:
 	var root = Node3D.new()
 	root.name = kind
 	var size = card_size(kind, footprint_cells)
 	var quad = QuadMesh.new()
 	quad.size = size
 	quad.center_offset = Vector3(0, size.y * 0.5, 0)
-	var hw = maxf(size.x * 0.5, footprint_cells * 0.5)
+	# The drawn base sits anchor_offset toward the camera in any yaw, so the
+	# box (used for culling and by main.gd's pick_screen) grows by it all round.
+	var hw = maxf(size.x * 0.5, footprint_cells * 0.5) + anchor_offset(kind, footprint_cells)
 	var body = MeshInstance3D.new()
 	body.name = "Card"
 	body.mesh = quad
@@ -222,8 +236,21 @@ static func card(kind: String, side: int, footprint_cells: int, accent: Color) -
 	var diameter = CONTACT_SCALE * (1.0 if is_unit else footprint_cells * sqrt(2.0))
 	var ring_radius = 0.65 if is_unit else (footprint_cells - 1) * 0.5 + 0.4
 	var disc = accent if side >= 0 else Color(accent.r, accent.g, accent.b, 0.0)
-	ground_only(fx, disc, diameter, ring_radius)
+	if with_ground:
+		ground_only(fx, disc, diameter, ring_radius)
 	return root
+
+## The four world-space corners of the card as drawn for `camera`: base
+## centre moved anchor_offset toward the camera, width along the camera's
+## right, height along the camera's up (the billboard leans to face it).
+static func card_corners(node: Node3D, kind: String, footprint_cells: int, camera: Camera3D) -> PackedVector3Array:
+	var size = card_size(kind, footprint_cells)
+	var basis = camera.global_transform.basis
+	var fwd = Vector3(-basis.z.x, 0.0, -basis.z.z).normalized()
+	var base = node.global_position - fwd * anchor_offset(kind, footprint_cells)
+	var half = basis.x * size.x * 0.5
+	var up = basis.y * size.y
+	return PackedVector3Array([base - half, base + half, base + half + up, base - half + up])
 
 static func set_rise(node: Node3D, progress: float) -> void:
 	for child in [node.get_node_or_null("Card"), node.get_node_or_null("Fx/Shadow")]:

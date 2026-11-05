@@ -59,6 +59,15 @@ func run() -> void:
 	expect(core.get_node("Fx/Ground").mesh is PlaneMesh, "ground disc present")
 	var disc = DASprites.ground_only(walker, Color("57ebd5"), 2.0)
 	expect(disc.get_parent() == walker and not (walker.get_child(0) is MeshInstance3D and walker.get_child(0).name == "Card"), "ground disc added under a 3D model without making it a card")
+	# Review fixes: exported builds pack the imported texture, not the PNG; portraits must come from the texture.
+	var small = ImageTexture.create_from_image(Image.create(64, 32, false, Image.FORMAT_RGBA8))
+	var pf = DASprites.portrait_from_texture(small)
+	expect(pf != null and pf.get_width() == 128 and pf.get_height() == 128, "portrait cut from any texture")
+	expect(DASprites.sprite_available("res://assets/sprites/units/drone.png"), "available when the PNG exists")
+	expect(DASprites.sprite_available("res://assets/sprites/units/nothing.png") == false, "unavailable without PNG or import")
+	# The pick box must also cover the card's base, which sits anchor_offset toward the camera.
+	var a = DASprites.anchor_offset("core", 5)
+	expect(core.get_child(0).custom_aabb.position.x <= -(2.5 + a) and core.get_child(0).custom_aabb.end.z >= 2.5 + a, "core pick box extends by the anchor offset")
 	for n in [core, worker, other, walker]:
 		n.free()
 	print("SPRITE CARD CONTRACT: %d failures" % failures)
