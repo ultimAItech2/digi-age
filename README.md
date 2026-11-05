@@ -32,6 +32,13 @@ commands (attack, stop, age and weapons research, rally) and the active job.
 Icons are SVGs in `assets/ui/icons/`; portraits are Blender renders in
 `assets/ui/portraits/` (`tools/render_thumbnails.py`).
 
+Buildings, units and salvage deposits are drawn as photoreal sprite cards
+standing in the 3D world: the Age of AI sprite set (`assets/sprites/`, see
+its README for origin and recipe) on camera-facing cards with sun-cast
+silhouette shadows, contact shadows and a faction-coloured ground disc. Kinds
+without a sprite (Siege Walker, data archive) keep their Blender models until
+a sprite is dropped in.
+
 The desktop UI supports 1280×720 through 3440×1440, with 100%, 115%, and 125%
 UI scale. Tab/Shift+Tab navigate controls, Enter activates, and Escape closes
 the top overlay. Settings and the manual scroll with the wheel, arrows, or
