@@ -140,6 +140,10 @@ func run() -> void:
 	expect(game.field.models.has(sentinel_id) and DASprites.is_card(game.field.models[sentinel_id]), "cards rebuilt after load")
 	core = game.sim.entities[core.id]
 	game.selected.assign([core.id])
+	game.field.apply_settings({"profile": "low"})
+	expect(not game.field.models[sentinel_id].get_node("Fx/Shadow").visible, "low profile hides card shadows along with the sun's")
+	game.field.apply_settings({"profile": "normal"})
+	expect(game.field.models[sentinel_id].get_node("Fx/Shadow").visible, "normal profile shows card shadows again")
 	# Pause, help, speed and restart use real key/menu routes.
 	key(KEY_SPACE)
 	expect(game.mode=="paused","Space opens pause overlay")

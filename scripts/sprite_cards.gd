@@ -81,8 +81,10 @@ const BUILDING_WIDTH_FACTOR = 1.05
 const UNIT_HEIGHT = 1.4
 const UNIT_HEIGHT_LARGE = 1.9
 const CONTACT_SCALE = 1.3
-const CAST_ALPHA = 0.38
-const CONTACT_ALPHA = 0.3
+## Age of AI draws its cast shadows at 38% black on a 2D canvas (sRGB); Godot
+## blends in linear space, where 0.65 darkens bright ground by the same amount.
+const CAST_ALPHA = 0.65
+const CONTACT_ALPHA = 0.5
 
 static var card_shader: Shader
 static var shadow_shader: Shader

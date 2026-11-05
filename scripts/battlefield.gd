@@ -262,6 +262,7 @@ func apply_settings(values: Dictionary) -> void:
 	var no_shadows = "--no-shadows" in OS.get_cmdline_user_args()
 	if sun:
 		sun.shadow_enabled = not low and not reduced and not no_shadows
+		DASprites.set_shadows_enabled(sun.shadow_enabled)
 		sun.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS if (low or not forward_plus) else DirectionalLight3D.SHADOW_PARALLEL_4_SPLITS
 		if low or not forward_plus:
 			sun.directional_shadow_split_1 = 0.3

@@ -86,6 +86,20 @@ exits 0. The extracted Linux package also passes `--headless -- --ui-smoke`,
 which verifies menu startup and entry into a mission. Windows is produced and hashed only; no Windows machine signed off
 this RC.
 
+## Photoreal sprite cards
+
+Buildings, units and deposits are drawn as camera-facing sprite cards from
+the Age of AI set (`assets/sprites/README.md`), with sheared cast shadows,
+contact shadows and faction discs; Siege Walker and the data archive keep
+their Blender models. `tests/sprite_cards_test.gd` covers the catalogue, card
+geometry, pick boxes and the sun helpers; `tests/interface_test.gd` covers
+facing flip against the camera yaw, construction rise, ghost tint isolation,
+rebuild after load and the low-profile shadow toggle. Reference capture:
+`docs/images/sprite-look.jpg` (`tools/render_scene.sh --gl --zoom 24`).
+Headless `--benchmark` (188 sentinels, dummy renderer, this workstation):
+39.9 ms CPU per frame before the sprite work, 37.9 ms after, so the cards do
+not add CPU cost; GPU cost on the recommended PC is not measured.
+
 ## Not claimed
 
 Steamworks live integration, extended 200-unit 1080p performance targets, and

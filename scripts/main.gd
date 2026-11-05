@@ -319,6 +319,9 @@ func capture() -> void:
 	var path = "res://builds/screenshot.png"
 	get_viewport().get_texture().get_image().save_png(path)
 	print("Screenshot saved: ", path)
+	# tools/render_scene.sh waits for the process to end; a benchmark quits on its own.
+	if benchmark_remaining < 0:
+		get_tree().quit()
 
 func camera_controls(dt: float) -> void:
 	if hud.modal_active(): return

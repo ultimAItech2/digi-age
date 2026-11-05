@@ -87,6 +87,8 @@ One map cell is one world unit. Building cards are `cells × √2 × 1.05` wide
 anchored at the footprint centre plus half the diagonal toward the camera;
 unit cards are 1.4 units tall (1.9 for disruptor and walker); deposits are
 `√2` wide. Every card has a sun-cast silhouette shadow sheared along the sun
-direction (38 % black), a soft contact shadow (1.3 × footprint, 30 % black)
-and an owner disc in the faction colour. The HUD portrait of a kind with a
+direction, a soft contact shadow (1.3 × footprint) and an owner disc in the
+faction colour. Age of AI draws the shadows at 38 % and 30 % black on an sRGB
+canvas; Godot blends in linear space, so the shaders use 0.65 and 0.5 to
+darken the ground by the same visible amount. The HUD portrait of a kind with a
 sprite is the sprite itself.
