@@ -25,6 +25,6 @@ if [[ ! -s "$render_dir/display" ]]; then
 fi
 export DISPLAY=":$(<"$render_dir/display")"
 mkdir -p builds/ui
-./tools/godot.sh --audio-driver Dummy --script tests/ui_production_test.gd -- --capture-ui 2>&1 | tee builds/ui/render.log
+./tools/godot.sh --audio-driver Dummy --rendering-method gl_compatibility --rendering-driver opengl3 --script tests/ui_production_test.gd -- --capture-ui 2>&1 | tee builds/ui/render.log
 if grep -Eq 'SCRIPT ERROR|^ERROR:|FAIL:' builds/ui/render.log; then exit 1; fi
 python3 tools/ui_report.py

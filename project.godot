@@ -6,7 +6,7 @@ config/name="Digital Age: Machine Civilizations"
 config/version="1.0.0-rc2"
 config/icon="res://assets/icon.svg"
 run/main_scene="res://scenes/main.tscn"
-config/features=PackedStringArray("4.6", "GL Compatibility")
+config/features=PackedStringArray("4.6", "Forward Plus")
 config/description="An offline real-time strategy game about rival machine civilizations."
 
 [display]
@@ -20,12 +20,42 @@ window/size/min_width=1280
 window/size/min_height=720
 
 [rendering]
-lights_and_shadows/directional_shadow/size=1024
-lights_and_shadows/directional_shadow/soft_shadow_filter_quality=0
-renderer/rendering_method="gl_compatibility"
+
+renderer/rendering_method="forward_plus"
 renderer/rendering_method.mobile="gl_compatibility"
-environment/defaults/default_clear_color=Color(0.025, 0.04, 0.055, 1)
+rendering_device/fallback_to_opengl3=true
+textures/vram_compression/import_s3tc_bptc=true
+textures/default_filters/anisotropic_filtering_level=3
 textures/default_filters/use_nearest_mipmap_filter=false
+anti_aliasing/quality/use_taa=true
+anti_aliasing/quality/msaa_3d=0
+anti_aliasing/quality/screen_space_aa=0
+scaling_3d/mode=0
+scaling_3d/scale=1.0
+lights_and_shadows/directional_shadow/size=4096
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality=3
+lights_and_shadows/directional_shadow/16_bits=true
+environment/ssao/quality=2
+environment/ssao/half_size=true
+environment/ssil/quality=2
+environment/ssil/half_size=true
+environment/screen_space_reflection/roughness_quality=1
+environment/volumetric_fog/volume_size=64
+environment/volumetric_fog/volume_depth=64
+environment/volumetric_fog/use_filter=1
+environment/glow/upscale_mode=1
+environment/defaults/default_clear_color=Color(0.025, 0.04, 0.055, 1)
+
+[shader_globals]
+
+fog_of_war={
+"type": "sampler2D",
+"value": ""
+}
+fog_bounds={
+"type": "vec4",
+"value": Vector4(-1.5, -1.5, 74, 74)
+}
 
 [audio]
 buses/default_bus_layout="res://default_bus_layout.tres"

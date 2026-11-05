@@ -228,7 +228,7 @@ def export_lod(asset_id, parts, lod):
     bpy.ops.export_scene.gltf(
         filepath=str(path), export_format="GLTF_SEPARATE", use_selection=True, export_apply=True,
         export_animations=False, export_skins=False, export_morph=False, export_yup=True,
-        export_tangents=True, export_normals=True, export_texcoords=True, export_colors="NONE",
+        export_tangents=True, export_normals=True, export_texcoords=True, export_vertex_color="NONE",
         export_image_format="AUTO", export_keep_originals=False, export_texture_dir="textures",
         export_lights=False, export_cameras=False)
     return body, path

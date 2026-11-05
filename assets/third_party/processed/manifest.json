@@ -1,0 +1,1352 @@
+{
+  "models": {
+    "island_tree_01": {
+      "class": "tree",
+      "lods": [
+        {
+          "file": "island_tree_01_lod0.gltf",
+          "triangles": 19198
+        },
+        {
+          "file": "island_tree_01_lod1.gltf",
+          "triangles": 9653
+        },
+        {
+          "file": "island_tree_01_lod2.gltf",
+          "triangles": 6932
+        }
+      ],
+      "source_triangles": 1599403,
+      "size": [
+        4.755,
+        5.027,
+        4.818
+      ]
+    },
+    "island_tree_02": {
+      "class": "tree",
+      "lods": [
+        {
+          "file": "island_tree_02_lod0.gltf",
+          "triangles": 19197
+        },
+        {
+          "file": "island_tree_02_lod1.gltf",
+          "triangles": 7804
+        },
+        {
+          "file": "island_tree_02_lod2.gltf",
+          "triangles": 5037
+        }
+      ],
+      "source_triangles": 1072212,
+      "size": [
+        4.208,
+        3.407,
+        4.071
+      ]
+    },
+    "island_tree_03": {
+      "class": "tree",
+      "lods": [
+        {
+          "file": "island_tree_03_lod0.gltf",
+          "triangles": 20125
+        },
+        {
+          "file": "island_tree_03_lod1.gltf",
+          "triangles": 11347
+        },
+        {
+          "file": "island_tree_03_lod2.gltf",
+          "triangles": 8609
+        }
+      ],
+      "source_triangles": 2085320,
+      "size": [
+        2.972,
+        2.615,
+        2.913
+      ]
+    },
+    "tree_small_02": {
+      "class": "tree",
+      "lods": [
+        {
+          "file": "tree_small_02_lod0.gltf",
+          "triangles": 43224
+        },
+        {
+          "file": "tree_small_02_lod1.gltf",
+          "triangles": 42917
+        },
+        {
+          "file": "tree_small_02_lod2.gltf",
+          "triangles": 42886
+        }
+      ],
+      "source_triangles": 2062487,
+      "size": [
+        2.917,
+        4.557,
+        4.292
+      ]
+    },
+    "jacaranda_tree": {
+      "class": "tree",
+      "lods": [
+        {
+          "file": "jacaranda_tree_lod0.gltf",
+          "triangles": 69787
+        },
+        {
+          "file": "jacaranda_tree_lod1.gltf",
+          "triangles": 69025
+        },
+        {
+          "file": "jacaranda_tree_lod2.gltf",
+          "triangles": 68786
+        }
+      ],
+      "source_triangles": 3863832,
+      "size": [
+        24.417,
+        19.469,
+        19.155
+      ]
+    },
+    "shrub_01": {
+      "class": "shrub",
+      "lods": [
+        {
+          "file": "shrub_01_lod0.gltf",
+          "triangles": 2400
+        },
+        {
+          "file": "shrub_01_lod1.gltf",
+          "triangles": 799
+        },
+        {
+          "file": "shrub_01_lod2.gltf",
+          "triangles": 320
+        }
+      ],
+      "source_triangles": 156012,
+      "size": [
+        2.587,
+        0.396,
+        0.219
+      ]
+    },
+    "shrub_02": {
+      "class": "shrub",
+      "lods": [
+        {
+          "file": "shrub_02_lod0.gltf",
+          "triangles": 2400
+        },
+        {
+          "file": "shrub_02_lod1.gltf",
+          "triangles": 800
+        },
+        {
+          "file": "shrub_02_lod2.gltf",
+          "triangles": 604
+        }
+      ],
+      "source_triangles": 27254,
+      "size": [
+        6.054,
+        1.703,
+        2.285
+      ]
+    },
+    "shrub_03": {
+      "class": "shrub",
+      "lods": [
+        {
+          "file": "shrub_03_lod0.gltf",
+          "triangles": 2400
+        },
+        {
+          "file": "shrub_03_lod1.gltf",
+          "triangles": 800
+        },
+        {
+          "file": "shrub_03_lod2.gltf",
+          "triangles": 319
+        }
+      ],
+      "source_triangles": 8287,
+      "size": [
+        1.367,
+        0.403,
+        0.151
+      ]
+    },
+    "shrub_04": {
+      "class": "shrub",
+      "lods": [
+        {
+          "file": "shrub_04_lod0.gltf",
+          "triangles": 2400
+        },
+        {
+          "file": "shrub_04_lod1.gltf",
+          "triangles": 1031
+        },
+        {
+          "file": "shrub_04_lod2.gltf",
+          "triangles": 1031
+        }
+      ],
+      "source_triangles": 27327,
+      "size": [
+        0.584,
+        0.219,
+        0.146
+      ]
+    },
+    "fern_02": {
+      "class": "shrub",
+      "lods": [
+        {
+          "file": "fern_02_lod0.gltf",
+          "triangles": 2400
+        },
+        {
+          "file": "fern_02_lod1.gltf",
+          "triangles": 800
+        },
+        {
+          "file": "fern_02_lod2.gltf",
+          "triangles": 320
+        }
+      ],
+      "source_triangles": 6232,
+      "size": [
+        1.973,
+        0.428,
+        1.724
+      ]
+    },
+    "grass_medium_01": {
+      "class": "grass",
+      "lods": [
+        {
+          "file": "grass_medium_01_lod0.gltf",
+          "triangles": 1600
+        },
+        {
+          "file": "grass_medium_01_lod1.gltf",
+          "triangles": 639
+        },
+        {
+          "file": "grass_medium_01_lod2.gltf",
+          "triangles": 429
+        }
+      ],
+      "source_triangles": 24730,
+      "size": [
+        5.605,
+        0.343,
+        0.327
+      ]
+    },
+    "rock_moss_set_01": {
+      "class": "prop",
+      "lods": [
+        {
+          "file": "rock_moss_set_01_lod0.gltf",
+          "triangles": 3200
+        },
+        {
+          "file": "rock_moss_set_01_lod1.gltf",
+          "triangles": 1279
+        },
+        {
+          "file": "rock_moss_set_01_lod2.gltf",
+          "triangles": 400
+        }
+      ],
+      "source_triangles": 63127,
+      "size": [
+        8.005,
+        1.768,
+        6.949
+      ]
+    },
+    "boulder_01": {
+      "class": "prop",
+      "lods": [
+        {
+          "file": "boulder_01_lod0.gltf",
+          "triangles": 26613
+        },
+        {
+          "file": "boulder_01_lod1.gltf",
+          "triangles": 26613
+        },
+        {
+          "file": "boulder_01_lod2.gltf",
+          "triangles": 26613
+        }
+      ],
+      "source_triangles": 66122,
+      "size": [
+        1.272,
+        1.004,
+        1.83
+      ]
+    },
+    "concrete_road_barrier": {
+      "class": "prop",
+      "lods": [
+        {
+          "file": "concrete_road_barrier_lod0.gltf",
+          "triangles": 3199
+        },
+        {
+          "file": "concrete_road_barrier_lod1.gltf",
+          "triangles": 1279
+        },
+        {
+          "file": "concrete_road_barrier_lod2.gltf",
+          "triangles": 400
+        }
+      ],
+      "source_triangles": 60928,
+      "size": [
+        1.545,
+        0.831,
+        0.639
+      ]
+    },
+    "modular_industrial_pipes_01": {
+      "class": "prop",
+      "lods": [
+        {
+          "file": "modular_industrial_pipes_01_lod0.gltf",
+          "triangles": 3199
+        },
+        {
+          "file": "modular_industrial_pipes_01_lod1.gltf",
+          "triangles": 1278
+        },
+        {
+          "file": "modular_industrial_pipes_01_lod2.gltf",
+          "triangles": 399
+        }
+      ],
+      "source_triangles": 12340,
+      "size": [
+        1.403,
+        1.955,
+        0.308
+      ]
+    },
+    "dead_tree_trunk": {
+      "class": "prop",
+      "lods": [
+        {
+          "file": "dead_tree_trunk_lod0.gltf",
+          "triangles": 3200
+        },
+        {
+          "file": "dead_tree_trunk_lod1.gltf",
+          "triangles": 1279
+        },
+        {
+          "file": "dead_tree_trunk_lod2.gltf",
+          "triangles": 400
+        }
+      ],
+      "source_triangles": 101802,
+      "size": [
+        3.051,
+        0.29,
+        0.278
+      ]
+    },
+    "covered_car": {
+      "class": "prop",
+      "lods": [
+        {
+          "file": "covered_car_lod0.gltf",
+          "triangles": 3199
+        },
+        {
+          "file": "covered_car_lod1.gltf",
+          "triangles": 1278
+        },
+        {
+          "file": "covered_car_lod2.gltf",
+          "triangles": 398
+        }
+      ],
+      "source_triangles": 12592,
+      "size": [
+        1.789,
+        1.411,
+        4.38
+      ]
+    }
+  },
+  "hdris": {
+    "kloofendal_48d_partly_cloudy_puresky": {
+      "file": "hdri/kloofendal_48d_partly_cloudy_puresky_2k.hdr"
+    }
+  },
+  "files": [
+    {
+      "path": "boulder_01/boulder_01_lod0.bin",
+      "size": 2912240,
+      "md5": "7291ecd7226299282353ff3588757a3c"
+    },
+    {
+      "path": "boulder_01/boulder_01_lod0.gltf",
+      "size": 2476,
+      "md5": "db1dc504a4e832ff9b97b287dfe21c34"
+    },
+    {
+      "path": "boulder_01/boulder_01_lod1.bin",
+      "size": 2912240,
+      "md5": "7291ecd7226299282353ff3588757a3c"
+    },
+    {
+      "path": "boulder_01/boulder_01_lod1.gltf",
+      "size": 2476,
+      "md5": "db7f3df58da932b55e758ff7d1f97edd"
+    },
+    {
+      "path": "boulder_01/boulder_01_lod2.bin",
+      "size": 2912240,
+      "md5": "7291ecd7226299282353ff3588757a3c"
+    },
+    {
+      "path": "boulder_01/boulder_01_lod2.gltf",
+      "size": 2476,
+      "md5": "72194a2849ede34148b3630bfc400038"
+    },
+    {
+      "path": "boulder_01/textures/boulder_01_arm_1k.jpg",
+      "size": 659386,
+      "md5": "d632159982cc3121ed3d69b89a122146"
+    },
+    {
+      "path": "boulder_01/textures/boulder_01_diff_1k.jpg",
+      "size": 987467,
+      "md5": "25f8a843f13369d56d37f49db05ea8c3"
+    },
+    {
+      "path": "boulder_01/textures/boulder_01_nor_gl_1k.jpg",
+      "size": 1183552,
+      "md5": "0c4da644d901144b53e4fe2446f3c389"
+    },
+    {
+      "path": "concrete_road_barrier/concrete_road_barrier_lod0.bin",
+      "size": 112844,
+      "md5": "ed2156a164fefe289a1c888e5bbfe478"
+    },
+    {
+      "path": "concrete_road_barrier/concrete_road_barrier_lod0.gltf",
+      "size": 2557,
+      "md5": "294e4887a3bb27112dfbcbe315676fc0"
+    },
+    {
+      "path": "concrete_road_barrier/concrete_road_barrier_lod1.bin",
+      "size": 48668,
+      "md5": "7fc883bfd0e63828f3ef7ad5bd15154f"
+    },
+    {
+      "path": "concrete_road_barrier/concrete_road_barrier_lod1.gltf",
+      "size": 2549,
+      "md5": "5c7d84958e74f22a882375a36b239753"
+    },
+    {
+      "path": "concrete_road_barrier/concrete_road_barrier_lod2.bin",
+      "size": 17424,
+      "md5": "6aa8f581ce1cbb262dcaf77a74f356b0"
+    },
+    {
+      "path": "concrete_road_barrier/concrete_road_barrier_lod2.gltf",
+      "size": 2547,
+      "md5": "ae7fad100b9ec650037eeb65488af894"
+    },
+    {
+      "path": "concrete_road_barrier/textures/concrete_road_barrier_arm_1k.jpg",
+      "size": 619502,
+      "md5": "a289412cc7fe2c265f0975b31d8edda1"
+    },
+    {
+      "path": "concrete_road_barrier/textures/concrete_road_barrier_diff_1k.jpg",
+      "size": 792641,
+      "md5": "0fc11541996e1ddbdb1875dff35bc1c9"
+    },
+    {
+      "path": "concrete_road_barrier/textures/concrete_road_barrier_nor_gl_1k.jpg",
+      "size": 961760,
+      "md5": "5cc77a0a52de7f3e6c7405b5bfedfc6f"
+    },
+    {
+      "path": "covered_car/covered_car_lod0.bin",
+      "size": 203324,
+      "md5": "0559b534892cc65ba9106f7aec15a60c"
+    },
+    {
+      "path": "covered_car/covered_car_lod0.gltf",
+      "size": 4552,
+      "md5": "79818012b7cc0004388939e82350397e"
+    },
+    {
+      "path": "covered_car/covered_car_lod1.bin",
+      "size": 93352,
+      "md5": "6fb88942e7fcd690783990290b21eb6a"
+    },
+    {
+      "path": "covered_car/covered_car_lod1.gltf",
+      "size": 4534,
+      "md5": "29c057597e6bea6ca77cdb7852a6dab7"
+    },
+    {
+      "path": "covered_car/covered_car_lod2.bin",
+      "size": 38584,
+      "md5": "45369aff69a5b06dd77df3ee1eb9bf1c"
+    },
+    {
+      "path": "covered_car/covered_car_lod2.gltf",
+      "size": 4521,
+      "md5": "b04ee3f9775c19939171d4dde6168772"
+    },
+    {
+      "path": "covered_car/textures/covered_car_arm_1k.jpg",
+      "size": 745781,
+      "md5": "62f9a8c8719ce46ee5464462ec6ed6fc"
+    },
+    {
+      "path": "covered_car/textures/covered_car_diff_1k.jpg",
+      "size": 558004,
+      "md5": "61c107225ca1cbd523d6d6e9c1775f22"
+    },
+    {
+      "path": "covered_car/textures/covered_car_nor_gl_1k.jpg",
+      "size": 641340,
+      "md5": "afc43e8dd74213483a454cdb00f0f541"
+    },
+    {
+      "path": "dead_tree_trunk/dead_tree_trunk_lod0.bin",
+      "size": 126624,
+      "md5": "16adcd9dc8b71a23af3dc8236182cf35"
+    },
+    {
+      "path": "dead_tree_trunk/dead_tree_trunk_lod0.gltf",
+      "size": 2502,
+      "md5": "78296fa53f0f57c17fe00ef8d243a19e"
+    },
+    {
+      "path": "dead_tree_trunk/dead_tree_trunk_lod1.bin",
+      "size": 54860,
+      "md5": "dd98c79a7376d159fc8e7ce5cce69c7f"
+    },
+    {
+      "path": "dead_tree_trunk/dead_tree_trunk_lod1.gltf",
+      "size": 2491,
+      "md5": "f06ba6df167067c8b2f4b22b5624ec77"
+    },
+    {
+      "path": "dead_tree_trunk/dead_tree_trunk_lod2.bin",
+      "size": 19488,
+      "md5": "db31976ff734dd027ba55421c6de9b6c"
+    },
+    {
+      "path": "dead_tree_trunk/dead_tree_trunk_lod2.gltf",
+      "size": 2489,
+      "md5": "2802bb37d5ddc2305cbff1ebe8e33889"
+    },
+    {
+      "path": "dead_tree_trunk/textures/dead_tree_trunk_arm_1k.jpg",
+      "size": 724384,
+      "md5": "548a72849ce709a9f38fa06776732a07"
+    },
+    {
+      "path": "dead_tree_trunk/textures/dead_tree_trunk_diff_1k.jpg",
+      "size": 713480,
+      "md5": "fe92c64532d4684d3239f6edc7733192"
+    },
+    {
+      "path": "dead_tree_trunk/textures/dead_tree_trunk_nor_gl_1k.jpg",
+      "size": 1053075,
+      "md5": "28992c1123371ae1899e49360953c846"
+    },
+    {
+      "path": "fern_02/fern_02_lod0.bin",
+      "size": 114240,
+      "md5": "d39cd46bad43c764e01a0b1f665ef6fd"
+    },
+    {
+      "path": "fern_02/fern_02_lod0.gltf",
+      "size": 2448,
+      "md5": "7875ee9b29d2a350808efdf473f64796"
+    },
+    {
+      "path": "fern_02/fern_02_lod1.bin",
+      "size": 49872,
+      "md5": "9c5f74e286e082970f4276a69adb01e7"
+    },
+    {
+      "path": "fern_02/fern_02_lod1.gltf",
+      "size": 2441,
+      "md5": "54b0328bc143340da33242c9b7d3e974"
+    },
+    {
+      "path": "fern_02/fern_02_lod2.bin",
+      "size": 28608,
+      "md5": "4a0003473ac181931071fd972f51455b"
+    },
+    {
+      "path": "fern_02/fern_02_lod2.gltf",
+      "size": 2435,
+      "md5": "77d68f4d1f4ff551684256d979b02e03"
+    },
+    {
+      "path": "fern_02/textures/fern_02_arm_1k.jpg",
+      "size": 280359,
+      "md5": "1bbb2b22951f450720d28e17d93a2987"
+    },
+    {
+      "path": "fern_02/textures/fern_02_diff_1k.png",
+      "size": 930729,
+      "md5": "9a24901ee3f45ed0c23c3f2f15b52340"
+    },
+    {
+      "path": "fern_02/textures/fern_02_nor_gl_1k.jpg",
+      "size": 367222,
+      "md5": "43aed63dff79554f6064627515afd9d7"
+    },
+    {
+      "path": "grass_medium_01/grass_medium_01_lod0.bin",
+      "size": 173184,
+      "md5": "aa5f79c4df7a32ed1fb8c9264c471211"
+    },
+    {
+      "path": "grass_medium_01/grass_medium_01_lod0.gltf",
+      "size": 2521,
+      "md5": "a0417815911e75ef5a2b3f5b16384885"
+    },
+    {
+      "path": "grass_medium_01/grass_medium_01_lod1.bin",
+      "size": 77228,
+      "md5": "ea530190037660eefca151cfa5e77d2f"
+    },
+    {
+      "path": "grass_medium_01/grass_medium_01_lod1.gltf",
+      "size": 2518,
+      "md5": "2b8e3aeff836a0ed8c3a909f23b53a4b"
+    },
+    {
+      "path": "grass_medium_01/grass_medium_01_lod2.bin",
+      "size": 51776,
+      "md5": "126d019e282165af0b091d3567ff0f65"
+    },
+    {
+      "path": "grass_medium_01/grass_medium_01_lod2.gltf",
+      "size": 2518,
+      "md5": "5945ef9c51327c90a1c02345f083bbeb"
+    },
+    {
+      "path": "grass_medium_01/textures/grass_medium_01_arm_1k.jpg",
+      "size": 679518,
+      "md5": "37ed2730a507b681af2e9f9f7ef3ae5e"
+    },
+    {
+      "path": "grass_medium_01/textures/grass_medium_01_diff_1k.png",
+      "size": 848943,
+      "md5": "6770e404be9127fdd1dd6b73ac93bdb7"
+    },
+    {
+      "path": "grass_medium_01/textures/grass_medium_01_nor_gl_1k.jpg",
+      "size": 956166,
+      "md5": "fcf43dd1253f56e4c361079f34155c37"
+    },
+    {
+      "path": "hdri/kloofendal_48d_partly_cloudy_puresky_2k.hdr",
+      "size": 5451493,
+      "md5": "2eba3a4d7eeb23cbfbeca364c97e7980"
+    },
+    {
+      "path": "island_tree_01/island_tree_01_lod0.bin",
+      "size": 2574712,
+      "md5": "bf880e74692c8311bfd44ab37eeca62c"
+    },
+    {
+      "path": "island_tree_01/island_tree_01_lod0.gltf",
+      "size": 7499,
+      "md5": "b545882244d31969fe690a02f8ea3c9b"
+    },
+    {
+      "path": "island_tree_01/island_tree_01_lod1.bin",
+      "size": 1253604,
+      "md5": "87f7dfcc398c01e947bddbfa517aa6f1"
+    },
+    {
+      "path": "island_tree_01/island_tree_01_lod1.gltf",
+      "size": 7493,
+      "md5": "63beb165ecee1bdff6210b326d7af4ac"
+    },
+    {
+      "path": "island_tree_01/island_tree_01_lod2.bin",
+      "size": 857404,
+      "md5": "71f1d0d604100ea16eb0829794ab70f4"
+    },
+    {
+      "path": "island_tree_01/island_tree_01_lod2.gltf",
+      "size": 7477,
+      "md5": "6e68300caed7d32ea735ec3385603b89"
+    },
+    {
+      "path": "island_tree_01/textures/island_tree_01_arm_1k.jpg",
+      "size": 727403,
+      "md5": "8077da7d1a001867c0da0cde6bc807f2"
+    },
+    {
+      "path": "island_tree_01/textures/island_tree_01_branches_arm_1k.jpg",
+      "size": 484806,
+      "md5": "5b6f5b3838f4a8f60fea14fa3a3fef9f"
+    },
+    {
+      "path": "island_tree_01/textures/island_tree_01_branches_diff_1k.jpg",
+      "size": 528304,
+      "md5": "7792907fe2b2b748c129a2384192a579"
+    },
+    {
+      "path": "island_tree_01/textures/island_tree_01_branches_nor_gl_1k.jpg",
+      "size": 819101,
+      "md5": "789084affb01f4a22290a848558f5e12"
+    },
+    {
+      "path": "island_tree_01/textures/island_tree_01_diff_1k.jpg",
+      "size": 791327,
+      "md5": "8a67489846657df6b859d97e0b80fcf4"
+    },
+    {
+      "path": "island_tree_01/textures/island_tree_01_leaves_arm_1k.jpg",
+      "size": 489476,
+      "md5": "27b06c4a53ff115ed7d51ee94e417257"
+    },
+    {
+      "path": "island_tree_01/textures/island_tree_01_leaves_diff_1k.png",
+      "size": 471042,
+      "md5": "6af58acab4a2da4630518bc0d65fb9d5"
+    },
+    {
+      "path": "island_tree_01/textures/island_tree_01_leaves_nor_gl_1k.jpg",
+      "size": 379443,
+      "md5": "a08ffb98b5ffb7dfa682e05a1639c642"
+    },
+    {
+      "path": "island_tree_01/textures/island_tree_01_nor_gl_1k.jpg",
+      "size": 1207134,
+      "md5": "3871f67863453a16b866950202fa2b7f"
+    },
+    {
+      "path": "island_tree_02/island_tree_02_lod0.bin",
+      "size": 2527520,
+      "md5": "e5191c2184cfa9d9860fa2dd51763304"
+    },
+    {
+      "path": "island_tree_02/island_tree_02_lod0.gltf",
+      "size": 7477,
+      "md5": "1f1abe611ce661fda788b820c5aee0f3"
+    },
+    {
+      "path": "island_tree_02/island_tree_02_lod1.bin",
+      "size": 1055836,
+      "md5": "8ea4f474694a8bdee3b822f81e1851bc"
+    },
+    {
+      "path": "island_tree_02/island_tree_02_lod1.gltf",
+      "size": 7465,
+      "md5": "307598b0f6b2f92705daf8537fe51d40"
+    },
+    {
+      "path": "island_tree_02/island_tree_02_lod2.bin",
+      "size": 651060,
+      "md5": "36faac601af1f1950ed6ec4db475b092"
+    },
+    {
+      "path": "island_tree_02/island_tree_02_lod2.gltf",
+      "size": 7450,
+      "md5": "e4a298101d3fd9028eb6cd47a5bf28e0"
+    },
+    {
+      "path": "island_tree_02/textures/island_tree_02_arm_1k.jpg",
+      "size": 688305,
+      "md5": "e487f91bcb37a2a1109ef6234f1db27e"
+    },
+    {
+      "path": "island_tree_02/textures/island_tree_02_branches_arm_1k.jpg",
+      "size": 484806,
+      "md5": "5b6f5b3838f4a8f60fea14fa3a3fef9f"
+    },
+    {
+      "path": "island_tree_02/textures/island_tree_02_branches_diff_1k.jpg",
+      "size": 528304,
+      "md5": "7792907fe2b2b748c129a2384192a579"
+    },
+    {
+      "path": "island_tree_02/textures/island_tree_02_branches_nor_gl_1k.jpg",
+      "size": 819101,
+      "md5": "789084affb01f4a22290a848558f5e12"
+    },
+    {
+      "path": "island_tree_02/textures/island_tree_02_diff_1k.jpg",
+      "size": 738738,
+      "md5": "b7435527d9628527ce47d89fc1468e9a"
+    },
+    {
+      "path": "island_tree_02/textures/island_tree_02_leaves_arm_1k.jpg",
+      "size": 489476,
+      "md5": "27b06c4a53ff115ed7d51ee94e417257"
+    },
+    {
+      "path": "island_tree_02/textures/island_tree_02_leaves_diff_1k.png",
+      "size": 471042,
+      "md5": "6af58acab4a2da4630518bc0d65fb9d5"
+    },
+    {
+      "path": "island_tree_02/textures/island_tree_02_leaves_nor_gl_1k.jpg",
+      "size": 379443,
+      "md5": "a08ffb98b5ffb7dfa682e05a1639c642"
+    },
+    {
+      "path": "island_tree_02/textures/island_tree_02_nor_gl_1k.jpg",
+      "size": 1157226,
+      "md5": "d8b8bc86de9934a743fc9b0a5470e695"
+    },
+    {
+      "path": "island_tree_03/island_tree_03_lod0.bin",
+      "size": 2722832,
+      "md5": "30f3680172eabf0155b2268fc266612e"
+    },
+    {
+      "path": "island_tree_03/island_tree_03_lod0.gltf",
+      "size": 7479,
+      "md5": "c5709a60d62c6ed27a1f06027e54b4ce"
+    },
+    {
+      "path": "island_tree_03/island_tree_03_lod1.bin",
+      "size": 1448712,
+      "md5": "037ce52851ffd6413d6d586e53acfd58"
+    },
+    {
+      "path": "island_tree_03/island_tree_03_lod1.gltf",
+      "size": 7475,
+      "md5": "c7d3bf0cc1c05ab31cf158aa40374f7c"
+    },
+    {
+      "path": "island_tree_03/island_tree_03_lod2.bin",
+      "size": 1045116,
+      "md5": "1a5e264944d572d7cc01383d2daaa585"
+    },
+    {
+      "path": "island_tree_03/island_tree_03_lod2.gltf",
+      "size": 7454,
+      "md5": "6b752b9577e77121e64b37b4e87fe5e9"
+    },
+    {
+      "path": "island_tree_03/textures/island_tree_03_arm_1k.jpg",
+      "size": 611708,
+      "md5": "4e643865b2b52a18cc66774f4c96cccb"
+    },
+    {
+      "path": "island_tree_03/textures/island_tree_03_branches_arm_1k.jpg",
+      "size": 484806,
+      "md5": "5b6f5b3838f4a8f60fea14fa3a3fef9f"
+    },
+    {
+      "path": "island_tree_03/textures/island_tree_03_branches_diff_1k.jpg",
+      "size": 528304,
+      "md5": "7792907fe2b2b748c129a2384192a579"
+    },
+    {
+      "path": "island_tree_03/textures/island_tree_03_branches_nor_gl_1k.jpg",
+      "size": 819101,
+      "md5": "789084affb01f4a22290a848558f5e12"
+    },
+    {
+      "path": "island_tree_03/textures/island_tree_03_diff_1k.jpg",
+      "size": 757828,
+      "md5": "5c7fa31f9b4b818755f015ed1fd58519"
+    },
+    {
+      "path": "island_tree_03/textures/island_tree_03_leaves_arm_1k.jpg",
+      "size": 489476,
+      "md5": "27b06c4a53ff115ed7d51ee94e417257"
+    },
+    {
+      "path": "island_tree_03/textures/island_tree_03_leaves_diff_1k.png",
+      "size": 471042,
+      "md5": "6af58acab4a2da4630518bc0d65fb9d5"
+    },
+    {
+      "path": "island_tree_03/textures/island_tree_03_leaves_nor_gl_1k.jpg",
+      "size": 379443,
+      "md5": "a08ffb98b5ffb7dfa682e05a1639c642"
+    },
+    {
+      "path": "island_tree_03/textures/island_tree_03_nor_gl_1k.jpg",
+      "size": 1051809,
+      "md5": "631d4c7f51eaf6fb54928c5bc731fb89"
+    },
+    {
+      "path": "jacaranda_tree/jacaranda_tree_lod0.bin",
+      "size": 8990828,
+      "md5": "1f75ff68d5885e50af06e988d3b22d6e"
+    },
+    {
+      "path": "jacaranda_tree/jacaranda_tree_lod0.gltf",
+      "size": 7014,
+      "md5": "d68e45b879817ffe193c8aa5dbb3e4ff"
+    },
+    {
+      "path": "jacaranda_tree/jacaranda_tree_lod1.bin",
+      "size": 8957168,
+      "md5": "e632d7159e210d3ca77c2b47072e737c"
+    },
+    {
+      "path": "jacaranda_tree/jacaranda_tree_lod1.gltf",
+      "size": 7004,
+      "md5": "5e99b17b67a17001decdc8833f8c8e7d"
+    },
+    {
+      "path": "jacaranda_tree/jacaranda_tree_lod2.bin",
+      "size": 8944836,
+      "md5": "893238f648eb01a9f1d52639a9d61882"
+    },
+    {
+      "path": "jacaranda_tree/jacaranda_tree_lod2.gltf",
+      "size": 7006,
+      "md5": "1562b694ddfc6b1b11f23ba0508aae52"
+    },
+    {
+      "path": "jacaranda_tree/textures/jacaranda_tree_branches_arm_1k.jpg",
+      "size": 484806,
+      "md5": "5b6f5b3838f4a8f60fea14fa3a3fef9f"
+    },
+    {
+      "path": "jacaranda_tree/textures/jacaranda_tree_branches_diff_1k.jpg",
+      "size": 531544,
+      "md5": "e5bacbfd3e7ce397bdd34b0bac6669ca"
+    },
+    {
+      "path": "jacaranda_tree/textures/jacaranda_tree_branches_nor_gl_1k.jpg",
+      "size": 819101,
+      "md5": "789084affb01f4a22290a848558f5e12"
+    },
+    {
+      "path": "jacaranda_tree/textures/jacaranda_tree_leaves_arm_1k.jpg",
+      "size": 332762,
+      "md5": "fabee050680fd173032acf003ef61191"
+    },
+    {
+      "path": "jacaranda_tree/textures/jacaranda_tree_leaves_diff_1k.png",
+      "size": 964505,
+      "md5": "3d5b6790fe366cabbd2e18c4a5be7c14"
+    },
+    {
+      "path": "jacaranda_tree/textures/jacaranda_tree_leaves_nor_gl_1k.jpg",
+      "size": 700843,
+      "md5": "7cbd82c0dd4b8c8a4ab314338f50404d"
+    },
+    {
+      "path": "jacaranda_tree/textures/jacaranda_tree_trunk_arm_1k.jpg",
+      "size": 895975,
+      "md5": "7232b4514e9412725a6a8e65a69f4ed4"
+    },
+    {
+      "path": "jacaranda_tree/textures/jacaranda_tree_trunk_diff_1k.jpg",
+      "size": 896938,
+      "md5": "c3edc2e76157023e7a5c35cd13867498"
+    },
+    {
+      "path": "jacaranda_tree/textures/jacaranda_tree_trunk_nor_gl_1k.jpg",
+      "size": 1096100,
+      "md5": "af34d3a054b498f153e4793f7520a630"
+    },
+    {
+      "path": "modular_industrial_pipes_01/modular_industrial_pipes_01_lod0.bin",
+      "size": 272540,
+      "md5": "ad4cbcd48809fe01019a3f122ede00a7"
+    },
+    {
+      "path": "modular_industrial_pipes_01/modular_industrial_pipes_01_lod0.gltf",
+      "size": 4694,
+      "md5": "2bf73bf509c3925507dac5d76e286751"
+    },
+    {
+      "path": "modular_industrial_pipes_01/modular_industrial_pipes_01_lod1.bin",
+      "size": 122292,
+      "md5": "d6f64b0f9ef2bdd38b7c0a2b7e6abee0"
+    },
+    {
+      "path": "modular_industrial_pipes_01/modular_industrial_pipes_01_lod1.gltf",
+      "size": 4701,
+      "md5": "2ce4bdba5fd65103a0ccccaf3db0454e"
+    },
+    {
+      "path": "modular_industrial_pipes_01/modular_industrial_pipes_01_lod2.bin",
+      "size": 45548,
+      "md5": "dcd64b830a3494888dd91338194367c4"
+    },
+    {
+      "path": "modular_industrial_pipes_01/modular_industrial_pipes_01_lod2.gltf",
+      "size": 4685,
+      "md5": "57d071944cdf9e28507eee7114cdbe63"
+    },
+    {
+      "path": "modular_industrial_pipes_01/textures/modular_industrial_pipes_01_group01_arm_1k.jpg",
+      "size": 860825,
+      "md5": "2ab8f10dc9ca832af70cd48183281f97"
+    },
+    {
+      "path": "modular_industrial_pipes_01/textures/modular_industrial_pipes_01_group01_diff_1k.jpg",
+      "size": 553576,
+      "md5": "28678434837d64476cb8d75d0314166e"
+    },
+    {
+      "path": "modular_industrial_pipes_01/textures/modular_industrial_pipes_01_group01_nor_gl_1k.jpg",
+      "size": 674568,
+      "md5": "a5d4deb3ea6772c0af1275edeab7dc94"
+    },
+    {
+      "path": "modular_industrial_pipes_01/textures/modular_industrial_pipes_01_group02_arm_1k.jpg",
+      "size": 898932,
+      "md5": "088f90ba0d60c13ff0d6fc43cf734372"
+    },
+    {
+      "path": "modular_industrial_pipes_01/textures/modular_industrial_pipes_01_group02_diff_1k.jpg",
+      "size": 580676,
+      "md5": "d3d951f471cfcd15e89cedcd43d28606"
+    },
+    {
+      "path": "modular_industrial_pipes_01/textures/modular_industrial_pipes_01_group02_nor_gl_1k.jpg",
+      "size": 725187,
+      "md5": "282735667b3cd6e2d0ef058f2c260740"
+    },
+    {
+      "path": "rock_moss_set_01/rock_moss_set_01_lod0.bin",
+      "size": 149376,
+      "md5": "ccba74c8707ab19a95fbbe5b68ed010c"
+    },
+    {
+      "path": "rock_moss_set_01/rock_moss_set_01_lod0.gltf",
+      "size": 2511,
+      "md5": "6a7bafd1c91e9efa0abf95e1ca467595"
+    },
+    {
+      "path": "rock_moss_set_01/rock_moss_set_01_lod1.bin",
+      "size": 67052,
+      "md5": "7399af462ec96fd04fa4a30b15e25bf5"
+    },
+    {
+      "path": "rock_moss_set_01/rock_moss_set_01_lod1.gltf",
+      "size": 2509,
+      "md5": "16e6e92c550ef345271be1513caed796"
+    },
+    {
+      "path": "rock_moss_set_01/rock_moss_set_01_lod2.bin",
+      "size": 26592,
+      "md5": "0b3f7e82098d2fa7cd1be9a09163e4e4"
+    },
+    {
+      "path": "rock_moss_set_01/rock_moss_set_01_lod2.gltf",
+      "size": 2500,
+      "md5": "def586632dfe8e927d727df1124b1cb1"
+    },
+    {
+      "path": "rock_moss_set_01/textures/rock_moss_set_01_diff_1k.jpg",
+      "size": 168099,
+      "md5": "b8742301e6b4bc5683d2de712e83f772"
+    },
+    {
+      "path": "rock_moss_set_01/textures/rock_moss_set_01_nor_gl_1k.jpg",
+      "size": 209975,
+      "md5": "eb7ebd31ad08e78d0497900652ff1568"
+    },
+    {
+      "path": "rock_moss_set_01/textures/rock_moss_set_01_rough_1k.jpg",
+      "size": 82624,
+      "md5": "ed9d8a2c863262f76f881346e8047c6a"
+    },
+    {
+      "path": "shrub_01/shrub_01_lod0.bin",
+      "size": 226656,
+      "md5": "cc876f789d1e8831d511501fa9c3888f"
+    },
+    {
+      "path": "shrub_01/shrub_01_lod0.gltf",
+      "size": 2463,
+      "md5": "060e43ca18863e6875d13cbee696c919"
+    },
+    {
+      "path": "shrub_01/shrub_01_lod1.bin",
+      "size": 67100,
+      "md5": "112fc63fbff2b5ef075fff9e0d2afc98"
+    },
+    {
+      "path": "shrub_01/shrub_01_lod1.gltf",
+      "size": 2456,
+      "md5": "dccbf6e5fe863e198f490bfb1fb9c7eb"
+    },
+    {
+      "path": "shrub_01/shrub_01_lod2.bin",
+      "size": 36192,
+      "md5": "dcca4fdcb2343589dcd959f84c70f597"
+    },
+    {
+      "path": "shrub_01/shrub_01_lod2.gltf",
+      "size": 2448,
+      "md5": "cf4acd46d4c0a8e2db04c1fde3cbc537"
+    },
+    {
+      "path": "shrub_01/textures/shrub_01_arm_1k.jpg",
+      "size": 386309,
+      "md5": "1682705926a9fc60ab34d079564f1a9e"
+    },
+    {
+      "path": "shrub_01/textures/shrub_01_diff_1k.png",
+      "size": 1300600,
+      "md5": "e0069dda0995c21d0e1a514889a766d3"
+    },
+    {
+      "path": "shrub_01/textures/shrub_01_nor_gl_1k.jpg",
+      "size": 746497,
+      "md5": "985fa065ed411dc49e07d564330555ac"
+    },
+    {
+      "path": "shrub_02/shrub_02_lod0.bin",
+      "size": 187152,
+      "md5": "192f523ac6c169ed54c72c00a4cbfdb4"
+    },
+    {
+      "path": "shrub_02/shrub_02_lod0.gltf",
+      "size": 2454,
+      "md5": "c276affff223c0824015441ac0ee5ae0"
+    },
+    {
+      "path": "shrub_02/shrub_02_lod1.bin",
+      "size": 78048,
+      "md5": "e6441f4fdef92995716b0e0bb7730f6c"
+    },
+    {
+      "path": "shrub_02/shrub_02_lod1.gltf",
+      "size": 2453,
+      "md5": "ebb0d83a08cff9cf2d9db69eac617813"
+    },
+    {
+      "path": "shrub_02/shrub_02_lod2.bin",
+      "size": 51816,
+      "md5": "4a8a1d7d60a6885538578a168702c6c7"
+    },
+    {
+      "path": "shrub_02/shrub_02_lod2.gltf",
+      "size": 2453,
+      "md5": "4cfb57190e1f5fd5d0e7ddf611a9a72a"
+    },
+    {
+      "path": "shrub_02/textures/shrub_02_arm_1k.jpg",
+      "size": 313715,
+      "md5": "28c218aeb7cab930d99ee16578984241"
+    },
+    {
+      "path": "shrub_02/textures/shrub_02_diff_1k.png",
+      "size": 1048076,
+      "md5": "cd5825d9c4338fa4605c3af3a6afce98"
+    },
+    {
+      "path": "shrub_02/textures/shrub_02_nor_gl_1k.jpg",
+      "size": 490815,
+      "md5": "51a7f2db7e06a207171fd725585241d5"
+    },
+    {
+      "path": "shrub_03/shrub_03_lod0.bin",
+      "size": 143568,
+      "md5": "6810e74d7e8b3d0117eef62727feb9b1"
+    },
+    {
+      "path": "shrub_03/shrub_03_lod0.gltf",
+      "size": 2458,
+      "md5": "7570f6c85f9082121aac6e3f85c279ba"
+    },
+    {
+      "path": "shrub_03/shrub_03_lod1.bin",
+      "size": 60096,
+      "md5": "bb9b42c696c2e6212ae42089920fde9e"
+    },
+    {
+      "path": "shrub_03/shrub_03_lod1.gltf",
+      "size": 2456,
+      "md5": "ecf837f276fac91e3d406145e5a1fcfa"
+    },
+    {
+      "path": "shrub_03/shrub_03_lod2.bin",
+      "size": 31436,
+      "md5": "676eb603e627eeee90f0f0507d2f604f"
+    },
+    {
+      "path": "shrub_03/shrub_03_lod2.gltf",
+      "size": 2445,
+      "md5": "6a496df9a5db773966fa6ebc40765f70"
+    },
+    {
+      "path": "shrub_03/textures/shrub_03_arm_1k.jpg",
+      "size": 396238,
+      "md5": "67faf4c5c213589b41a3bd18d378fa7d"
+    },
+    {
+      "path": "shrub_03/textures/shrub_03_diff_1k.png",
+      "size": 1261924,
+      "md5": "254afb85a0b25b1cf3ce568a20324d24"
+    },
+    {
+      "path": "shrub_03/textures/shrub_03_nor_gl_1k.jpg",
+      "size": 504734,
+      "md5": "38956b2171644cfefda2ef542e055100"
+    },
+    {
+      "path": "shrub_04/shrub_04_lod0.bin",
+      "size": 194592,
+      "md5": "df03444c75e75459024a251cb380eb99"
+    },
+    {
+      "path": "shrub_04/shrub_04_lod0.gltf",
+      "size": 2461,
+      "md5": "55a1ce473386dcf6f30be58b172a19cb"
+    },
+    {
+      "path": "shrub_04/shrub_04_lod1.bin",
+      "size": 74396,
+      "md5": "9dc369ab2f8eece7d75a4dbb3626799a"
+    },
+    {
+      "path": "shrub_04/shrub_04_lod1.gltf",
+      "size": 2456,
+      "md5": "091dc03aa144a90186e007d8ab8a6106"
+    },
+    {
+      "path": "shrub_04/shrub_04_lod2.bin",
+      "size": 74396,
+      "md5": "9dc369ab2f8eece7d75a4dbb3626799a"
+    },
+    {
+      "path": "shrub_04/shrub_04_lod2.gltf",
+      "size": 2456,
+      "md5": "9f875bddddcbb64db007e2e1eec6b705"
+    },
+    {
+      "path": "shrub_04/textures/shrub_04_arm_1k.jpg",
+      "size": 332957,
+      "md5": "65e414abd3533b7157f05aed63f5f329"
+    },
+    {
+      "path": "shrub_04/textures/shrub_04_diff_1k.png",
+      "size": 1041211,
+      "md5": "2fcd65082ee3145d0134ea62b7fa18a6"
+    },
+    {
+      "path": "shrub_04/textures/shrub_04_nor_gl_1k.jpg",
+      "size": 449241,
+      "md5": "b08f500d19ee9b29d7da06fc0e874bb2"
+    },
+    {
+      "path": "terrain_albedo.jpg",
+      "size": 9971272,
+      "md5": "d7c9d5785f96eb946fc20ef2365a891d"
+    },
+    {
+      "path": "terrain_arm.jpg",
+      "size": 1734534,
+      "md5": "3302b7e1fe5265500b96e9457ce29fb3"
+    },
+    {
+      "path": "terrain_normal.png",
+      "size": 11708221,
+      "md5": "4cd40a38b844481308f6c0e2657ffd22"
+    },
+    {
+      "path": "tree_small_02/textures/tree_small_02_arm_1k.jpg",
+      "size": 708242,
+      "md5": "44b6ed4bf32d7cd67cb3e9d5faeacc38"
+    },
+    {
+      "path": "tree_small_02/textures/tree_small_02_branch_arm_1k.jpg",
+      "size": 375732,
+      "md5": "9ec3d8428295d87ae363bf0d1e0a8288"
+    },
+    {
+      "path": "tree_small_02/textures/tree_small_02_branch_diff_1k.jpg",
+      "size": 449977,
+      "md5": "88b531469f5dba2fc44ca85df3776e7c"
+    },
+    {
+      "path": "tree_small_02/textures/tree_small_02_branch_nor_gl_1k.jpg",
+      "size": 581596,
+      "md5": "00a3eed0d4d28e7e890d9ec6ac0619af"
+    },
+    {
+      "path": "tree_small_02/textures/tree_small_02_diff_1k.jpg",
+      "size": 863246,
+      "md5": "a7287a3f4e7f0d4577cb949b245f5b14"
+    },
+    {
+      "path": "tree_small_02/textures/tree_small_02_leaves_arm_1k.jpg",
+      "size": 633698,
+      "md5": "3dad5bafc732f7692db32a262530bbab"
+    },
+    {
+      "path": "tree_small_02/textures/tree_small_02_leaves_diff_1k.png",
+      "size": 823351,
+      "md5": "846684bcb0364919bc16517a73c6776c"
+    },
+    {
+      "path": "tree_small_02/textures/tree_small_02_leaves_nor_gl_1k.jpg",
+      "size": 681604,
+      "md5": "b06c87e73f54d9654f66d67e9de7aa85"
+    },
+    {
+      "path": "tree_small_02/textures/tree_small_02_nor_gl_1k.jpg",
+      "size": 1228646,
+      "md5": "115a20da8621cd3e034e9b1bbe574746"
+    },
+    {
+      "path": "tree_small_02/tree_small_02_lod0.bin",
+      "size": 5471912,
+      "md5": "cf1d1ee7014cc2541dfc98c5aa689351"
+    },
+    {
+      "path": "tree_small_02/tree_small_02_lod0.gltf",
+      "size": 7856,
+      "md5": "8b5c20e6be9b5a4fc00096c72a51bc90"
+    },
+    {
+      "path": "tree_small_02/tree_small_02_lod1.bin",
+      "size": 5448680,
+      "md5": "d47c3c29962745f075b123452faca069"
+    },
+    {
+      "path": "tree_small_02/tree_small_02_lod1.gltf",
+      "size": 7849,
+      "md5": "fc608317cc16d2ed5b997ae742a8b669"
+    },
+    {
+      "path": "tree_small_02/tree_small_02_lod2.bin",
+      "size": 5446196,
+      "md5": "b119c9328d6a13df03b847de7dbebb1c"
+    },
+    {
+      "path": "tree_small_02/tree_small_02_lod2.gltf",
+      "size": 7845,
+      "md5": "cd526469d53a26db277a36b2ea8e2430"
+    }
+  ]
+}

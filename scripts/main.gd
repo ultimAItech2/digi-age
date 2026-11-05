@@ -19,6 +19,7 @@ var screenshot_requested: bool = false
 var capture_delay: float = 3.0
 var capture_frames: int = 90
 var dev_overrides: Dictionary = {}
+var vignette: ColorRect
 var middle_drag: bool = false
 var benchmark_frames: Array[float] = []
 var benchmark_process: Array[float] = []
@@ -43,6 +44,20 @@ func _ready() -> void:
 	if campaign.current_mission != "" and campaign.unlocked_missions.has(campaign.current_mission):
 		pending_mission_id = campaign.current_mission
 	platform.initialize()
+	var post_layer = CanvasLayer.new()
+	post_layer.layer = 0
+	add_child(post_layer)
+	vignette = ColorRect.new()
+	vignette.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	vignette.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var vignette_shader = load("res://assets/shaders/vignette.gdshader") if ResourceLoader.exists("res://assets/shaders/vignette.gdshader") else null
+	if vignette_shader:
+		var vignette_material = ShaderMaterial.new()
+		vignette_material.shader = vignette_shader
+		vignette.material = vignette_material
+	else:
+		vignette.visible = false
+	post_layer.add_child(vignette)
 	new_world()
 	var layer = CanvasLayer.new()
 	add_child(layer)
@@ -125,6 +140,7 @@ func new_world(mission_id: String = "") -> void:
 	auto_player = null
 	field = DABattlefield.new()
 	add_child(field)
+	field.vignette = vignette
 	field.setup(sim)
 	field.apply_settings(settings.values)
 	sim.notice.connect(func(text):

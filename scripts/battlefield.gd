@@ -56,6 +56,17 @@ const RIVERS = [
 	{"along": "z", "base": 112.0, "a1": 8.0, "f1": 0.05, "p1": 2.0, "a2": 2.5, "f2": 0.13, "width": 3.0},
 ]
 const HIDDEN = Transform3D(Basis(Vector3.ZERO, Vector3.ZERO, Vector3.ZERO), Vector3(0, -50, 0))
+## Forward+ unlocks SDFGI, SSAO/SSIL, SSR, volumetric fog and PCSS shadows; the
+## Compatibility and Dummy renderers take the simpler path.
+static var forward_plus: bool = RenderingServer.get_current_rendering_method() == "forward_plus"
+const HDRI_PATH = "res://assets/third_party/processed/hdri/kloofendal_48d_partly_cloudy_puresky_2k.hdr"
+## The HDRI's sun sits at panorama u = 0.594 (tools/hdri_sun.py); the sky shader
+## rolls it to the light's azimuth so the scene stays front-lit for the camera.
+const HDRI_SUN_U = 0.594
+const SUN_ROTATION = Vector3(-48, -35, 0)
+var sky_rotation: float = 0.0
+var vignette: ColorRect
+var camera_attributes: CameraAttributesPractical
 
 func setup(world: DASimulation) -> void:
 	sim = world
@@ -66,21 +77,40 @@ func setup(world: DASimulation) -> void:
 	camera.far = 420
 	camera.current = true
 	add_child(camera)
+	build_environment()
+	build_sun()
+	make_fog_texture()
+	make_terrain()
+	for child in terrain.get_children():
+		if child is GeometryInstance3D and child.gi_mode == GeometryInstance3D.GI_MODE_DYNAMIC:
+			child.gi_mode = GeometryInstance3D.GI_MODE_STATIC
+	make_water()
+	water.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
+	marker = Node3D.new()
+	add_child(marker)
+	DAModels.ring(marker, 0.8, DAModels.CYAN)
+	marker.visible = false
+	sim.shot.connect(on_shot)
+	sim.destroyed.connect(on_destroyed)
+	update_camera()
+	refresh_fog()
+
+func build_environment() -> void:
 	var env = WorldEnvironment.new()
 	environment = Environment.new()
-	# The horizon fades into the depth fog, so the backdrop matches its colour.
-	environment.background_mode = Environment.BG_COLOR
-	environment.background_color = Color("9fb3bf")
 	environment.sky = shared_sky()
+	environment.background_mode = Environment.BG_SKY if forward_plus else Environment.BG_COLOR
+	environment.background_color = Color("9fb3bf")
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
 	environment.ambient_light_sky_contribution = 1.0
-	environment.ambient_light_energy = 0.8
+	environment.ambient_light_energy = 1.0 if has_hdri() else 0.8
 	environment.reflected_light_source = Environment.REFLECTION_SOURCE_SKY
 	environment.tonemap_mode = Environment.TONE_MAPPER_AGX
-	# Palette colours are converted to linear in the baked shader, so expose like the
-	# Blender portrait renders: strong key light plus a lifted overall exposure.
-	environment.tonemap_exposure = 1.3
-	# Aerial perspective: clear around the camera focus, hazy toward the far ring.
+	environment.tonemap_exposure = 1.0 if has_hdri() else 1.3
+	environment.adjustment_enabled = true
+	environment.adjustment_contrast = 1.05
+	environment.adjustment_saturation = 1.08
+	# Aerial perspective for the far ring; volumetric fog replaces it on Forward+.
 	environment.fog_enabled = true
 	environment.fog_mode = Environment.FOG_MODE_DEPTH
 	environment.fog_light_color = Color("9fb3bf")
@@ -92,69 +122,178 @@ func setup(world: DASimulation) -> void:
 	environment.fog_sky_affect = 0.0
 	environment.fog_aerial_perspective = 0.0
 	environment.glow_enabled = true
-	environment.glow_hdr_threshold = 1.1
-	environment.glow_intensity = 0.4
+	environment.glow_normalized = true
+	environment.glow_hdr_threshold = 1.2
+	environment.glow_intensity = 0.5
 	environment.glow_bloom = 0.0
-	# Additive: only emissive parts bloom, so the base exposure matches the low profile.
 	environment.glow_blend_mode = Environment.GLOW_BLEND_MODE_ADDITIVE
+	if forward_plus:
+		environment.sdfgi_enabled = true
+		environment.sdfgi_cascades = 4
+		environment.sdfgi_min_cell_size = 0.4
+		environment.sdfgi_y_scale = Environment.SDFGI_Y_SCALE_50_PERCENT
+		environment.sdfgi_use_occlusion = true
+		environment.sdfgi_bounce_feedback = 0.5
+		environment.sdfgi_read_sky_light = true
+		environment.sdfgi_energy = 1.0
+		environment.ssao_enabled = true
+		environment.ssao_radius = 1.5
+		environment.ssao_intensity = 2.0
+		environment.ssao_power = 1.5
+		environment.ssao_detail = 0.5
+		environment.ssao_horizon = 0.06
+		environment.ssao_ao_channel_affect = 0.5
+		environment.ssil_enabled = true
+		environment.ssil_radius = 3.0
+		environment.ssil_intensity = 1.0
+		environment.ssil_normal_rejection = 1.0
+		environment.ssr_enabled = true
+		environment.ssr_max_steps = 48
+		environment.ssr_fade_in = 0.15
+		environment.ssr_fade_out = 2.0
+		environment.ssr_depth_tolerance = 0.2
+		environment.volumetric_fog_enabled = true
+		environment.volumetric_fog_density = 0.012
+		environment.volumetric_fog_albedo = Color(0.85, 0.9, 0.95)
+		environment.volumetric_fog_anisotropy = 0.6
+		environment.volumetric_fog_length = 160.0
+		environment.volumetric_fog_gi_inject = 0.3
+		environment.volumetric_fog_ambient_inject = 0.4
+		environment.volumetric_fog_sky_affect = 0.0
+		environment.volumetric_fog_temporal_reprojection_enabled = true
+		environment.fog_enabled = false
 	env.environment = environment
 	add_child(env)
+	camera_attributes = CameraAttributesPractical.new()
+	camera_attributes.dof_blur_far_enabled = forward_plus
+	camera_attributes.dof_blur_far_distance = camera_distance() + 60.0
+	camera_attributes.dof_blur_far_transition = 40.0
+	camera_attributes.dof_blur_amount = 0.08
+	camera.attributes = camera_attributes
+
+func build_sun() -> void:
 	sun = DirectionalLight3D.new()
-	sun.rotation_degrees = Vector3(-48, -35, 0)
-	sun.light_color = Color("ffe9c8")
-	sun.light_energy = 2.3
+	sun.rotation_degrees = SUN_ROTATION
+	sun.light_color = Color("fff1dc") if has_hdri() else Color("ffe9c8")
+	sun.light_energy = 3.0 if has_hdri() else 2.3
+	sun.light_angular_distance = 0.5
+	sun.light_volumetric_fog_energy = 1.5
 	sun.shadow_enabled = "--no-shadows" not in OS.get_cmdline_user_args()
-	sun.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS
-	sun.directional_shadow_split_1 = 0.3
+	sun.shadow_bias = 0.03
+	sun.shadow_normal_bias = 1.5
+	sun.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_4_SPLITS
+	sun.directional_shadow_split_1 = 0.2
+	sun.directional_shadow_split_2 = 0.4
+	sun.directional_shadow_split_3 = 0.65
+	sun.directional_shadow_blend_splits = true
 	sun.directional_shadow_fade_start = 0.9
 	add_child(sun)
-	make_fog_texture()
-	make_terrain()
-	make_water()
-	marker = Node3D.new()
-	add_child(marker)
-	DAModels.ring(marker, 0.8, DAModels.CYAN)
-	marker.visible = false
-	sim.shot.connect(on_shot)
-	sim.destroyed.connect(on_destroyed)
-	update_camera()
-	refresh_fog()
+
+static func has_hdri() -> bool:
+	return imported(HDRI_PATH)
+
+## True when Godot has imported the file (its .import sidecar names an existing
+## .godot/imported artefact); ResourceLoader.exists() is true as soon as the
+## sidecar exists, which makes load() print errors on clean clones.
+static func imported(path: String) -> bool:
+	if not FileAccess.file_exists(path + ".import"):
+		return false
+	for line in FileAccess.get_file_as_string(path + ".import").split("\n"):
+		if line.begins_with("path="):
+			return FileAccess.file_exists(line.get_slice("\"", 1))
+	return false
 
 ## One Sky for the whole process: the Compatibility renderer reports its
 ## radiance textures as leaked when a Sky is released mid-session (each
-## battlefield rebuild), but not when it is released at exit.
+## battlefield rebuild), but not when it is released at exit. With the CC0 HDRI
+## present the sky is a panorama rolled so its sun matches SUN_ROTATION; without
+## it (clean clones, asset tests) the procedural sky stands in.
 static var process_sky: Sky
+static var sky_shader: Shader
 
 static func shared_sky() -> Sky:
 	if not process_sky:
-		var sky_material = ProceduralSkyMaterial.new()
-		sky_material.sky_top_color = Color("4a7fb5")
-		sky_material.sky_horizon_color = Color("a9c3dc")
-		sky_material.ground_bottom_color = Color("3b4a39")
-		sky_material.ground_horizon_color = Color("7f9382")
-		sky_material.sun_angle_max = 20.0
-		sky_material.sun_curve = 0.2
 		process_sky = Sky.new()
-		process_sky.sky_material = sky_material
-		process_sky.radiance_size = Sky.RADIANCE_SIZE_64
+		process_sky.radiance_size = Sky.RADIANCE_SIZE_256 if forward_plus else Sky.RADIANCE_SIZE_64
+		if has_hdri():
+			sky_shader = Shader.new()
+			sky_shader.code = """shader_type sky;
+uniform sampler2D panorama : source_color, filter_linear, repeat_enable;
+uniform float rotation = 0.0;
+uniform float energy = 1.0;
+void sky() {
+	vec3 d = EYEDIR;
+	float yaw = atan(d.x, -d.z) + rotation;
+	vec2 uv = vec2(yaw / (2.0 * PI) + 0.5, acos(clamp(d.y, -1.0, 1.0)) / PI);
+	COLOR = texture(panorama, uv).rgb * energy;
+}"""
+			var material = ShaderMaterial.new()
+			material.shader = sky_shader
+			material.set_shader_parameter("panorama", load(HDRI_PATH))
+			# The light at SUN_ROTATION comes from azimuth atan(sin(yaw), cos(yaw)) in
+			# panorama space (u = yaw/2pi + 0.5); roll the HDRI sun onto it.
+			var light_yaw = deg_to_rad(SUN_ROTATION.y)
+			var from = Vector3(sin(light_yaw), 0, cos(light_yaw))
+			var target_u = atan2(from.x, -from.z) / TAU + 0.5
+			material.set_shader_parameter("rotation", (HDRI_SUN_U - target_u) * TAU)
+			process_sky.sky_material = material
+		else:
+			var sky_material = ProceduralSkyMaterial.new()
+			sky_material.sky_top_color = Color("4a7fb5")
+			sky_material.sky_horizon_color = Color("a9c3dc")
+			sky_material.ground_bottom_color = Color("3b4a39")
+			sky_material.ground_horizon_color = Color("7f9382")
+			sky_material.sun_angle_max = 20.0
+			sky_material.sun_curve = 0.2
+			process_sky.sky_material = sky_material
 	return process_sky
 
 func apply_settings(values: Dictionary) -> void:
 	var profile = str(values.get("profile", "normal"))
 	var reduced = bool(values.get("reduced_effects", false))
-	low_effects = profile == "low" or reduced
-	shadow_reach = 50.0 if profile == "low" else 90.0
+	var low = profile == "low"
+	low_effects = low or reduced
+	shadow_reach = 50.0 if low else 90.0
+	var no_shadows = "--no-shadows" in OS.get_cmdline_user_args()
 	if sun:
-		sun.shadow_enabled = profile != "low" and not reduced and "--no-shadows" not in OS.get_cmdline_user_args()
+		sun.shadow_enabled = not low and not reduced and not no_shadows
+		sun.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS if (low or not forward_plus) else DirectionalLight3D.SHADOW_PARALLEL_4_SPLITS
+		if low or not forward_plus:
+			sun.directional_shadow_split_1 = 0.3
+		else:
+			sun.directional_shadow_split_1 = 0.2
+	if forward_plus:
+		RenderingServer.directional_shadow_atlas_set_size(2048 if low else 4096, true)
+		RenderingServer.directional_soft_shadow_filter_set_quality(RenderingServer.SHADOW_QUALITY_SOFT_LOW if low else RenderingServer.SHADOW_QUALITY_SOFT_HIGH)
 	if camera:
-		camera.far = 300.0 if profile == "low" else 420.0
+		camera.far = 260.0 if low else 400.0
 		update_camera()
 	if environment:
-		environment.glow_enabled = not low_effects
-		environment.fog_enabled = not low_effects
+		environment.glow_enabled = not low
+		if forward_plus:
+			environment.sdfgi_enabled = not low
+			environment.ssao_enabled = not low
+			environment.ssil_enabled = not low_effects
+			environment.ssr_enabled = not low_effects
+			environment.volumetric_fog_enabled = not low_effects
+			environment.fog_enabled = low_effects
+		else:
+			environment.fog_enabled = not low_effects
+	if camera_attributes:
+		camera_attributes.dof_blur_far_enabled = forward_plus and not low_effects
+	var viewport = get_viewport()
+	if viewport and forward_plus:
+		viewport.use_taa = not low
+		viewport.screen_space_aa = Viewport.SCREEN_SPACE_AA_FXAA if low else Viewport.SCREEN_SPACE_AA_DISABLED
+		viewport.scaling_3d_mode = Viewport.SCALING_3D_MODE_FSR2 if low else Viewport.SCALING_3D_MODE_BILINEAR
+		viewport.scaling_3d_scale = 0.77 if low else 1.0
+	elif viewport:
+		viewport.screen_space_aa = Viewport.SCREEN_SPACE_AA_FXAA
+	if vignette:
+		vignette.visible = not low_effects
 	if water_material:
 		water_material.set_shader_parameter("animation", 0.0 if low_effects else 1.0)
-	scatter_fraction = (0.4 if profile == "low" else 1.0) * (0.5 if reduced else 1.0)
+	scatter_fraction = (0.4 if low else 1.0) * (0.5 if reduced else 1.0)
 	if sim:
 		refresh_scatter()
 
@@ -286,6 +425,16 @@ static func grass_tone(x: float, z: float, tint: float) -> Color:
 	var moss = 1.0 + moss_noise.get_noise_2d(x, z) * 0.1
 	return Color(base.r * tint * GAIN * moss, base.g * tint * GAIN * moss, base.b * tint * GAIN * moss)
 
+const TERRAIN_ALBEDO = "res://assets/third_party/processed/terrain_albedo.jpg"
+const TERRAIN_NORMAL = "res://assets/third_party/processed/terrain_normal.png"
+const TERRAIN_ARM = "res://assets/third_party/processed/terrain_arm.jpg"
+const CONTROL_SIZE = 256
+static var terrain_shader: Shader
+var terrain_material: ShaderMaterial
+
+static func has_terrain_textures() -> bool:
+	return imported(TERRAIN_ALBEDO) and imported(TERRAIN_NORMAL) and imported(TERRAIN_ARM)
+
 func make_terrain() -> void:
 	terrain = Node3D.new()
 	add_child(terrain)
@@ -293,28 +442,26 @@ func make_terrain() -> void:
 	var rng = RandomNumberGenerator.new()
 	rng.seed = SCATTER_SEED
 	var bands: Array = road_bands()
-	var grass = grass_material()
-	var road = road_material()
-	# Ground tiles: grass and asphalt each get their own MultiMesh and material.
-	var grass_cells: Array = []
-	var grass_colors = PackedColorArray()
-	var road_cells: Array = []
-	var road_colors = PackedColorArray()
-	for x in DASimulation.SIZE:
-		for y in DASimulation.SIZE:
-			var tint = rng.randf_range(0.96, 1.04)
-			if is_road_cell(x, y, bands):
-				var base = ASPHALT * (1.0 + moss_noise.get_noise_2d(x, y) * 0.08)
-				# Verges: moss creeps over the asphalt where it meets the grass.
-				if not (is_road_cell(x - 1, y, bands) and is_road_cell(x + 1, y, bands) and is_road_cell(x, y - 1, bands) and is_road_cell(x, y + 1, bands)):
-					base = base.lerp(GRASS, 0.3)
-				road_cells.append(Vector2i(x, y))
-				road_colors.append(Color(base.r * tint * GAIN, base.g * tint * GAIN, base.b * tint * GAIN))
-			else:
-				grass_cells.append(Vector2i(x, y))
-				grass_colors.append(grass_tone(x, y, tint))
-	make_tiles(grass_cells, grass_colors, grass)
-	make_tiles(road_cells, road_colors, road)
+	var world: Dictionary = cached_world(bands)
+	var ground = MeshInstance3D.new()
+	ground.mesh = world.mesh
+	ground.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	if has_terrain_textures():
+		if not terrain_shader:
+			terrain_shader = load("res://assets/shaders/terrain.gdshader")
+		terrain_material = ShaderMaterial.new()
+		terrain_material.shader = terrain_shader
+		terrain_material.set_shader_parameter("albedo_arr", load(TERRAIN_ALBEDO))
+		terrain_material.set_shader_parameter("normal_arr", load(TERRAIN_NORMAL))
+		terrain_material.set_shader_parameter("arm_arr", load(TERRAIN_ARM))
+		terrain_material.set_shader_parameter("control_tex", ImageTexture.create_from_image(world.control))
+		terrain_material.set_shader_parameter("macro_tex", noise_texture(SCATTER_SEED + 1, 0.02))
+		terrain_material.set_shader_parameter("control_bounds", Vector4(world.origin, world.origin, world.extent, world.extent))
+		terrain_material.set_shader_parameter("single_scale", 0.0 if forward_plus else 1.0)
+		ground.material_override = terrain_material
+	else:
+		ground.material_override = grass_material()
+	terrain.add_child(ground)
 	# Lane dashes along the main avenue between the two bases, drawn with the
 	# shared kit shader so the fog of war tints them too.
 	var road_x = 35.5
@@ -393,26 +540,129 @@ func make_terrain() -> void:
 	scatter_vegetation(pending, rng, bands, scenery)
 	for kind in pending:
 		build_scatter_batch(kind, pending[kind], false)
-	make_ring(bands, grass, road)
+	for kind in world.scatter:
+		build_scatter_batch(kind, world.scatter[kind], true)
 
-func make_tiles(cells: Array, colors: PackedColorArray, material: Material) -> void:
-	if cells.is_empty():
-		return
-	var tiles = MultiMeshInstance3D.new()
-	var mm = MultiMesh.new()
-	mm.transform_format = MultiMesh.TRANSFORM_3D
-	mm.use_colors = true
-	var mesh = PlaneMesh.new()
-	mesh.size = Vector2(1, 1)
-	mm.mesh = mesh
-	mm.instance_count = cells.size()
-	for i in cells.size():
-		mm.set_instance_transform(i, Transform3D(Basis.IDENTITY, Vector3(cells[i].x, 0, cells[i].y)))
-		mm.set_instance_color(i, colors[i])
-	tiles.multimesh = mm
-	tiles.material_override = material
-	tiles.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	terrain.add_child(tiles)
+## The whole ground (map plus outer ring) as one heightmap mesh, with the
+## control image the terrain shader blends its layers from. Cached per map.
+func cached_world(bands: Array) -> Dictionary:
+	var key = (sim.active_map.map_id if sim.active_map else "legacy") + str(bands)
+	if not ring_cache.has(key):
+		ring_cache[key] = build_world(bands, sim.obstacles, sim.bases)
+	return ring_cache[key]
+
+static func build_world(bands: Array, obstacles: Dictionary, bases: Array) -> Dictionary:
+	ground_noise()
+	var rng = RandomNumberGenerator.new()
+	rng.seed = SCATTER_SEED + 99
+	var n = int(round((DASimulation.SIZE + 2.0 * RING_EXTENT) / RING_STEP)) + 1
+	var origin = -0.5 - RING_EXTENT
+	var extent = (n - 1) * RING_STEP
+	var heights = PackedFloat32Array()
+	heights.resize(n * n)
+	for i in n:
+		for j in n:
+			heights[i * n + j] = ring_height(origin + i * RING_STEP, origin + j * RING_STEP)
+	var vertices = PackedVector3Array()
+	var normals = PackedVector3Array()
+	var colors = PackedColorArray()
+	vertices.resize(n * n)
+	normals.resize(n * n)
+	colors.resize(n * n)
+	for i in n:
+		for j in n:
+			var x = origin + i * RING_STEP
+			var z = origin + j * RING_STEP
+			var h = heights[i * n + j]
+			vertices[i * n + j] = Vector3(x, h, z)
+			var hx = heights[mini(i + 1, n - 1) * n + j] - heights[maxi(i - 1, 0) * n + j]
+			var hz = heights[i * n + mini(j + 1, n - 1)] - heights[i * n + maxi(j - 1, 0)]
+			normals[i * n + j] = Vector3(-hx / (2.0 * RING_STEP), 1.0, -hz / (2.0 * RING_STEP)).normalized()
+			# Gentle tone variation; the textures carry the detail now.
+			var moss = 1.0 + moss_noise.get_noise_2d(x, z) * 0.12
+			var dirt = clampf((dirt_noise.get_noise_2d(x, z) - 0.18) * 2.4, 0.0, 1.0)
+			var tint = rng.randf_range(0.97, 1.03) * moss
+			colors[i * n + j] = Color(tint, tint * (1.0 - dirt * 0.08), tint * (1.0 - dirt * 0.15))
+	var index = PackedInt32Array()
+	var road_quads: Dictionary = {}
+	for i in n - 1:
+		for j in n - 1:
+			var cx = origin + (i + 0.5) * RING_STEP
+			var cz = origin + (j + 0.5) * RING_STEP
+			var on_road = false
+			for band in bands:
+				if band_covers(band, cx, cz):
+					on_road = true
+			var corners = [i * n + j, i * n + j + 1, (i + 1) * n + j, (i + 1) * n + j + 1]
+			if on_road:
+				for c in corners:
+					if river_depth(vertices[c].x, vertices[c].z) < -0.12:
+						on_road = false
+			if on_road:
+				road_quads[Vector2i(i, j)] = true
+			index.append(corners[0])
+			index.append(corners[2])
+			index.append(corners[1])
+			index.append(corners[2])
+			index.append(corners[3])
+			index.append(corners[1])
+	var mesh = ArrayMesh.new()
+	var data = []
+	data.resize(Mesh.ARRAY_MAX)
+	data[Mesh.ARRAY_VERTEX] = vertices
+	data[Mesh.ARRAY_NORMAL] = normals
+	data[Mesh.ARRAY_COLOR] = colors
+	data[Mesh.ARRAY_INDEX] = index
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, data)
+	return {"mesh": mesh, "origin": origin, "extent": extent, "control": build_control(bands, obstacles, bases, origin, extent), "scatter": ring_scatter(rng, n, origin, road_quads)}
+
+## Control image: R asphalt (road bands, ending at the river banks), G worn
+## ground around obstacles, ruins and bases, B forest floor under the groves.
+static func build_control(bands: Array, obstacles: Dictionary, bases: Array, origin: float, extent: float) -> Image:
+	var image = Image.create(CONTROL_SIZE, CONTROL_SIZE, false, Image.FORMAT_RGBA8)
+	var step = extent / CONTROL_SIZE
+	var grove = FastNoiseLite.new()
+	grove.seed = SCATTER_SEED + 51
+	grove.frequency = 0.05
+	grove.fractal_octaves = 2
+	var worn = PackedFloat32Array()
+	worn.resize(CONTROL_SIZE * CONTROL_SIZE)
+	var stamp = func(wx: float, wz: float, radius: float, strength: float):
+		var cx = int((wx - origin) / step)
+		var cz = int((wz - origin) / step)
+		var r = int(ceil(radius / step))
+		for dx in range(-r, r + 1):
+			for dz in range(-r, r + 1):
+				var px = cx + dx
+				var pz = cz + dz
+				if px < 0 or pz < 0 or px >= CONTROL_SIZE or pz >= CONTROL_SIZE:
+					continue
+				var d = Vector2(dx, dz).length() * step / radius
+				if d > 1.0:
+					continue
+				var k = pz * CONTROL_SIZE + px
+				worn[k] = maxf(worn[k], strength * (1.0 - d * d))
+	for c in obstacles:
+		stamp.call(float(c.x), float(c.y), 2.6, 0.75)
+	for b in bases:
+		stamp.call(b.x, b.y, 9.0, 0.55)
+	for pz in CONTROL_SIZE:
+		for px in CONTROL_SIZE:
+			var wx = origin + (px + 0.5) * step
+			var wz = origin + (pz + 0.5) * step
+			var asphalt = 0.0
+			for band in bands:
+				var lo = float(band.get("min", 0)) - 0.5
+				var hi = float(band.get("max", 0)) + 0.5
+				var t = wz if str(band.get("axis", "y")) == "y" else wx
+				# Soft half-metre edge so the asphalt does not end on a texel step.
+				var inside = minf(t - lo, hi - t)
+				asphalt = maxf(asphalt, clampf(inside / 0.8 + 0.5, 0.0, 1.0))
+			if river_depth(wx, wz) < -0.12:
+				asphalt = 0.0
+			var forest = clampf((grove.get_noise_2d(wx, wz) + 0.05) * 2.2, 0.0, 1.0)
+			image.set_pixel(px, pz, Color(asphalt, worn[pz * CONTROL_SIZE + px], forest, 1.0))
+	return image
 
 func queue_scenery(pending: Dictionary, kind: String, p: Vector2, height: float, yaw_angle: float, scale: float, tint: Color, order: float) -> void:
 	if not pending.has(kind):
@@ -500,6 +750,7 @@ func build_scatter_batch(kind: String, entries: Array, low: bool) -> void:
 		scatter.append({"mm": mm, "index": i, "transform": entries[i].transform, "order": entries[i].order, "shown": false})
 	batch.multimesh = mm
 	batch.material_override = DAModels.shared_material()
+	batch.gi_mode = GeometryInstance3D.GI_MODE_STATIC
 	if kind == "bush" or (low and kind != "tree" and kind not in DAModels.HIGHRISE_KINDS):
 		batch.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	terrain.add_child(batch)
@@ -556,112 +807,6 @@ static func band_covers(band: Dictionary, x: float, z: float) -> bool:
 	if str(band.get("axis", "y")) == "y":
 		return z >= lo and z <= hi
 	return x >= lo and x <= hi
-
-func make_ring(bands: Array, grass: ShaderMaterial, road: ShaderMaterial) -> void:
-	var key = (sim.active_map.map_id if sim.active_map else "legacy") + str(bands)
-	if not ring_cache.has(key):
-		ring_cache[key] = build_ring(bands)
-	var ring: Dictionary = ring_cache[key]
-	for part in [["grass", grass], ["road", road]]:
-		var mesh: ArrayMesh = ring[part[0]]
-		if mesh.get_surface_count() == 0:
-			continue
-		var instance = MeshInstance3D.new()
-		instance.mesh = mesh
-		instance.material_override = part[1]
-		instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		terrain.add_child(instance)
-	for kind in ring.scatter:
-		build_scatter_batch(kind, ring.scatter[kind], true)
-
-static func build_ring(bands: Array) -> Dictionary:
-	ground_noise()
-	var rng = RandomNumberGenerator.new()
-	rng.seed = SCATTER_SEED + 99
-	var n = int(round((DASimulation.SIZE + 2.0 * RING_EXTENT) / RING_STEP)) + 1
-	var origin = -0.5 - RING_EXTENT
-	var inner_lo = -0.5
-	var inner_hi = DASimulation.SIZE - 0.5
-	var heights = PackedFloat32Array()
-	heights.resize(n * n)
-	for i in n:
-		for j in n:
-			heights[i * n + j] = ring_height(origin + i * RING_STEP, origin + j * RING_STEP)
-	var vertices = PackedVector3Array()
-	var normals = PackedVector3Array()
-	var colors = PackedColorArray()
-	vertices.resize(n * n)
-	normals.resize(n * n)
-	colors.resize(n * n)
-	for i in n:
-		for j in n:
-			var x = origin + i * RING_STEP
-			var z = origin + j * RING_STEP
-			var h = heights[i * n + j]
-			vertices[i * n + j] = Vector3(x, h, z)
-			var hx = heights[mini(i + 1, n - 1) * n + j] - heights[maxi(i - 1, 0) * n + j]
-			var hz = heights[i * n + mini(j + 1, n - 1)] - heights[i * n + maxi(j - 1, 0)]
-			normals[i * n + j] = Vector3(-hx / (2.0 * RING_STEP), 1.0, -hz / (2.0 * RING_STEP)).normalized()
-			var tone = grass_tone(x, z, rng.randf_range(0.96, 1.04))
-			# Banks turn to mud below the grass line and darken under the water.
-			var mud = clampf(-h / 0.7, 0.0, 1.0)
-			colors[i * n + j] = tone.lerp(MUD * GAIN * (1.0 - 0.4 * clampf((-h - 0.35) / 0.8, 0.0, 1.0)), mud)
-	var grass_index = PackedInt32Array()
-	var road_index = PackedInt32Array()
-	var road_quads: Dictionary = {}
-	for i in n - 1:
-		for j in n - 1:
-			var x0 = origin + i * RING_STEP
-			var z0 = origin + j * RING_STEP
-			if x0 >= inner_lo - 0.01 and x0 + RING_STEP <= inner_hi + 0.01 and z0 >= inner_lo - 0.01 and z0 + RING_STEP <= inner_hi + 0.01:
-				continue
-			var cx = x0 + RING_STEP * 0.5
-			var cz = z0 + RING_STEP * 0.5
-			var on_road = false
-			for band in bands:
-				if band_covers(band, cx, cz):
-					on_road = true
-			var corners = [i * n + j, i * n + j + 1, (i + 1) * n + j, (i + 1) * n + j + 1]
-			# Roads end at the river banks; the grass stays underneath them so the
-			# small lift never shows a gap at the map edge.
-			if on_road:
-				for c in corners:
-					if river_depth(vertices[c].x, vertices[c].z) < -0.12:
-						on_road = false
-			if on_road:
-				road_quads[Vector2i(i, j)] = true
-			for target in ([grass_index, road_index] if on_road else [grass_index]):
-				target.append(corners[0])
-				target.append(corners[2])
-				target.append(corners[1])
-				target.append(corners[2])
-				target.append(corners[3])
-				target.append(corners[1])
-	var grass_mesh = ArrayMesh.new()
-	var data = []
-	data.resize(Mesh.ARRAY_MAX)
-	data[Mesh.ARRAY_VERTEX] = vertices
-	data[Mesh.ARRAY_NORMAL] = normals
-	data[Mesh.ARRAY_COLOR] = colors
-	data[Mesh.ARRAY_INDEX] = grass_index
-	grass_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, data)
-	var road_mesh = ArrayMesh.new()
-	if not road_index.is_empty():
-		var lifted = PackedVector3Array(vertices)
-		var asphalt = PackedColorArray()
-		asphalt.resize(n * n)
-		for v in n * n:
-			lifted[v] = lifted[v] + Vector3(0, 0.03, 0)
-			var tint = rng.randf_range(0.96, 1.04) * (1.0 + moss_noise.get_noise_2d(vertices[v].x, vertices[v].z) * 0.08)
-			asphalt[v] = Color(ASPHALT.r * tint * GAIN, ASPHALT.g * tint * GAIN, ASPHALT.b * tint * GAIN)
-		var road_data = []
-		road_data.resize(Mesh.ARRAY_MAX)
-		road_data[Mesh.ARRAY_VERTEX] = lifted
-		road_data[Mesh.ARRAY_NORMAL] = normals
-		road_data[Mesh.ARRAY_COLOR] = asphalt
-		road_data[Mesh.ARRAY_INDEX] = road_index
-		road_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, road_data)
-	return {"grass": grass_mesh, "road": road_mesh, "scatter": ring_scatter(rng, n, origin, road_quads)}
 
 ## Denser growth and a ruined skyline outside the map: tower clusters follow a
 ## city mask, groves a second mask; nothing lands in rivers or on the roads.
@@ -783,6 +928,8 @@ func make_fog_texture() -> void:
 	fog_image.fill(Color(EXPLORED_LEVEL, 0, 0))
 	fog_texture = ImageTexture.create_from_image(fog_image)
 	DAModels.shared_material().set_shader_parameter("fog_tex", fog_texture)
+	RenderingServer.global_shader_parameter_set("fog_of_war", fog_texture)
+	RenderingServer.global_shader_parameter_set("fog_bounds", Vector4(-1.5, -1.5, FOG_SIZE, FOG_SIZE))
 
 func refresh_fog() -> void:
 	var raw = PackedFloat32Array()
