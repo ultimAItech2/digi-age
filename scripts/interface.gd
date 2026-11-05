@@ -248,7 +248,11 @@ func icon_texture(name: String, px: int) -> Texture2D:
 
 func portrait(kind: String) -> Texture2D:
 	if portrait_cache.has(kind): return portrait_cache[kind]
-	var texture = null
+	# Kinds drawn as sprite cards use the sprite itself, so the panel matches the field.
+	var texture = DASprites.portrait(kind)
+	if texture:
+		portrait_cache[kind] = texture
+		return texture
 	var path = "res://assets/ui/portraits/%s.png" % DAModels.BLENDER_ASSETS.get(kind, kind)
 	if FileAccess.file_exists(path):
 		var image = Image.new()

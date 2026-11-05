@@ -53,6 +53,7 @@ func run() -> void:
 	await process_frame
 	# Drive the actual controller and UI, not a second implementation of their logic.
 	expect(game.mode == "menu", "starts on main menu")
+	expect(game.hud.portrait("worker") == DASprites.portrait("worker") and game.hud.portrait("walker") != null, "HUD portraits come from the sprites, Blender renders remain for the rest")
 	expect(await button("start"), "launch button is clickable")
 	expect(game.mode == "playing", "launch starts a fresh match")
 	game.set_process(false)
