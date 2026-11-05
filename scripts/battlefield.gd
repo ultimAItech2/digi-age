@@ -42,7 +42,7 @@ const MUD = Color("5a4e38")
 const WATER_LEVEL = -0.35
 const SCATTER_SEED = 1407
 const CAMERA_FOV = 32.0
-const CAMERA_ELEVATION = 50.0
+const CAMERA_ELEVATION = 38.0
 const FOG_SIZE = DASimulation.SIZE + 2
 const EXPLORED_LEVEL = 0.545
 ## The world continues this far past every map edge, as a 2-unit height grid.
@@ -63,7 +63,10 @@ const HDRI_PATH = "res://assets/third_party/processed/hdri/kloofendal_48d_partly
 ## The HDRI's sun sits at panorama u = 0.594 (tools/hdri_sun.py); the sky shader
 ## rolls it to the light's azimuth so the scene stays front-lit for the camera.
 const HDRI_SUN_U = 0.594
-const SUN_ROTATION = Vector3(-48, -35, 0)
+## Yaw -170.5: at the default camera yaw the sun's ground direction is lower
+## right on screen, where the photoreal sprites' baked key light (upper left)
+## throws their shadows; DASprites shears the card shadows along the same line.
+const SUN_ROTATION = Vector3(-48, -170.5, 0)
 var sky_rotation: float = 0.0
 var vignette: ColorRect
 var camera_attributes: CameraAttributesPractical
@@ -174,11 +177,13 @@ func build_environment() -> void:
 func build_sun() -> void:
 	sun = DirectionalLight3D.new()
 	sun.rotation_degrees = SUN_ROTATION
+	DASprites.set_sun(DASprites.sun_ground_direction(SUN_ROTATION), DASprites.shadow_length(SUN_ROTATION))
 	sun.light_color = Color("fff1dc") if has_hdri() else Color("ffe9c8")
 	sun.light_energy = 3.0 if has_hdri() else 2.3
 	sun.light_angular_distance = 0.5
 	sun.light_volumetric_fog_energy = 1.5
 	sun.shadow_enabled = "--no-shadows" not in OS.get_cmdline_user_args()
+	DASprites.set_shadows_enabled(sun.shadow_enabled)
 	sun.shadow_bias = 0.03
 	sun.shadow_normal_bias = 1.5
 	sun.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_4_SPLITS
@@ -998,6 +1003,27 @@ func pan(direction: Vector2, dt: float) -> void:
 	focus += (right*direction.x + forward*direction.y) * dt * zoom * 0.65
 	update_camera()
 
+## Screen-right on the ground for the current yaw (see update_camera).
+func camera_right_ground() -> Vector2:
+	return Vector2(cos(yaw), -sin(yaw))
+
+## The visual for an entity: a photoreal sprite card when the kind has one,
+## otherwise the Blender model with the same ground disc under it so mixed
+## kinds share the depth cues. `accent.a == 0` draws no owner disc (ghosts).
+func entity_node(e: Dictionary, accent: Color = Color(0, 0, 0, 0)) -> Node3D:
+	var owner: int = e.get("owner", -1)
+	var color: Color = accent if accent.a > 0 else (sim.faction_color(owner) if owner >= 0 else Color.WHITE)
+	var disc = color if owner >= 0 and accent.a == 0 else Color(color.r, color.g, color.b, 0.0)
+	var cells = (sim.catalog.buildings[e.kind].radius * 2 + 1) if e.get("building", false) else 1
+	if DASprites.has_sprite(e.kind):
+		return DASprites.card(e.kind, owner, cells, disc)
+	var n = DAModels.entity(e.kind, owner, color)
+	if owner >= 0 and accent.a == 0:
+		var diameter = DASprites.CONTACT_SCALE * (1.0 if not e.get("building", false) else cells * sqrt(2.0))
+		var ring_radius = 0.65 if not e.get("building", false) else (cells - 1) * 0.5 + 0.4
+		DASprites.ground_only(n, disc, diameter, ring_radius)
+	return n
+
 func sync(dt: float, selected: Array) -> void:
 	for id in models.keys():
 		if not sim.entities.has(id):
@@ -1007,10 +1033,10 @@ func sync(dt: float, selected: Array) -> void:
 	var batch_transforms: Dictionary = {}
 	for e in sim.entities.values():
 		if not models.has(e.id):
-			var n = DAModels.entity(e.kind, e.owner, sim.faction_color(e.owner) if e.owner >= 0 else Color.WHITE)
+			var n = entity_node(e)
 			add_child(n)
 			models[e.id] = n
-			if e.owner >= 0 and not e.building:
+			if e.owner >= 0 and not e.building and not DASprites.is_card(n):
 				# Geometry is rendered in shared MultiMeshes; keep the node for picking and rings.
 				n.get_child(0).visible = false
 				n.get_child(0).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
@@ -1029,14 +1055,20 @@ func sync(dt: float, selected: Array) -> void:
 			selections[e.id].visible = selected.has(e.id)
 			if e.building:
 				var progress = 1.0 if e.complete else 1.0 - e.build_left / sim.catalog.buildings[e.kind].time
-				model.scale.y = 0.15 + progress * 0.85
+				if DASprites.is_card(model):
+					DASprites.set_rise(model, progress)
+				else:
+					model.scale.y = 0.15 + progress * 0.85
 			elif e.order != "idle":
 				var direction: Vector2 = e.destination - e.pos
 				if not e.path.is_empty():
 					direction = e.path[0] - e.pos
 				if direction.length() > 0.1:
-					model.rotation.y = lerp_angle(model.rotation.y, atan2(direction.x, direction.y), dt * 10)
-		if e.owner >= 0 and not e.building and model.visible:
+					if DASprites.is_card(model):
+						DASprites.set_flip(model, direction.dot(camera_right_ground()) < 0.0)
+					else:
+						model.rotation.y = lerp_angle(model.rotation.y, atan2(direction.x, direction.y), dt * 10)
+		if e.owner >= 0 and not e.building and model.visible and not DASprites.is_card(model):
 			var key = e.kind + str(e.owner)
 			if not batch_transforms.has(key):
 				batch_transforms[key] = []
@@ -1085,10 +1117,13 @@ func preview(kind: String, p: Vector2, valid: bool) -> void:
 		ghost_kind = kind
 		ghost = null
 		if kind != "":
-			ghost = DAModels.entity(kind, 0)
+			ghost = entity_node({"kind": kind, "owner": 0, "building": true}, Color(1, 1, 1, 0))
 			add_child(ghost)
 	if ghost:
 		ghost.position = Vector3(roundf(p.x), 0, roundf(p.y))
+		if DASprites.is_card(ghost):
+			DASprites.set_tint(ghost, Color(0.25, 1, 0.7, 0.5) if valid else Color(1, 0.2, 0.15, 0.5))
+			return
 		var m = DAModels.material(Color(0.25, 1, 0.7, 0.5) if valid else Color(1, 0.2, 0.15, 0.5), true)
 		for child in ghost.get_children():
 			if child is MeshInstance3D:

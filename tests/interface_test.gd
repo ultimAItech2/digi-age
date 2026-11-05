@@ -97,9 +97,15 @@ func run() -> void:
 	click(game.field.screen_at(site))
 	expect(game.sim.resources[0].x==before.x-100 and game.build_kind=="", "click creates paid foundation")
 	var foundation=game.sim.entities.values().filter(func(e): return e.owner==0 and e.kind=="generator" and not e.complete)[0]
+	game.field.sync(0.1, game.selected)
+	var foundation_node: Node3D = game.field.models[foundation.id]
+	var rise = foundation_node.get_child(0).get_instance_shader_parameter("rise")
+	expect(DASprites.is_card(foundation_node) and rise != null and rise < 1.0 and foundation_node.scale == Vector3.ONE, "construction uses the card's rise, not node scale")
 	for i in 500:
 		game.sim.tick()
 	expect(foundation.complete,"UI-ordered construction finishes in simulation")
+	game.field.sync(0.1, game.selected)
+	expect(foundation_node.get_child(0).get_instance_shader_parameter("rise") == 1.0, "finished building is fully risen")
 	key(KEY_HOME)
 	await process_frame
 	var core=game.sim.entities[game.selected[0]]
@@ -109,6 +115,31 @@ func run() -> void:
 	var rally_target = visible_ground(Vector2(18,40))
 	click(game.field.screen_at(rally_target),true)
 	expect(core.rally.distance_to(rally_target)<0.1,"building right-click sets rally point")
+	# Sprite cards: facing follows the camera yaw, ghost tint stays per instance, cards survive a load.
+	var sentinel_id = game.sim.spawn("sentinel", 0, Vector2(20, 20))
+	game.sim.set_order(game.sim.entities[sentinel_id], "move", Vector2(10, 20))
+	game.field.yaw = -0.62
+	game.field.update_camera()
+	game.field.sync(0.1, game.selected)
+	var sentinel_node: Node3D = game.field.models[sentinel_id]
+	expect(DASprites.is_card(sentinel_node), "sentinel is drawn as a sprite card")
+	expect(sentinel_node.get_child(0).get_instance_shader_parameter("flip") == 1.0, "moving to world -x flips at default yaw")
+	game.field.yaw = -0.62 + PI
+	game.field.update_camera()
+	game.field.sync(0.1, game.selected)
+	expect(sentinel_node.get_child(0).get_instance_shader_parameter("flip") == 0.0, "same move after a half-turn does not flip")
+	game.field.yaw = -0.62
+	game.field.update_camera()
+	game.field.preview("generator", Vector2(30, 30), true)
+	expect(game.field.ghost != null and DASprites.is_card(game.field.ghost) and game.field.ghost.get_child(0).get_instance_shader_parameter("tint") != null, "placement ghost is a tinted card")
+	var tint = sentinel_node.get_child(0).get_instance_shader_parameter("tint")
+	expect(tint == null or Color(tint) == Color(1, 1, 1, 1), "entity cards keep white tint while a ghost is shown")
+	game.field.preview("", Vector2.ZERO, false)
+	expect(game.save_game("test_cards") == "" and game.load_game("test_cards") == "", "save and load round trip")
+	game.field.sync(0.1, game.selected)
+	expect(game.field.models.has(sentinel_id) and DASprites.is_card(game.field.models[sentinel_id]), "cards rebuilt after load")
+	core = game.sim.entities[core.id]
+	game.selected.assign([core.id])
 	# Pause, help, speed and restart use real key/menu routes.
 	key(KEY_SPACE)
 	expect(game.mode=="paused","Space opens pause overlay")

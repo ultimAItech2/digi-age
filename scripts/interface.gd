@@ -246,6 +246,13 @@ func icon_texture(name: String, px: int) -> Texture2D:
 	icon_cache[key] = texture
 	return texture
 
+## Height of the health bar anchor: just above a sprite card, or the model heights.
+func bar_height(e: Dictionary) -> float:
+	if DASprites.has_sprite(e.kind):
+		var cells = (game.sim.catalog.buildings[e.kind].radius * 2 + 1) if e.building else 1
+		return DASprites.bar_height(e.kind, cells)
+	return 4.4 if e.building else 2.2
+
 func portrait(kind: String) -> Texture2D:
 	if portrait_cache.has(kind): return portrait_cache[kind]
 	# Kinds drawn as sprite cards use the sprite itself, so the panel matches the field.
@@ -973,7 +980,7 @@ func draw_world_overlay() -> void:
 	for e in game.sim.entities.values():
 		if e.owner < 0 or not game.sim.known(0,e): continue
 		if not game.selected.has(e.id) and e.hp>=e.max_hp and e.complete: continue
-		var p: Vector2 = game.field.screen_at(e.pos,4.4 if e.building else 2.2)
+		var p: Vector2 = game.field.screen_at(e.pos, bar_height(e))
 		if not is_world(p): continue
 		var width = 54 if e.building else 32
 		draw_rect(Rect2(p.x-width/2.0,p.y,width,6),BG)

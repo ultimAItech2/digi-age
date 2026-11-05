@@ -640,6 +640,7 @@ func ui_action(action: String, payload: Dictionary = {}) -> void:
 			hud.rebind_action = str(payload.get("action", ""))
 		"shadows":
 			field.sun.shadow_enabled = not field.sun.shadow_enabled
+			DASprites.set_shadows_enabled(field.sun.shadow_enabled)
 		"profile":
 			commit_preferences(settings.set_value("profile", "low" if settings.values.profile == "normal" else "normal"))
 		"effects":
