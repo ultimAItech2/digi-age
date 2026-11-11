@@ -12,7 +12,7 @@ if [[ ! -x "$display_binary" ]]; then
   echo 'Xvfb is required for real renderer captures. Install xvfb or set XVFB_BIN.' >&2
   exit 1
 fi
-"$display_binary" -displayfd 3 -screen 0 3440x1440x24 -nolisten tcp 3>"$render_dir/display" >"$render_dir/xvfb.log" 2>&1 &
+"$display_binary" -displayfd 3 -screen 0 3840x2160x24 -nolisten tcp 3>"$render_dir/display" >"$render_dir/xvfb.log" 2>&1 &
 display_pid=$!
 trap 'kill "$display_pid" 2>/dev/null || true' EXIT
 for attempt in {1..50}; do

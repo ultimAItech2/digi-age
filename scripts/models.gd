@@ -146,8 +146,9 @@ float fog_level(vec3 p) {
 }
 vec3 fog_tint(vec3 c, float f) {
 	float grey = dot(c, vec3(0.3, 0.59, 0.11));
-	float light = pow(mix(0.45, 1.0, f), 1.25);
-	return mix(vec3(grey), c, mix(0.5, 1.0, f)) * light;
+	// Explored ground stays readable: dimmed and a little greyed, not blacked out.
+	float light = pow(mix(0.52, 1.0, f), 1.1);
+	return mix(vec3(grey), c, mix(0.55, 1.0, f)) * light;
 }"""
 
 static func box(parent: Node3D, size: Vector3, p: Vector3, color: Color, glow: bool = false) -> MeshInstance3D:
@@ -271,6 +272,20 @@ static func entity(kind: String, side: int, accent_override: Color = Color(0, 0,
 				cylinder(root, 0.22, 0.8, Vector3(0, 0.9, 0), DARK)
 				var dish = cylinder(root, 0.7, 0.25, Vector3(0, 1.4, 0), accent, 0.2)
 				dish.rotation.x = PI/4
+			"warden":
+				box(root, Vector3(0.9, 0.4, 1.2), Vector3(0, 0.5, 0), STEEL)
+				cylinder(root, 0.08, 0.7, Vector3(0, 1.0, -0.2), DARK)
+				cylinder(root, 0.55, 0.06, Vector3(0, 1.4, -0.2), accent, -1, true)
+			"mortar":
+				box(root, Vector3(0.95, 0.35, 1.2), Vector3(0, 0.45, 0), STEEL)
+				var tube = cylinder(root, 0.16, 1.0, Vector3(0, 1.0, 0.15), DARK)
+				tube.rotation.x = PI/5
+				box(root, Vector3(0.5, 0.1, 0.3), Vector3(0, 0.68, -0.4), accent)
+			"phantom":
+				cylinder(root, 0.6, 0.18, Vector3(0, 0.55, 0), DARK, 0.35)
+				box(root, Vector3(0.12, 0.08, 1.1), Vector3(0, 0.68, 0.1), accent, true)
+				for x in [-1, 1]:
+					box(root, Vector3(0.08, 0.08, 0.7), Vector3(x*0.2, 0.55, 0.6), STEEL)
 			"walker":
 				box(root, Vector3(1.0, 0.5, 1.2), Vector3(0, 1.0, 0), STEEL)
 				box(root, Vector3(0.55, 0.45, 0.9), Vector3(0, 1.45, 0), DARK)

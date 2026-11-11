@@ -13,6 +13,7 @@ float fog_level(vec3 p) {
 
 vec3 fog_tint(vec3 c, float f) {
 	float grey = dot(c, vec3(0.3, 0.59, 0.11));
-	float light = pow(mix(0.45, 1.0, f), 1.25);
-	return mix(vec3(grey), c, mix(0.5, 1.0, f)) * light;
+	// Explored ground stays readable: dimmed and a little greyed, not blacked out.
+	float light = pow(mix(0.52, 1.0, f), 1.1);
+	return mix(vec3(grey), c, mix(0.55, 1.0, f)) * light;
 }

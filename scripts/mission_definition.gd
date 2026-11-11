@@ -13,6 +13,10 @@ extends Resource
 @export var technology_floor: Array[int] = [0, 0]
 @export var technology_ceiling: Array[int] = [2, 2]
 @export var time_limit: float = 0.0
+## Skirmish: both sides open with the same force, ignoring the map's authored units and structures.
+@export var symmetric_start: bool = false
+## Skirmish: the player takes the map's second start.
+@export var swap_sides: bool = false
 @export var dialogue_entries: Array[Dictionary] = []
 @export var events: Array[Dictionary] = []
 @export var checkpoint_ids: Array[String] = ["opening", "first_signal", "counterattack"]

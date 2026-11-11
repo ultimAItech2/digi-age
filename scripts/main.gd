@@ -10,6 +10,13 @@ var groups: Dictionary = {}
 var build_kind: String = ""
 var attack_mode: bool = false
 var rally_mode: bool = false
+var patrol_mode: bool = false
+## Aiming a targeted ability (Sensor sweep, EMP shell): the next click on the ground fires it.
+var ability_mode: bool = false
+## "campaign" or "skirmish": what the current world is, and what Play Again restarts.
+var game_kind: String = "campaign"
+var fail_reason: String = ""
+var last_alert_pos: Vector2 = Vector2(-1, -1)
 var dragging: bool = false
 var drag_start: Vector2 = Vector2.ZERO
 var speed: int = 1
@@ -35,6 +42,11 @@ var autosave_index: int = 0
 var pending_mission_id: String = "first_signal"
 var saved_elapsed: float = -1.0
 var unsaved_command: bool = false
+var idle_cursor: int = -1
+var last_click_id: int = -1
+var last_click_msec: int = 0
+var cursor_kind: String = ""
+var cursor_timer: float = 0.0
 
 func _ready() -> void:
 	audio = DAAudio.new()
@@ -82,6 +94,10 @@ func _ready() -> void:
 			for i in 94:
 				sim.spawn("sentinel", side, Vector2(8+(i%10)*1.3+side*35, 22+floori(i/10.0)*1.3))
 		benchmark_remaining = 20.0
+		# Measure what the hardware can do, not the display's refresh rate.
+		if DisplayServer.get_name() != "headless":
+			DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+			Engine.max_fps = 0
 		field.focus = Vector2(35,36)
 		field.zoom = 68
 		field.update_camera()
@@ -94,8 +110,13 @@ func _ready() -> void:
 		if arg == "--capture-frames": capture_frames = maxi(1, int(next))
 		elif arg == "--profile" and next in ["low", "normal"]: dev_overrides.profile = next
 		elif arg == "--reduced": dev_overrides.reduced_effects = true
+		elif arg == "--focus" and next.contains(","):
+			# Development: look at a given cell, with the map revealed there.
+			field.focus = Vector2(float(next.get_slice(",", 0)), float(next.get_slice(",", 1)))
+			mission.reveal_area(0, field.focus, 22)
+			field.update_camera()
 		elif arg == "--zoom" and next != "":
-			field.zoom = clampf(float(next), 18.0, 70.0)
+			field.zoom = clampf(float(next), DABattlefield.ZOOM_MIN, DABattlefield.ZOOM_MAX)
 			field.update_camera()
 	if not dev_overrides.is_empty():
 		var merged: Dictionary = settings.values.duplicate(true)
@@ -106,10 +127,11 @@ func _ready() -> void:
 		for kind in ["fabricator", "data_center", "depot", "tower"]:
 			var points = {"fabricator": Vector2(20,40), "data_center": Vector2(6,30), "depot": Vector2(21,28), "tower": Vector2(24,36)}
 			sim.spawn(kind,0,points[kind])
-		for i in 10:
-			selected.append(sim.spawn(["sentinel","disruptor","walker"][i%3],0,Vector2(20+i%5*1.5,46+floori(i/5.0)*2)))
+		for i in 12:
+			selected.append(sim.spawn(["sentinel","disruptor","walker","warden","mortar","phantom"][i%6],0,Vector2(19+i%6*1.5,46+floori(i/6.0)*2)))
 		sim.ages[0] = 2
-		field.focus = Vector2(20,36)
+		if "--focus" not in args:
+			field.focus = Vector2(20,36)
 		field.update_camera()
 
 func launch_smoke() -> void:
@@ -136,14 +158,21 @@ func new_world(mission_id: String = "") -> void:
 		field.queue_free()
 	sim = DASimulation.new()
 	var requested = mission_id if mission_id != "" else pending_mission_id
-	mission_definition = mission_catalog.get_definition(requested)
-	if mission_definition == null or not campaign.unlocked_missions.has(requested):
-		mission_definition = mission_catalog.get_definition("first_signal")
-	pending_mission_id = mission_definition.mission_id
+	if requested == "skirmish":
+		game_kind = "skirmish"
+		mission_definition = skirmish_definition()
+	else:
+		game_kind = "campaign"
+		mission_definition = mission_catalog.get_definition(requested)
+		if mission_definition == null or not campaign.unlocked_missions.has(requested):
+			mission_definition = mission_catalog.get_definition("first_signal")
+		pending_mission_id = mission_definition.mission_id
 	mission = DAMissionController.new()
 	mission.setup(sim, mission_definition)
 	opponent = DAOpponent.new(sim)
 	auto_player = null
+	fail_reason = ""
+	last_alert_pos = Vector2(-1, -1)
 	field = DABattlefield.new()
 	add_child(field)
 	field.vignette = vignette
@@ -151,13 +180,21 @@ func new_world(mission_id: String = "") -> void:
 	field.apply_settings(settings.values)
 	sim.notice.connect(func(text):
 		if hud:
-			hud.toast(text)
-		audio.play("alert"))
+			hud.toast(text, "success"))
+	sim.alert.connect(_on_alert)
 	sim.shot.connect(func(from, to, _owner, _kind):
 		if sim.seen(0, from) or sim.seen(0, to):
 			audio.play("shot", {"kind": _kind})
+			if sim.seen(0, to):
+				audio.play("impact")
 			if _owner == 1:
 				audio.notify_combat())
+	sim.impact.connect(func(position, _kind, _radius):
+		if sim.seen(0, position):
+			audio.play("impact"))
+	sim.destroyed.connect(func(position, kind):
+		if sim.seen(0, position):
+			audio.play("structure_destroyed" if sim.catalog.buildings.has(kind) else "unit_destroyed"))
 	mission.objective_completed.connect(_on_objective_completed)
 	mission.checkpoint_created.connect(_on_checkpoint_created)
 	mission.mission_completed.connect(_on_mission_completed)
@@ -165,6 +202,7 @@ func new_world(mission_id: String = "") -> void:
 	mission.dialogue_requested.connect(_on_dialogue_requested)
 	sim.reset_from_mission(mission_definition)
 	opponent.refresh_from_faction()
+	opponent.set_difficulty(campaign.selected_difficulty)
 	if auto_player:
 		auto_player.refresh_from_faction()
 	if field:
@@ -175,6 +213,8 @@ func new_world(mission_id: String = "") -> void:
 	build_kind = ""
 	attack_mode = false
 	rally_mode = false
+	patrol_mode = false
+	ability_mode = false
 	dragging = false
 	accumulator = 0
 	speed = 1
@@ -184,8 +224,77 @@ func new_world(mission_id: String = "") -> void:
 		hud.clear_overlays()
 		hud.refresh_map()
 
+## A free match from the saved setup: equal openings, no script, one goal.
+func skirmish_definition() -> DAMissionDefinition:
+	var setup: Dictionary = settings.values.skirmish
+	var definition = DAMissionDefinition.new()
+	var map = load("res://data/maps/" + str(setup.map) + ".tres") as DAMapDefinition
+	definition.mission_id = "skirmish"
+	definition.title = "Skirmish · " + (map.display_name if map else str(setup.map))
+	definition.briefing = "A free match. Build, scout and destroy the rival Core."
+	definition.map_id = str(setup.map)
+	definition.player_faction_id = str(setup.player)
+	definition.enemy_faction_id = str(setup.enemy)
+	definition.checkpoint_ids.clear()
+	var grant: Vector3 = DASettingsService.SKIRMISH_RESOURCES[setup.resources]
+	definition.starting_resources.assign([grant, grant])
+	definition.symmetric_start = true
+	definition.swap_sides = setup.side == "right" or (setup.side == "random" and randi() % 2 == 1)
+	definition.victory_text = "The rival Core is gone. The field is yours."
+	definition.defeat_text = "Your civilization has fallen."
+	return definition
+
+## What the simulation tells the player: a sound, a spoken line, a toast and a minimap ping.
+func _on_alert(kind: String, pos: Vector2, side: int, detail: String) -> void:
+	if side != 0:
+		return
+	var subject: String = str(sim.catalog.definition(detail).get("name", detail.capitalize()))
+	match kind:
+		"under_attack":
+			last_alert_pos = pos
+			audio.play("alert")
+			audio.announce("alert.under_attack", true)
+			if hud:
+				hud.ping(pos, "danger")
+				hud.toast("Under attack. Press " + settings.prompt("alert") + " to look.", "alert")
+		"unit_lost":
+			audio.announce("alert.unit_lost")
+			if hud: hud.ping(pos, "danger")
+		"structure_lost":
+			last_alert_pos = pos
+			audio.announce("alert.structure_lost")
+			if hud:
+				hud.ping(pos, "danger")
+				hud.toast(subject + " destroyed.", "alert")
+		"core_lost":
+			last_alert_pos = pos
+			audio.play("alert")
+			if hud: hud.toast("Core destroyed. Raise a new Core within two minutes or the match is lost.", "alert")
+		"construction_started":
+			audio.play("construction")
+		"construction_complete":
+			audio.announce("alert.construction_complete")
+			if hud:
+				hud.ping(pos, "info")
+				hud.toast(subject + " complete.", "success")
+		"unit_ready":
+			if hud and hud.message_left <= 0: hud.toast(subject + " ready.")
+		"research_started":
+			audio.play("research")
+		"research_complete", "age_advanced":
+			audio.play("research")
+			audio.announce("alert.research_complete")
+		"population_cap":
+			audio.announce("alert.population")
+			if hud: hud.toast("Compute limit reached. Build a Data Center.", "alert")
+		"deposit_exhausted":
+			if hud:
+				hud.ping(pos, "info")
+				hud.toast(("Salvage" if detail == "metal" else "Data") + " deposit exhausted.")
+
 func _on_objective_completed(objective_id: String) -> void:
 	audio.play("objective_updated", {"id": objective_id})
+	audio.announce("alert.objective")
 	if hud:
 		hud.toast(objective_id.replace("_", " ").capitalize(), "success")
 
@@ -195,18 +304,55 @@ func _on_dialogue_requested(entry_id: String) -> void:
 	var speaker = str(entry.get("speaker", "archivist"))
 	audio.speak(mission_definition.mission_id + "." + entry_id, text, speaker)
 
+## Blue against orange stays apart under the common forms of colour blindness.
+const COLORBLIND_COLORS: Array[Color] = [Color("4a90ff"), Color("ff9d2e")]
+
 func apply_runtime_settings() -> void:
+	audio.enabled = not bool(settings.values.get("muted", false))
 	audio.apply_settings(settings.values)
+	apply_window_settings()
+	if sim:
+		var wanted: Array[Color] = COLORBLIND_COLORS if bool(settings.values.get("colorblind", false)) else ([] as Array[Color])
+		if sim.color_override != wanted:
+			sim.color_override = wanted
+			# Models carry their side colour from creation; rebuild them in the new one.
+			if field:
+				for model in field.models.values(): model.queue_free()
+				field.models.clear()
+				field.selections.clear()
 	if field: field.apply_settings(settings.values)
 	if hud:
 		hud.apply_scale(float(settings.values.get("ui_scale", 1.0)))
 		hud.subtitles_enabled = bool(settings.values.get("subtitles", true))
 
+## Window mode, size, vsync and frame cap. A headless run has no window to change.
+func apply_window_settings() -> void:
+	Engine.max_fps = int(settings.values.get("frame_cap", 0))
+	if DisplayServer.get_name() == "headless":
+		return
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if bool(settings.values.get("vsync", true)) else DisplayServer.VSYNC_DISABLED)
+	var wanted = {"windowed": DisplayServer.WINDOW_MODE_WINDOWED, "borderless": DisplayServer.WINDOW_MODE_WINDOWED, "fullscreen": DisplayServer.WINDOW_MODE_FULLSCREEN}[str(settings.values.get("window_mode", "windowed"))]
+	var borderless: bool = settings.values.get("window_mode", "windowed") == "borderless"
+	if DisplayServer.window_get_mode() != wanted:
+		DisplayServer.window_set_mode(wanted)
+	if wanted == DisplayServer.WINDOW_MODE_WINDOWED:
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, borderless)
+		var parts: PackedStringArray = str(settings.values.get("resolution", "1600x900")).split("x")
+		var size = Vector2i(int(parts[0]), int(parts[1]))
+		var screen = DisplayServer.screen_get_usable_rect(DisplayServer.window_get_current_screen())
+		if borderless:
+			DisplayServer.window_set_position(screen.position)
+			DisplayServer.window_set_size(screen.size)
+		elif DisplayServer.window_get_size() != size:
+			size = Vector2i(mini(size.x, screen.size.x), mini(size.y, screen.size.y))
+			DisplayServer.window_set_size(size)
+			DisplayServer.window_set_position(screen.position + (screen.size - size) / 2)
+
 func _on_checkpoint_created(slot_id: String) -> void:
 	campaign.current_mission = mission_definition.mission_id
 	campaign.last_checkpoint = slot_id
 	DASaveGame.save_campaign(campaign)
-	var error = DASaveGame.save_slot("autosave_" + str(autosave_index), sim, mission, campaign, {"checkpoint": slot_id})
+	var error = DASaveGame.save_slot("autosave_" + str(autosave_index), sim, mission, campaign, {"checkpoint": slot_id, "difficulty": campaign.selected_difficulty, "title": mission_definition.title, "session": session_state()})
 	autosave_index = (autosave_index + 1) % DASaveGame.SLOT_COUNT
 	if error != "" and hud:
 		hud.toast(error)
@@ -216,7 +362,13 @@ func _on_mission_completed() -> void:
 	build_kind = ""
 	attack_mode = false
 	rally_mode = false
+	patrol_mode = false
+	ability_mode = false
 	audio.set_music("result")
+	audio.play("mission_won")
+	if game_kind == "skirmish":
+		platform.unlock("skirmish_won")
+		return
 	campaign.mark_complete(mission_definition.mission_id)
 	var definitions = mission_catalog.all_definitions()
 	var index = 0
@@ -228,32 +380,76 @@ func _on_mission_completed() -> void:
 	DASaveGame.save_slot("campaign_complete", sim, mission, campaign, {"mission": mission_definition.mission_id})
 	DASaveGame.save_campaign(campaign)
 	platform.unlock("mission_" + mission_definition.mission_id)
-	audio.play("mission_won")
 	if mission_definition:
 		audio.speak("victory", mission_definition.victory_text, "archivist")
 
 func _on_mission_failed(reason: String) -> void:
 	mode = "result"
+	fail_reason = reason
 	build_kind = ""
 	attack_mode = false
 	rally_mode = false
+	patrol_mode = false
+	ability_mode = false
 	audio.set_music("result")
 	audio.play("mission_failed", {"reason": reason})
+	audio.announce("alert.mission_failed")
 	if hud:
 		hud.toast(reason)
 
+## Session state that is not the simulation's: the opponent's timers, control groups, speed.
+func session_state() -> Dictionary:
+	return {"opponent": opponent.serialize_state(), "groups": groups.duplicate(true), "speed": speed}
+
 func save_game(slot: String = "manual_1") -> String:
-	campaign.current_mission = mission_definition.mission_id
-	var error = DASaveGame.save_slot(slot, sim, mission, campaign, {"difficulty": mission_definition.difficulty})
+	if game_kind == "campaign": campaign.current_mission = mission_definition.mission_id
+	var metadata = {"difficulty": campaign.selected_difficulty, "title": mission_definition.title, "session": session_state()}
+	if game_kind == "skirmish":
+		# Enough to rebuild the same match definition before loading into it.
+		metadata["skirmish"] = settings.values.skirmish.duplicate()
+		metadata.skirmish.side = "right" if mission_definition.swap_sides else "left"
+	var error = DASaveGame.save_slot(slot, sim, mission, campaign, metadata)
 	if error == "":
 		saved_elapsed = sim.elapsed
 		unsaved_command = false
+	if hud: hud.refresh_slots()
 	return error
 
 func load_game(slot: String = "manual_1") -> String:
-	var error = DASaveGame.load_slot(slot, sim, mission, campaign)
+	# A save from another mission switches to that mission first.
+	var info: Dictionary = DASaveGame.describe(slot)
+	var saved_mission: String = str(info.get("mission_id", ""))
+	if saved_mission == "skirmish":
+		# Rebuild the match the save was made in, then load into it.
+		var setup = info.get("metadata", {}).get("skirmish", {})
+		if not settings.valid_value("skirmish", setup):
+			return "This skirmish save has no usable match setup."
+		var setup_error = settings.set_value("skirmish", setup)
+		if setup_error != "":
+			return setup_error
+		new_world("skirmish")
+	elif saved_mission != "" and saved_mission != mission_definition.mission_id:
+		if mission_catalog.get_definition(saved_mission) == null:
+			return "This save belongs to a mission that is no longer available."
+		campaign.unlock(saved_mission)
+		new_world(saved_mission)
+	var metadata: Dictionary = {}
+	var error = DASaveGame.load_slot(slot, sim, mission, campaign, metadata)
 	if error == "":
+		var session: Dictionary = metadata.get("session", {}) if metadata.get("session", {}) is Dictionary else {}
+		if session.get("opponent", {}) is Dictionary and not session.get("opponent", {}).is_empty():
+			opponent.restore_state(session.get("opponent", {}))
+		else:
+			opponent.set_difficulty(campaign.selected_difficulty)
+		groups.clear()
+		if session.get("groups", {}) is Dictionary:
+			for key in session.groups:
+				if key is int and session.groups[key] is Array:
+					groups[key] = session.groups[key].filter(func(id): return id is int)
+		speed = int(session.get("speed", 1)) if int(session.get("speed", 1)) in [1, 2, 4] else 1
 		mode = "playing" if sim.winner < 0 and mission.active else "result"
+		audio.set_music("ambient" if mode == "playing" else "result")
+		if game_kind == "campaign": pending_mission_id = mission_definition.mission_id
 		hud.clear_overlays()
 		selected.clear()
 		for model in field.models.values(): model.queue_free()
@@ -276,10 +472,13 @@ func _process(dt: float) -> void:
 			mission.tick(sim.catalog.tick_seconds)
 			accumulator -= sim.catalog.tick_seconds
 		if sim.winner >= 0:
+			if sim.winner == 1 and fail_reason == "": fail_reason = "core"
 			mode = "result"
 			build_kind = ""
 			attack_mode = false
 			rally_mode = false
+			patrol_mode = false
+			ability_mode = false
 			audio.play("alert")
 		camera_controls(dt)
 	if "--benchmark" in OS.get_cmdline_user_args():
@@ -299,6 +498,7 @@ func _process(dt: float) -> void:
 		field.preview(build_kind, p, sim.placement_error(0, build_kind, p) == "")
 	else:
 		field.preview("", Vector2.ZERO, false)
+	update_cursor(dt)
 	capture_delay -= dt
 	if screenshot_requested: capture_frames -= 1
 	if screenshot_requested and capture_frames <= 0:
@@ -319,6 +519,34 @@ func _process(dt: float) -> void:
 			print("BENCHMARK CPU average_ms=%.3f draw_calls=%d primitives=%d viewport=%s" % [process_total/benchmark_process.size()*1000,Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME),get_viewport().get_texture().get_size()])
 			print("BENCHMARK frames=%d seconds=%.3f fps=%.2f adapter=%s renderer=%s" % [benchmark_frames.size(),total,benchmark_frames.size()/total,RenderingServer.get_video_adapter_name(),RenderingServer.get_current_rendering_method()])
 			get_tree().quit()
+
+## The pointer says what a click will do: build, rally, attack or gather.
+func update_cursor(dt: float) -> void:
+	cursor_timer -= dt
+	if cursor_timer > 0 or DisplayServer.get_name() == "headless":
+		return
+	cursor_timer = 0.1
+	var kind = "default"
+	if mode == "playing" and not hud.modal_active():
+		var mouse = get_viewport().get_mouse_position()
+		if build_kind != "":
+			kind = "build"
+		elif rally_mode:
+			kind = "rally"
+		elif attack_mode or patrol_mode or ability_mode:
+			kind = "attack"
+		elif hud.is_world(mouse) and not selected.is_empty() and sim.entities.has(selected[0]):
+			var first: Dictionary = sim.entities[selected[0]]
+			var id = pick_screen(mouse) if first.owner == 0 and not first.building else -1
+			if id >= 0 and sim.entities[id].owner == 1:
+				kind = "attack"
+			elif id >= 0 and sim.entities[id].owner == -1 and first.kind == "worker":
+				kind = "gather"
+	if kind != cursor_kind:
+		cursor_kind = kind
+		var image = hud.cursor_image(kind)
+		if image:
+			Input.set_custom_mouse_cursor(image, Input.CURSOR_ARROW, Vector2(16, 16) if kind == "attack" else Vector2(4, 3))
 
 func capture() -> void:
 	await RenderingServer.frame_post_draw
@@ -342,22 +570,18 @@ func camera_controls(dt: float) -> void:
 		direction.x += 1
 	var mouse = get_viewport().get_mouse_position()
 	var size = get_viewport().get_visible_rect().size
-	if hud.is_world(mouse) and mouse.x >= 0 and mouse.x < 7:
-		direction.x -= 1
-	if hud.is_world(mouse) and mouse.x > size.x-7 and mouse.x < size.x:
-		direction.x += 1
-	if hud.is_world(mouse) and mouse.y < hud.world_rect.position.y+7:
-		direction.y -= 1
-	if hud.is_world(mouse) and mouse.y > hud.world_rect.end.y-7:
-		direction.y += 1
+	# Screen edges pan whether or not the HUD covers them, as long as the pointer is in the window.
+	if Rect2(Vector2.ZERO, size).has_point(mouse) and DisplayServer.window_is_focused():
+		if mouse.x < 4:
+			direction.x -= 1
+		if mouse.x > size.x-5:
+			direction.x += 1
+		if mouse.y < 4:
+			direction.y -= 1
+		if mouse.y > size.y-5:
+			direction.y += 1
 	if direction != Vector2.ZERO:
 		field.pan(direction.normalized(), dt)
-	if Input.is_physical_key_pressed(KEY_Q):
-		field.yaw -= dt
-		field.update_camera()
-	if Input.is_physical_key_pressed(KEY_E):
-		field.yaw += dt
-		field.update_camera()
 
 func _input(event: InputEvent) -> void:
 	if not hud:
@@ -376,24 +600,28 @@ func _input(event: InputEvent) -> void:
 		var p: Vector2 = event.position
 		if event.pressed:
 			if event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN] and hud.is_world(p):
-				field.zoom = clampf(field.zoom + (-2.5 if event.button_index == MOUSE_BUTTON_WHEEL_UP else 2.5), 18,  70.0)
+				field.zoom = clampf(field.zoom + (-2.0 if event.button_index == MOUSE_BUTTON_WHEEL_UP else 2.0), DABattlefield.ZOOM_MIN, DABattlefield.ZOOM_MAX)
 				field.update_camera()
 				return
 			if event.button_index not in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT]:
 				return
-			if event.button_index == MOUSE_BUTTON_RIGHT and (build_kind != "" or ((attack_mode or rally_mode) and not hud.map_rect.has_point(p))):
+			if event.button_index == MOUSE_BUTTON_RIGHT and (build_kind != "" or ((attack_mode or rally_mode or patrol_mode or ability_mode) and not hud.map_rect.has_point(p))):
 				build_kind = ""
 				attack_mode = false
 				rally_mode = false
+				patrol_mode = false
+				ability_mode = false
 				return
 			if hud.handle_click(p, event.button_index == MOUSE_BUTTON_RIGHT):
 				return
 			var ground = field.ground_at(p)
 			if event.button_index == MOUSE_BUTTON_RIGHT:
-				if build_kind != "" or attack_mode or rally_mode:
+				if build_kind != "" or attack_mode or rally_mode or patrol_mode or ability_mode:
 					build_kind = ""
 					attack_mode = false
 					rally_mode = false
+					patrol_mode = false
+					ability_mode = false
 				else:
 					context_order(ground, p)
 			elif build_kind != "":
@@ -405,6 +633,13 @@ func _input(event: InputEvent) -> void:
 			elif rally_mode:
 				issue("rally", {"pos": ground})
 				rally_mode = false
+			elif ability_mode:
+				issue("ability", {"pos": ground})
+				ability_mode = false
+			elif patrol_mode:
+				issue("patrol", {"pos": ground})
+				patrol_mode = false
+				ability_mode = false
 			else:
 				dragging = true
 				drag_start = p
@@ -430,48 +665,58 @@ func key_input(event: InputEventKey) -> void:
 		return
 	if hud.keyboard(event): return
 	if key == settings.binding("fullscreen", KEY_F11):
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN else DisplayServer.WINDOW_MODE_FULLSCREEN)
+		commit_preferences(settings.set_value("window_mode", "windowed" if settings.values.window_mode == "fullscreen" else "fullscreen"))
 		return
 	if key == settings.binding("manual", KEY_F1):
 		if hud.manual: hud.close_overlay()
-		elif not hud.settings_open and hud.confirmation.is_empty(): hud.open_overlay("manual")
+		elif not hud.overlay_open(): hud.open_overlay("manual")
 		return
 	if key == settings.binding("cancel", KEY_ESCAPE):
-		if hud.settings_open or hud.manual or not hud.confirmation.is_empty():
+		if hud.overlay_open():
 			hud.close_overlay()
-		elif build_kind != "" or attack_mode or rally_mode:
+		elif build_kind != "" or attack_mode or rally_mode or patrol_mode or ability_mode:
 			build_kind = ""
 			attack_mode = false
 			rally_mode = false
+			patrol_mode = false
+			ability_mode = false
 		elif mode == "playing":
 			mode = "paused"
 			hud.cancel_pointer()
 		elif mode == "paused":
 			mode = "playing"
 		return
-	if hud.settings_open or hud.manual or not hud.confirmation.is_empty(): return
+	if hud.overlay_open(): return
 	if key == settings.binding("pause", KEY_SPACE) and mode in ["playing", "paused"]:
 		mode = "paused" if mode == "playing" else "playing"
 		hud.cancel_pointer()
 		return
 	if mode != "playing" or hud.manual:
 		return
+	# The command grid's slot keys come first; attack-move and stop keep their own bindings.
+	if not event.ctrl_pressed and hud.grid_key(key):
+		return
+	if key == KEY_PERIOD:
+		ui_action("idle_worker")
 	if key == settings.binding("speed", KEY_F2):
 		speed = {1:2, 2:4, 4:1}[speed]
 	if key == settings.binding("events", KEY_M):
-		audio.enabled = not audio.enabled
-		audio.apply_settings(settings.values)
+		ui_action("sound")
 	if key == settings.binding("save", KEY_F5):
 		ui_action("save")
 	if key == settings.binding("load", KEY_F9):
 		ui_action("load")
 	if key == settings.binding("attack", KEY_A) and not selected.is_empty():
 		attack_mode = true
+		patrol_mode = false
+		ability_mode = false
 		build_kind = ""
 	if key == settings.binding("stop", KEY_S) and not selected.is_empty():
 		issue("stop")
 	if key == settings.binding("home", KEY_HOME):
 		ui_action("home")
+	if key == settings.binding("alert", KEY_N):
+		ui_action("jump_alert")
 	if key >= KEY_1 and key <= KEY_9:
 		var group = key-KEY_0
 		if event.ctrl_pressed:
@@ -539,7 +784,17 @@ func select_at(screen: Vector2, additive: bool) -> void:
 				selected.append(e.id)
 	else:
 		var id = pick_screen(screen)
-		if id >= 0:
+		var now = Time.get_ticks_msec()
+		var double: bool = id >= 0 and id == last_click_id and now - last_click_msec < 350
+		last_click_id = id
+		last_click_msec = now
+		if double and sim.entities[id].owner == 0 and not sim.entities[id].building:
+			# Double-click: every unit of that type on screen.
+			var kind: String = sim.entities[id].kind
+			for e in sim.entities.values():
+				if e.owner == 0 and e.kind == kind and hud.is_world(field.screen_at(e.pos, 0.6)) and not selected.has(e.id):
+					selected.append(e.id)
+		elif id >= 0:
 			if additive and selected.has(id):
 				selected.erase(id)
 			elif not selected.has(id):
@@ -575,12 +830,22 @@ func issue(action: String, payload: Dictionary = {}) -> String:
 	var error = sim.command(0, action, selected, payload)
 	if error != "":
 		hud.toast(error, "error")
+		audio.play("ui_error")
+		if error.begins_with("Insufficient"): audio.announce("alert.insufficient")
 	else:
 		unsaved_command = true
 		audio.play("order")
 		if payload.has("pos"):
 			field.show_marker(payload.pos)
 	return error
+
+## The mission after the current one, when it exists and is unlocked.
+func next_mission_id() -> String:
+	var definitions = mission_catalog.all_definitions()
+	for i in definitions.size() - 1:
+		if definitions[i].mission_id == mission_definition.mission_id and campaign.unlocked_missions.has(definitions[i + 1].mission_id):
+			return definitions[i + 1].mission_id
+	return ""
 
 func commit_preferences(error: String, success: String = "") -> void:
 	apply_runtime_settings()
@@ -589,8 +854,8 @@ func commit_preferences(error: String, success: String = "") -> void:
 	hud.prepare_layout(true)
 
 func ui_action(action: String, payload: Dictionary = {}) -> void:
-	if action in ["restart", "load", "menu", "quit"] and not payload.get("confirmed", false) and mode in ["playing", "paused"] and (sim.elapsed > saved_elapsed or unsaved_command):
-		hud.confirm_action(action)
+	if action in ["restart", "load", "load_slot", "menu", "quit"] and not payload.get("confirmed", false) and mode in ["playing", "paused"] and (sim.elapsed > saved_elapsed or unsaved_command):
+		hud.confirm_action(action, payload)
 		return
 	match action:
 		"confirm_cancel":
@@ -599,8 +864,10 @@ func ui_action(action: String, payload: Dictionary = {}) -> void:
 			hud.focused = previous_focus
 		"confirm_save", "confirm_proceed":
 			var next_action: String = hud.confirmation.get("action", "")
+			var next_payload: Dictionary = hud.confirmation.get("payload", {}).duplicate()
+			next_payload.confirmed = true
 			if action == "confirm_save":
-				if next_action == "load":
+				if next_action in ["load", "load_slot"]:
 					hud.toast("Choose Load Saved Game or Cancel to preserve the saved game.")
 					return
 				var error = save_game()
@@ -609,16 +876,34 @@ func ui_action(action: String, payload: Dictionary = {}) -> void:
 					return
 			hud.confirmation.clear()
 			if next_action == "reset_all": commit_preferences(settings.reset(), "Preferences reset")
-			elif next_action != "": ui_action(next_action, {"confirmed": true})
+			elif next_action != "": ui_action(next_action, next_payload)
 		"reset_all": hud.confirm_action("reset_all")
 		"reset_category": commit_preferences(settings.reset(str(payload.get("category", ""))), "Preferences reset")
-		"start", "restart":
-			new_world(pending_mission_id)
+		"start", "restart", "start_skirmish":
+			var skirmish: bool = action == "start_skirmish" or (action == "restart" and game_kind == "skirmish")
+			new_world("skirmish" if skirmish else pending_mission_id)
 			mode = "playing"
 			hud.objectives_open = true
 			audio.set_music("ambient")
 			hud.toast(mission_definition.title + " initiated.")
-			audio.speak(mission_definition.mission_id + ".briefing", mission_definition.briefing, "archivist")
+			if not skirmish:
+				audio.speak(mission_definition.mission_id + ".briefing", mission_definition.briefing, "archivist")
+		"skirmish":
+			if hud.panel_open == "skirmish": hud.close_overlay()
+			else:
+				if mode != "menu":
+					new_world(pending_mission_id)
+					mode = "menu"
+					audio.set_music("menu")
+				hud.open_overlay("skirmish")
+		"skirmish_option":
+			# Step one setting of the saved setup forward or back through its choices.
+			var setup: Dictionary = settings.values.skirmish.duplicate()
+			var field_name: String = str(payload.get("key", "map"))
+			var choices: Array = {"map": DASettingsService.SKIRMISH_MAPS, "player": DASettingsService.SKIRMISH_FACTIONS, "enemy": DASettingsService.SKIRMISH_FACTIONS, "resources": DASettingsService.SKIRMISH_RESOURCES.keys(), "side": DASettingsService.SKIRMISH_SIDES}.get(field_name, [])
+			if not choices.is_empty():
+				setup[field_name] = choices[posmod(choices.find(setup[field_name]) + int(payload.get("delta", 1)), choices.size())]
+				commit_preferences(settings.set_value("skirmish", setup))
 		"select_mission":
 			pending_mission_id = str(payload.get("id", "first_signal"))
 			hud.toast("Selected mission: " + str(payload.get("title", pending_mission_id)))
@@ -628,7 +913,7 @@ func ui_action(action: String, payload: Dictionary = {}) -> void:
 		"resume":
 			mode = "playing"
 		"menu":
-			new_world()
+			new_world(pending_mission_id)
 			mode = "menu"
 			audio.set_music("menu")
 		"help":
@@ -640,8 +925,20 @@ func ui_action(action: String, payload: Dictionary = {}) -> void:
 		"speed":
 			speed = {1:2, 2:4, 4:1}[speed]
 		"sound":
-			audio.enabled = not audio.enabled
-			audio.apply_settings(settings.values)
+			commit_preferences(settings.toggle("muted"), "Sound off" if not settings.values.muted else "Sound on")
+		"window_mode":
+			commit_preferences(settings.cycle("window_mode", DASettingsService.WINDOW_MODES))
+		"resolution":
+			commit_preferences(settings.cycle("resolution", DASettingsService.RESOLUTIONS))
+		"frame_cap":
+			commit_preferences(settings.cycle("frame_cap", DASettingsService.FRAME_CAPS))
+		"vsync":
+			commit_preferences(settings.toggle("vsync"))
+		"colorblind":
+			commit_preferences(settings.toggle("colorblind"))
+		"credits":
+			if hud.panel_open == "credits": hud.close_overlay()
+			else: hud.open_overlay("credits")
 		"settings":
 			if hud.settings_open: hud.close_overlay()
 			else: hud.open_overlay("settings")
@@ -657,18 +954,64 @@ func ui_action(action: String, payload: Dictionary = {}) -> void:
 		"rebind":
 			hud.rebind_action = str(payload.get("action", ""))
 		"shadows":
-			field.sun.shadow_enabled = not field.sun.shadow_enabled
-			DASprites.set_shadows_enabled(field.sun.shadow_enabled)
+			commit_preferences(settings.toggle("shadows"))
 		"profile":
 			commit_preferences(settings.set_value("profile", "low" if settings.values.profile == "normal" else "normal"))
 		"effects":
 			commit_preferences(settings.set_value("reduced_effects", not settings.values.reduced_effects))
-		"save":
-			var save_error = save_game()
+		"save", "save_slot":
+			var save_error = save_game(str(payload.get("slot", "manual_1")))
+			if action == "save_slot" and save_error == "": hud.close_overlay()
+			if save_error == "": audio.play("ui_confirm")
 			hud.toast("Game saved" if save_error == "" else save_error, "success" if save_error == "" else "error")
-		"load":
-			var load_error = load_game()
+		"load", "load_slot":
+			var load_error = load_game(str(payload.get("slot", "manual_1")))
 			hud.toast("Game loaded" if load_error == "" else load_error, "success" if load_error == "" else "error")
+		"saves":
+			if hud.panel_open == "saves": hud.close_overlay()
+			else:
+				hud.saves_mode = str(payload.get("id", "load"))
+				hud.open_overlay("saves")
+		"difficulty":
+			var levels: Array = DAOpponent.DIFFICULTIES
+			campaign.selected_difficulty = levels[(levels.find(campaign.selected_difficulty) + 1) % levels.size()]
+			DASaveGame.save_campaign(campaign)
+			opponent.set_difficulty(campaign.selected_difficulty)
+		"next_mission":
+			var next_id = next_mission_id()
+			if next_id != "":
+				pending_mission_id = next_id
+				ui_action("start")
+		"jump_alert":
+			if last_alert_pos.x < 0: hud.toast("No alert to show.")
+			else:
+				field.focus = last_alert_pos
+				field.update_camera()
+		"patrol_mode":
+			patrol_mode = true
+			attack_mode = false
+			rally_mode = false
+			build_kind = ""
+		"hold":
+			issue("hold")
+		"stance":
+			# Switch the selection between holding its ground and chasing what it sees.
+			var units = selected.filter(func(id): return sim.entities.has(id) and not sim.entities[id].building)
+			var aggressive: bool = not units.is_empty() and sim.entities[units[0]].get("stance", "defensive") == "aggressive"
+			if issue("stance", {"stance": "defensive" if aggressive else "aggressive"}) == "":
+				hud.toast("Stance: " + ("defensive. Units fire from where they stand." if aggressive else "aggressive. Units chase what they see, then return."))
+		"ability":
+			var spec: Dictionary = sim.catalog.abilities.get(str(payload.get("kind", "")), {})
+			if spec.get("targeted", false):
+				ability_mode = true
+				attack_mode = false
+				rally_mode = false
+				patrol_mode = false
+				build_kind = ""
+			else:
+				issue("ability")
+		"cancel_job":
+			if issue("cancel", payload) == "": hud.toast("Cancelled and refunded.")
 		"workers":
 			selected = sim.entities.values().filter(func(e): return e.owner == 0 and e.kind == "worker").map(func(e): return e.id)
 		"home":
@@ -678,14 +1021,38 @@ func ui_action(action: String, payload: Dictionary = {}) -> void:
 		"attack_mode":
 			attack_mode = true
 			rally_mode = false
+			patrol_mode = false
+			ability_mode = false
 			build_kind = ""
 		"rally":
 			rally_mode = true
 			attack_mode = false
+			patrol_mode = false
+			ability_mode = false
 			build_kind = ""
 		"tech":
-			selected = sim.entities.values().filter(func(e): return e.owner == 0 and e.kind == "core").map(func(e): return e.id)
-			if selected.is_empty(): hud.toast("No Core remains to research at.", "error")
+			if hud.tech_open: hud.close_overlay()
+			else: hud.open_overlay("tech")
+		"research_tech":
+			var labs = sim.entities.values().filter(func(e): return e.owner == 0 and e.kind == "lab" and e.complete and e.research == "")
+			if labs.is_empty():
+				hud.toast("Build a Research Lab, or wait for one to finish its project.", "error")
+			else:
+				var research_error = sim.command(0, "research", [labs[0].id], payload)
+				if research_error != "": hud.toast(research_error, "error")
+				else:
+					unsaved_command = true
+					audio.play("order")
+		"select_one":
+			selected = [payload.id]
+		"idle_worker":
+			var idle: Array = hud.idle_workers()
+			if idle.is_empty(): hud.toast("Every Worker is busy.")
+			else:
+				idle_cursor = (idle_cursor + 1) % idle.size()
+				selected = [idle[idle_cursor]]
+				field.focus = sim.entities[selected[0]].pos
+				field.update_camera()
 		"army":
 			selected = sim.entities.values().filter(func(e): return e.owner == 0 and not e.building and e.kind != "worker").map(func(e): return e.id)
 			if selected.is_empty(): hud.toast("No combat units. Train units at a Fabricator.")
@@ -696,5 +1063,7 @@ func ui_action(action: String, payload: Dictionary = {}) -> void:
 			build_kind = payload.kind
 			attack_mode = false
 			rally_mode = false
+			patrol_mode = false
+			ability_mode = false
 		"train", "research", "stop":
 			issue(action, payload)

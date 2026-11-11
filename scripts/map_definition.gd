@@ -14,6 +14,10 @@ extends Resource
 @export var prebuilt: Array[Dictionary] = []
 @export var scenery: Array[Dictionary] = []
 @export var road_bands: Array[Dictionary] = []
+## Broken ground: slower to cross and costlier to path through.
+@export var rough_cells: Array[Vector2i] = []
+## High ground: units standing on it see and shoot farther.
+@export var high_cells: Array[Vector2i] = []
 
 func resource_nodes_for_mission() -> Array[Dictionary]:
 	return resource_nodes.duplicate(true)

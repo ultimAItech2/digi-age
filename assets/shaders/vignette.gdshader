@@ -1,6 +1,6 @@
 shader_type canvas_item;
 render_mode blend_mix;
-uniform float strength : hint_range(0.0, 1.0) = 0.28;
+uniform float strength : hint_range(0.0, 1.0) = 0.18;
 uniform float radius : hint_range(0.2, 1.5) = 0.78;
 
 void fragment() {

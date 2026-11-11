@@ -1,8 +1,47 @@
 # Production status
 
+## Added in 1.0.0-rc3
+
+- **Skirmish:** a setup screen (map with preview, both factions, resources,
+  start position, difficulty) and symmetric openings on all eight maps.
+- **Opponent:** three difficulty levels; scouts and attacks from what its side
+  has seen (the rival start is the only map knowledge it uses before that);
+  expands to unserved deposits, retreats when outnumbered two to one, answers
+  the units it meets from the counter table, rebuilds a lost Core, fields its
+  faction's unit and uses abilities. Works on every map without scripting.
+- **Alerts:** under attack, unit and structure lost, construction and unit
+  complete, research complete, population cap, deposit exhausted, Core lost:
+  each with a toast, a minimap ping and its recorded voice line or sound.
+- **Orders:** hold, patrol, stance (defensive/aggressive), cancel with refund;
+  Workers move to the next deposit; unreachable destinations are refused.
+- **Match rules:** a side without a Core has two minutes to rebuild while it
+  has Workers; mission technology ceilings are enforced.
+- **Combat:** counters and armour classes are catalog data; Disruptor, Walker
+  and Mortar shells travel and splash; one ability per combat unit.
+- **Factions:** rosters enforced; Warden (Origin), Mortar (Foundry) and
+  Phantom (Lattice) with full rendered sprite sets.
+- **Terrain:** roads speed units up, rough ground slows them, high ground adds
+  sight and range; authored on all eight maps by `tools/author_terrain.py` and
+  painted into the terrain and the minimap.
+- **Fog memory:** buildings a side has scouted stay known in the fog.
+- **Saving:** three manual and three checkpoint slots with a load screen;
+  saves carry the opponent's state, control groups and speed, and switch
+  mission or skirmish on load. Save schema 3 with migration from 1 and 2.
+- **Campaign flow:** Next Mission after a win; the defeat screen names the cause.
+- **Settings:** window mode, resolution, VSync, frame cap, shadows, mute and
+  colour-blind side colours, all saved; UI scale up to 150%.
+- **Credits screen** reading the shipped `CREDITS.md`.
+- **Sound:** every recorded effect and alert line now has a trigger; interface
+  buttons click; an ambient bed plays under a match.
+- **Performance:** target search uses per-side spatial buckets and keeps its
+  target between ticks; visibility stamps each occupied cell once.
+- **Tests:** an integration suite driving the whole game through the real
+  menu, HUD and input; a skirmish suite on every map; a determinism check.
+
 ## Implemented in 1.0.0-rc2
 
-- Godot 4.6.3 Compatibility renderer with Linux and Windows export presets.
+- Godot 4.6.3, Forward+ by default with the Compatibility renderer as the fallback; Linux and Windows export presets.
+- Fixed dimetric camera, Blender-rendered sprite atlases for every kind, and the dock HUD with a technology tree (2026-11-10; see `README.md` and `assets/sprites/README.md`).
 - Eight authored missions on eight distinct 72×72 maps, with dialogue, scripted
   waves, checkpoints, and faction-specific AI.
 - Faction modifiers (`build_speed`, `unit_health`, `research_speed`,
@@ -39,6 +78,12 @@
 - Windows runtime playtest on physical hardware.
 - Outside usability playtests of the full eight-mission campaign.
 - Performance sign-off at 200 units / 1080p on the documented recommended PC.
+- Hands-on balance: faction win rates are measured only opponent against
+  opponent (`tests/balance_test.gd`), not with human players.
+
+## Out of scope
+
+Three or more sides, allies, multiplayer, controller support and translations.
 
 ## Audio provenance
 

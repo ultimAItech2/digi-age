@@ -9,3 +9,4 @@ primary_color = Color(1, 0.475, 0.361, 1)
 secondary_color = Color(0.486, 0.361, 0.255, 1)
 ai_profile = "industrial"
 modifiers = {"build_speed": 0.85, "unit_health": 1.1}
+roster = Array[String](["worker", "scout", "sentinel", "disruptor", "walker", "mortar"])

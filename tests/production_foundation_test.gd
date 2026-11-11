@@ -49,6 +49,36 @@ func run() -> void:
 	corrupt.store_buffer(var_to_bytes({"schema_version": 999}))
 	corrupt.close()
 	expect(DASaveGame.load_slot("production_corrupt", sim, mission, campaign) != "", "unsupported save versions are rejected")
+	# Version 1 saves carried a two-level weapons track; it migrates to the Military weapons upgrade.
+	var legacy = {"schema_version": 1, "slot": "production_legacy", "saved_at": "", "simulation": sim.serialize_state(), "mission": mission.serialize_state(), "campaign": DASaveGame.campaign_resource(campaign), "metadata": {}}
+	legacy.simulation.erase("tech")
+	legacy.simulation["upgrades"] = [2, 1]
+	var legacy_core = legacy.simulation.entities.values().filter(func(e): return e.owner == 0 and e.kind == "core")[0]
+	legacy_core.research = "weapons"
+	legacy_core.research_left = 12.0
+	var legacy_metal: float = legacy.simulation.resources[0].x
+	var legacy_file = FileAccess.open(DASaveGame.path_for("production_legacy"), FileAccess.WRITE)
+	legacy_file.store_buffer(var_to_bytes(legacy))
+	legacy_file.close()
+	var legacy_error = DASaveGame.load_slot("production_legacy", sim, mission, campaign)
+	expect(legacy_error == "" and sim.tech[0] == {"weapons": 2} and sim.tech[1] == {"weapons": 1}, "version 1 weapons levels migrate to the Military branch")
+	var migrated_core = sim.entities.values().filter(func(e): return e.owner == 0 and e.kind == "core")[0]
+	expect(migrated_core.research == "" and is_equal_approx(sim.resources[0].x, legacy_metal + sim.catalog.tech_cost("weapons", 3).x), "in-flight weapons research is refunded on migration")
+	for broken in [{"tech": [{"nonsense": 1}, {}]}, {"tech": [{"weapons": 6}, {}]}, {"core_research": "mining"}, {"lab_research": "age"}]:
+		var payload = {"schema_version": DASaveGame.VERSION, "slot": "production_broken", "saved_at": "", "simulation": sim.serialize_state(), "mission": mission.serialize_state(), "campaign": DASaveGame.campaign_resource(campaign), "metadata": {}}
+		if broken.has("tech"): payload.simulation.tech = broken.tech
+		if broken.has("core_research"):
+			payload.simulation.entities.values().filter(func(e): return e.owner == 0 and e.kind == "core")[0].research = broken.core_research
+		if broken.has("lab_research"):
+			var lab_id = sim.next_id
+			payload.simulation.entities[lab_id] = sim.entities.values().filter(func(e): return e.owner == 0 and e.kind == "core")[0].duplicate(true)
+			payload.simulation.entities[lab_id].id = lab_id
+			payload.simulation.entities[lab_id].kind = "lab"
+			payload.simulation.entities[lab_id].research = broken.lab_research
+		var broken_file = FileAccess.open(DASaveGame.path_for("production_broken"), FileAccess.WRITE)
+		broken_file.store_buffer(var_to_bytes(payload))
+		broken_file.close()
+		expect(DASaveGame.load_slot("production_broken", sim, mission, campaign) != "", "invalid research state is rejected: " + str(broken))
 
 	var settings = DASettingsService.new()
 	settings.values.profile = "low"

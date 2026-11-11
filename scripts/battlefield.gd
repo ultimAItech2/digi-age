@@ -8,10 +8,13 @@ var sim: DASimulation
 var models: Dictionary = {}
 var unit_batches: Dictionary = {}
 var selections: Dictionary = {}
+## Per-entity animation state for sprite cards: last position, facing row, attack time left, first amount seen.
+var anim_state: Dictionary = {}
+var anim_time: float = 0.0
 var camera: Camera3D
 var focus: Vector2 = Vector2(16, 36)
-var yaw: float = -0.62
-var zoom: float = 48.0
+var yaw: float = CAMERA_YAW
+var zoom: float = 28.0
 var ghost: Node3D
 var ghost_kind: String = ""
 var effects: Array = []
@@ -26,6 +29,10 @@ var water_material: ShaderMaterial
 ## 0 = unexplored, EXPLORED_LEVEL = explored but not visible, 1 = visible.
 var fog_image: Image
 var fog_texture: ImageTexture
+var fog_target: PackedByteArray = PackedByteArray()
+var fog_shown: PackedByteArray = PackedByteArray()
+var fog_ease: float = 0.0
+const FOG_STEP = 28          # levels (of 255) the shown fog moves per easing step
 ## Kit scenery drawn through MultiMeshes. Each entry:
 ## {mm, index, transform, order, shown}. `order` in [0,1) gates density;
 ## obstacles, authored scenery and towers use -1 so they always show.
@@ -40,9 +47,17 @@ const ASPHALT = Color("5c5b55")
 const DIRT = Color("726c4c")
 const MUD = Color("5a4e38")
 const WATER_LEVEL = -0.35
+const SHORE_SIZE = 384
+const SHORE_DEPTH = 0.7
 const SCATTER_SEED = 1407
-const CAMERA_FOV = 32.0
-const CAMERA_ELEVATION = 38.0
+## Fixed dimetric view, the angle the sprites are rendered at: an orthographic
+## camera 30 degrees above the ground and turned 45 degrees to the grid, so a
+## square cell is drawn as a 2:1 diamond and nothing is ever foreshortened.
+const CAMERA_YAW = -PI / 4.0
+const CAMERA_ELEVATION = 30.0
+## `zoom` is the height of the view in world units.
+const ZOOM_MIN = 14.0
+const ZOOM_MAX = 46.0
 const FOG_SIZE = DASimulation.SIZE + 2
 const EXPLORED_LEVEL = 0.545
 ## The world continues this far past every map edge, as a 2-unit height grid.
@@ -63,20 +78,25 @@ const HDRI_PATH = "res://assets/third_party/processed/hdri/kloofendal_48d_partly
 ## The HDRI's sun sits at panorama u = 0.594 (tools/hdri_sun.py); the sky shader
 ## rolls it to the light's azimuth so the scene stays front-lit for the camera.
 const HDRI_SUN_U = 0.594
-## Yaw -170.5: at the default camera yaw the sun's ground direction is lower
-## right on screen, where the photoreal sprites' baked key light (upper left)
-## throws their shadows; DASprites shears the card shadows along the same line.
-const SUN_ROTATION = Vector3(-48, -170.5, 0)
+## Yaw -76: the light travels screen-right and slightly away from the fixed
+## camera, so the left face of every building is the bright one, the right face
+## takes a grazing light and shadows fall to the right. tools/sprites/rig.py
+## lights the rendered sprites from the same direction, and DASprites shears
+## the card shadows along it.
+const SUN_ROTATION = Vector3(-48, -76, 0)
 var sky_rotation: float = 0.0
 var vignette: ColorRect
 var camera_attributes: CameraAttributesPractical
 
 func setup(world: DASimulation) -> void:
+	# Per-instance shader parameters run out at about 128 cards on the Compatibility renderer.
+	DASprites.own_materials = RenderingServer.get_current_rendering_method() == "gl_compatibility"
 	sim = world
 	camera = Camera3D.new()
-	camera.projection = Camera3D.PROJECTION_PERSPECTIVE
-	camera.fov = CAMERA_FOV
-	camera.near = 1.0
+	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
+	camera.keep_aspect = Camera3D.KEEP_HEIGHT
+	camera.size = zoom
+	camera.near = 0.5
 	camera.far = 420
 	camera.current = true
 	add_child(camera)
@@ -95,6 +115,7 @@ func setup(world: DASimulation) -> void:
 	marker.visible = false
 	sim.shot.connect(on_shot)
 	sim.destroyed.connect(on_destroyed)
+	sim.impact.connect(on_impact)
 	update_camera()
 	refresh_fog()
 
@@ -106,13 +127,13 @@ func build_environment() -> void:
 	environment.background_color = Color("9fb3bf")
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_SKY
 	environment.ambient_light_sky_contribution = 1.0
-	environment.ambient_light_energy = 1.0 if has_hdri() else 0.8
+	environment.ambient_light_energy = 0.9 if has_hdri() else 0.75
 	environment.reflected_light_source = Environment.REFLECTION_SOURCE_SKY
 	environment.tonemap_mode = Environment.TONE_MAPPER_AGX
-	environment.tonemap_exposure = 1.0 if has_hdri() else 1.3
+	environment.tonemap_exposure = 1.0
 	environment.adjustment_enabled = true
-	environment.adjustment_contrast = 1.05
-	environment.adjustment_saturation = 1.08
+	environment.adjustment_contrast = 1.08
+	environment.adjustment_saturation = 1.14
 	# Aerial perspective for the far ring; volumetric fog replaces it on Forward+.
 	environment.fog_enabled = true
 	environment.fog_mode = Environment.FOG_MODE_DEPTH
@@ -155,7 +176,8 @@ func build_environment() -> void:
 		environment.ssr_fade_in = 0.15
 		environment.ssr_fade_out = 2.0
 		environment.ssr_depth_tolerance = 0.2
-		environment.volumetric_fog_enabled = true
+		# Volumetric fog needs a perspective frustum; the orthographic view goes without.
+		environment.volumetric_fog_enabled = false
 		environment.volumetric_fog_density = 0.012
 		environment.volumetric_fog_albedo = Color(0.85, 0.9, 0.95)
 		environment.volumetric_fog_anisotropy = 0.6
@@ -164,11 +186,12 @@ func build_environment() -> void:
 		environment.volumetric_fog_ambient_inject = 0.4
 		environment.volumetric_fog_sky_affect = 0.0
 		environment.volumetric_fog_temporal_reprojection_enabled = true
-		environment.fog_enabled = false
+	# The dimetric view never reaches the horizon, so there is no distance to haze.
+	environment.fog_enabled = false
 	env.environment = environment
 	add_child(env)
 	camera_attributes = CameraAttributesPractical.new()
-	camera_attributes.dof_blur_far_enabled = forward_plus
+	camera_attributes.dof_blur_far_enabled = false
 	camera_attributes.dof_blur_far_distance = camera_distance() + 60.0
 	camera_attributes.dof_blur_far_transition = 40.0
 	camera_attributes.dof_blur_amount = 0.08
@@ -179,7 +202,7 @@ func build_sun() -> void:
 	sun.rotation_degrees = SUN_ROTATION
 	DASprites.set_sun(DASprites.sun_ground_direction(SUN_ROTATION), DASprites.shadow_length(SUN_ROTATION))
 	sun.light_color = Color("fff1dc") if has_hdri() else Color("ffe9c8")
-	sun.light_energy = 3.0 if has_hdri() else 2.3
+	sun.light_energy = 2.3 if has_hdri() else 2.0
 	sun.light_angular_distance = 0.5
 	sun.light_volumetric_fog_energy = 1.5
 	sun.shadow_enabled = "--no-shadows" not in OS.get_cmdline_user_args()
@@ -204,8 +227,10 @@ static func imported(path: String) -> bool:
 	if not FileAccess.file_exists(path + ".import"):
 		return false
 	for line in FileAccess.get_file_as_string(path + ".import").split("\n"):
-		if line.begins_with("path="):
-			return FileAccess.file_exists(line.get_slice("\"", 1))
+		# Plain textures write `path=`; compressed ones one line per format (`path.s3tc=`, `path.bptc=`).
+		if line.begins_with("path=") or line.begins_with("path."):
+			if FileAccess.file_exists(line.get_slice("\"", 1)):
+				return true
 	return false
 
 ## One Sky for the whole process: the Compatibility renderer reports its
@@ -261,8 +286,11 @@ func apply_settings(values: Dictionary) -> void:
 	shadow_reach = 50.0 if low else 90.0
 	var no_shadows = "--no-shadows" in OS.get_cmdline_user_args()
 	if sun:
-		sun.shadow_enabled = not low and not reduced and not no_shadows
+		sun.shadow_enabled = not low and not reduced and not no_shadows and bool(values.get("shadows", true))
 		DASprites.set_shadows_enabled(sun.shadow_enabled)
+		for key in scatter_batches:
+			if key.ends_with("_shadow"):
+				scatter_batches[key].visible = sun.shadow_enabled
 		sun.directional_shadow_mode = DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS if (low or not forward_plus) else DirectionalLight3D.SHADOW_PARALLEL_4_SPLITS
 		if low or not forward_plus:
 			sun.directional_shadow_split_1 = 0.3
@@ -281,12 +309,11 @@ func apply_settings(values: Dictionary) -> void:
 			environment.ssao_enabled = not low
 			environment.ssil_enabled = not low_effects
 			environment.ssr_enabled = not low_effects
-			environment.volumetric_fog_enabled = not low_effects
-			environment.fog_enabled = low_effects
-		else:
-			environment.fog_enabled = not low_effects
+		# The orthographic view has no distance to haze: fog stays off in every profile.
+		environment.volumetric_fog_enabled = false
+		environment.fog_enabled = false
 	if camera_attributes:
-		camera_attributes.dof_blur_far_enabled = forward_plus and not low_effects
+		camera_attributes.dof_blur_far_enabled = false
 	var viewport = get_viewport()
 	if viewport and forward_plus:
 		viewport.use_taa = not low
@@ -554,10 +581,10 @@ func make_terrain() -> void:
 func cached_world(bands: Array) -> Dictionary:
 	var key = (sim.active_map.map_id if sim.active_map else "legacy") + str(bands)
 	if not ring_cache.has(key):
-		ring_cache[key] = build_world(bands, sim.obstacles, sim.bases)
+		ring_cache[key] = build_world(bands, sim.obstacles, sim.bases, sim.rough.keys(), sim.high.keys())
 	return ring_cache[key]
 
-static func build_world(bands: Array, obstacles: Dictionary, bases: Array) -> Dictionary:
+static func build_world(bands: Array, obstacles: Dictionary, bases: Array, rough: Array = [], high: Array = []) -> Dictionary:
 	ground_noise()
 	var rng = RandomNumberGenerator.new()
 	rng.seed = SCATTER_SEED + 99
@@ -620,11 +647,11 @@ static func build_world(bands: Array, obstacles: Dictionary, bases: Array) -> Di
 	data[Mesh.ARRAY_COLOR] = colors
 	data[Mesh.ARRAY_INDEX] = index
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, data)
-	return {"mesh": mesh, "origin": origin, "extent": extent, "control": build_control(bands, obstacles, bases, origin, extent), "scatter": ring_scatter(rng, n, origin, road_quads)}
+	return {"mesh": mesh, "origin": origin, "extent": extent, "control": build_control(bands, obstacles, bases, origin, extent, rough, high), "scatter": ring_scatter(rng, n, origin, road_quads)}
 
 ## Control image: R asphalt (road bands, ending at the river banks), G worn
 ## ground around obstacles, ruins and bases, B forest floor under the groves.
-static func build_control(bands: Array, obstacles: Dictionary, bases: Array, origin: float, extent: float) -> Image:
+static func build_control(bands: Array, obstacles: Dictionary, bases: Array, origin: float, extent: float, rough: Array = [], high: Array = []) -> Image:
 	var image = Image.create(CONTROL_SIZE, CONTROL_SIZE, false, Image.FORMAT_RGBA8)
 	var step = extent / CONTROL_SIZE
 	var grove = FastNoiseLite.new()
@@ -652,6 +679,15 @@ static func build_control(bands: Array, obstacles: Dictionary, bases: Array, ori
 		stamp.call(float(c.x), float(c.y), 2.6, 0.75)
 	for b in bases:
 		stamp.call(b.x, b.y, 9.0, 0.55)
+	# Rough ground reads as churned mud; high ground as bare rock (alpha channel).
+	for c in rough:
+		stamp.call(float(c.x), float(c.y), 1.15, 1.0)
+	var worn_only = worn.duplicate()
+	worn.fill(0.0)
+	for c in high:
+		stamp.call(float(c.x), float(c.y), 1.3, 1.0)
+	var plate = worn
+	worn = worn_only
 	for pz in CONTROL_SIZE:
 		for px in CONTROL_SIZE:
 			var wx = origin + (px + 0.5) * step
@@ -667,7 +703,7 @@ static func build_control(bands: Array, obstacles: Dictionary, bases: Array, ori
 			if river_depth(wx, wz) < -0.12:
 				asphalt = 0.0
 			var forest = clampf((grove.get_noise_2d(wx, wz) + 0.05) * 2.2, 0.0, 1.0)
-			image.set_pixel(px, pz, Color(asphalt, worn[pz * CONTROL_SIZE + px], forest, 1.0))
+			image.set_pixel(px, pz, Color(asphalt, worn[pz * CONTROL_SIZE + px], forest, 1.0 - plate[pz * CONTROL_SIZE + px]))
 	return image
 
 func queue_scenery(pending: Dictionary, kind: String, p: Vector2, height: float, yaw_angle: float, scale: float, tint: Color, order: float) -> void:
@@ -743,7 +779,54 @@ static func block_area(blocked: Dictionary, center: Vector2i, radius: int) -> vo
 		for dy in range(-radius, radius + 1):
 			blocked[center + Vector2i(dx, dy)] = true
 
+## Scenery with a rendered atlas is drawn as camera-facing cards in two
+## MultiMeshes (the pictures and their cast shadows); each instance picks one
+## of the atlas's variants. Hiding an entry hides both.
+func build_card_batch(kind: String, entries: Array, low: bool) -> void:
+	var entry: Dictionary = DASprites.atlas(kind)
+	var size: Vector2 = DASprites.card_size(kind, 1)
+	var quad = QuadMesh.new()
+	quad.size = size
+	quad.center_offset = Vector3(0, size.y * 0.5, 0)
+	var variants: int = entry.cols
+	for layer in ["card", "shadow"]:
+		var material = ShaderMaterial.new()
+		material.shader = load("res://assets/shaders/sprite_scenery.gdshader" if layer == "card" else "res://assets/shaders/sprite_scenery_shadow.gdshader")
+		material.set_shader_parameter("tex", DASprites.texture(kind))
+		material.set_shader_parameter("grid", Vector2(entry.cols, entry.rows))
+		if layer == "card":
+			material.set_shader_parameter("anchor_offset", DASprites.anchor_offset(kind, 1))
+		else:
+			material.set_shader_parameter("base_height", float(entry.anchor) / float(entry.ppu))
+			material.set_shader_parameter("sun_dir", DASprites.sun_dir)
+			material.set_shader_parameter("shadow_length", DASprites.sun_length)
+			material.set_shader_parameter("strength", DASprites.CAST_ALPHA * 0.8)
+		var mm = MultiMesh.new()
+		mm.transform_format = MultiMesh.TRANSFORM_3D
+		mm.use_colors = true
+		mm.use_custom_data = true
+		mm.mesh = quad
+		mm.instance_count = entries.size()
+		for i in entries.size():
+			mm.set_instance_transform(i, HIDDEN)
+			mm.set_instance_color(i, Color.WHITE.lerp(entries[i].tint, 0.35))
+			# A stable variant per place, so the same tree stands there every run.
+			mm.set_instance_custom_data(i, Color(float(posmod(hash(Vector2i(entries[i].transform.origin.x * 8.0, entries[i].transform.origin.z * 8.0)), variants)), 0, 0, 0))
+			scatter.append({"mm": mm, "index": i, "transform": entries[i].transform, "order": entries[i].order, "shown": false})
+		var batch = MultiMeshInstance3D.new()
+		batch.multimesh = mm
+		batch.material_override = material
+		batch.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		batch.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
+		batch.custom_aabb = AABB(Vector3(-RING_EXTENT - 4.0, -4.0, -RING_EXTENT - 4.0), Vector3(DASimulation.SIZE + 2.0 * RING_EXTENT + 8.0, 40.0, DASimulation.SIZE + 2.0 * RING_EXTENT + 8.0))
+		batch.visible = layer == "card" or DASprites.shadows_enabled
+		terrain.add_child(batch)
+		scatter_batches[kind + ("_low" if low else "") + ("" if layer == "card" else "_shadow")] = batch
+
 func build_scatter_batch(kind: String, entries: Array, low: bool) -> void:
+	if not DASprites.atlas(kind).is_empty():
+		build_card_batch(kind, entries, low)
+		return
 	var batch = MultiMeshInstance3D.new()
 	var mm = MultiMesh.new()
 	mm.transform_format = MultiMesh.TRANSFORM_3D
@@ -880,6 +963,24 @@ static func ring_scatter(rng: RandomNumberGenerator, n: int, origin: float, road
 
 ## Rivers through the outer ring: one plane at the water line, visible where the
 ## ring is carved below it, with two scrolling noise normal layers and a fresnel tint.
+static var shore_texture: ImageTexture
+
+## Depth of the river bed below the water line, baked once (the rivers are the
+## same on every map): 0 at the bank rising to 1 at SHORE_DEPTH below the surface.
+static func shore_map() -> ImageTexture:
+	if not shore_texture:
+		var image = Image.create(SHORE_SIZE, SHORE_SIZE, false, Image.FORMAT_R8)
+		var extent = DASimulation.SIZE + 2.0 * RING_EXTENT
+		for i in SHORE_SIZE:
+			for j in SHORE_SIZE:
+				var x = -RING_EXTENT - 0.5 + (i + 0.5) / SHORE_SIZE * extent
+				var z = -RING_EXTENT - 0.5 + (j + 0.5) / SHORE_SIZE * extent
+				# Only the river corridors lie below the water line; skip the noise everywhere else.
+				var below = WATER_LEVEL - ring_height(x, z) if river_depth(x, z) < -0.05 else 0.0
+				image.set_pixel(i, j, Color(clampf(below / SHORE_DEPTH, 0.0, 1.0), 0, 0))
+		shore_texture = ImageTexture.create_from_image(image)
+	return shore_texture
+
 func make_water() -> void:
 	water = MeshInstance3D.new()
 	var mesh = PlaneMesh.new()
@@ -897,6 +998,9 @@ uniform vec3 shallow_color : source_color = vec3(0.165, 0.373, 0.471);
 uniform vec3 deep_color : source_color = vec3(0.05, 0.16, 0.24);
 uniform float wave_strength = 0.4;
 uniform float animation = 1.0;
+// How far the bed lies below the surface (0 at the bank, 1 in the channel), over shore_bounds in world XZ.
+uniform sampler2D shore_tex : filter_linear, repeat_disable;
+uniform vec4 shore_bounds = vec4(-110.5, -110.5, 292.0, 292.0);
 %s
 varying vec3 world_pos;
 void vertex() {
@@ -913,8 +1017,14 @@ void fragment() {
 	float fresnel = pow(1.0 - clamp(dot(NORMAL, VIEW), 0.0, 1.0), 2.5);
 	float ripple = 0.5 + 0.35 * (n_a.x + n_b.y);
 	float f = fog_level(world_pos);
-	ALBEDO = fog_tint(mix(deep_color, shallow_color, 0.35 + 0.65 * fresnel) * (0.8 + 0.4 * ripple), f);
-	ROUGHNESS = 0.12;
+	float depth = texture(shore_tex, (world_pos.xz - shore_bounds.xy) / shore_bounds.zw).r;
+	// Clear shallows over the bank, dark water in the channel, and a broken line of foam where they meet the land.
+	vec3 body = mix(shallow_color * 1.35, deep_color, smoothstep(0.05, 0.8, depth));
+	body = mix(body, shallow_color, 0.5 * fresnel) * (0.8 + 0.4 * ripple);
+	float lap = 0.5 + 0.5 * sin(t * 1.3 + (n_a.y + n_b.x) * 6.0);
+	float foam = smoothstep(0.2 + 0.1 * lap, 0.02, depth) * smoothstep(0.25, 0.6, 0.5 + 0.5 * (n_a.x - n_b.y) + 0.3 * lap);
+	ALBEDO = fog_tint(mix(body, vec3(0.86, 0.9, 0.9), foam * 0.85), f);
+	ROUGHNESS = mix(0.12, 0.6, foam);
 	METALLIC = 0.0;
 	SPECULAR = 0.55 * f;
 }""" % DAModels.FOG_SHADER
@@ -923,6 +1033,8 @@ void fragment() {
 	water_material.set_shader_parameter("noise_b", noise_texture(SCATTER_SEED + 31, 0.06, true, 5.0))
 	water_material.set_shader_parameter("shallow_color", Color("2a5f78"))
 	water_material.set_shader_parameter("fog_tex", fog_texture)
+	water_material.set_shader_parameter("shore_tex", shore_map())
+	water_material.set_shader_parameter("shore_bounds", Vector4(-RING_EXTENT - 0.5, -RING_EXTENT - 0.5, DASimulation.SIZE + 2.0 * RING_EXTENT, DASimulation.SIZE + 2.0 * RING_EXTENT))
 	water.material_override = water_material
 	add_child(water)
 
@@ -945,24 +1057,46 @@ func refresh_fog() -> void:
 		for y in DASimulation.SIZE:
 			var c = Vector2i(x, y)
 			raw[(y + 1) * FOG_SIZE + x + 1] = 1.0 if sim.visible[0].has(c) else (EXPLORED_LEVEL if sim.explored[0].has(c) else 0.0)
-	# A [1 2 1] blur in each axis softens the cell steps before bilinear sampling.
-	var pass_x = PackedFloat32Array()
-	pass_x.resize(FOG_SIZE * FOG_SIZE)
-	for y in FOG_SIZE:
-		var row = y * FOG_SIZE
-		for x in FOG_SIZE:
-			pass_x[row + x] = (raw[row + maxi(x - 1, 0)] + raw[row + x] * 2.0 + raw[row + mini(x + 1, FOG_SIZE - 1)]) * 0.25
+	# Two [1 2 1] blurs in each axis soften the cell steps into a gradual edge before bilinear sampling.
+	for blur in 2:
+		var pass_x = PackedFloat32Array()
+		pass_x.resize(FOG_SIZE * FOG_SIZE)
+		for y in FOG_SIZE:
+			var row = y * FOG_SIZE
+			for x in FOG_SIZE:
+				pass_x[row + x] = (raw[row + maxi(x - 1, 0)] + raw[row + x] * 2.0 + raw[row + mini(x + 1, FOG_SIZE - 1)]) * 0.25
+		for y in FOG_SIZE:
+			var up = maxi(y - 1, 0) * FOG_SIZE
+			var row = y * FOG_SIZE
+			var down = mini(y + 1, FOG_SIZE - 1) * FOG_SIZE
+			for x in FOG_SIZE:
+				raw[row + x] = (pass_x[up + x] + pass_x[row + x] * 2.0 + pass_x[down + x]) * 0.25
 	var bytes = PackedByteArray()
 	bytes.resize(FOG_SIZE * FOG_SIZE)
-	for y in FOG_SIZE:
-		var up = maxi(y - 1, 0) * FOG_SIZE
-		var row = y * FOG_SIZE
-		var down = mini(y + 1, FOG_SIZE - 1) * FOG_SIZE
-		for x in FOG_SIZE:
-			bytes[row + x] = int((pass_x[up + x] + pass_x[row + x] * 2.0 + pass_x[down + x]) * 0.25 * 255.0 + 0.5)
-	fog_image.set_data(FOG_SIZE, FOG_SIZE, false, Image.FORMAT_R8, bytes)
-	fog_texture.update(fog_image)
+	for i in FOG_SIZE * FOG_SIZE:
+		bytes[i] = int(raw[i] * 255.0 + 0.5)
+	fog_target = bytes
+	if fog_shown.size() != bytes.size():
+		# First fill (a new or loaded match): show it at once.
+		fog_shown = bytes.duplicate()
+		fog_image.set_data(FOG_SIZE, FOG_SIZE, false, Image.FORMAT_R8, fog_shown)
+		fog_texture.update(fog_image)
 	refresh_scatter()
+
+## Vision eases in and out: the shown fog steps toward the latest fog a few
+## times a second instead of snapping to it on every refresh.
+func ease_fog(dt: float) -> void:
+	fog_ease -= dt
+	if fog_ease > 0.0 or fog_shown == fog_target or fog_shown.size() != fog_target.size():
+		return
+	fog_ease = 0.06
+	for i in fog_shown.size():
+		var shown = fog_shown[i]
+		var target = fog_target[i]
+		if shown != target:
+			fog_shown[i] = shown + clampi(target - shown, -FOG_STEP, FOG_STEP)
+	fog_image.set_data(FOG_SIZE, FOG_SIZE, false, Image.FORMAT_R8, fog_shown)
+	fog_texture.update(fog_image)
 
 ## Scenery follows the density setting only; the fog texture tints it in place.
 func refresh_scatter() -> void:
@@ -973,11 +1107,16 @@ func refresh_scatter() -> void:
 			entry.mm.set_instance_transform(entry.index, entry.transform if show else HIDDEN)
 
 ## ---- Camera -------------------------------------------------------------------
-## Perspective camera on a fixed elevation; `zoom` is the height of the view at
-## the focus point, as it was for the orthographic size, so the zoom limits and
-## the edge-pan speed keep their feel.
+## Orthographic camera on a fixed yaw and elevation; `zoom` is the height of
+## the view in world units. The camera sits just far enough back that the
+## nearest ground and the tallest card stay in front of the near plane, which
+## keeps the shadow cascades on the visible ground.
 func camera_distance() -> float:
-	return zoom * 0.5 / tan(deg_to_rad(CAMERA_FOV * 0.5))
+	return zoom + 14.0
+
+## Depth of the farthest visible ground from the camera plane.
+func view_depth() -> float:
+	return camera_distance() + zoom * 0.5 / tan(deg_to_rad(CAMERA_ELEVATION))
 
 func update_camera() -> void:
 	var cam_min = sim.active_map.camera_min if sim.active_map else Vector2.ONE
@@ -988,8 +1127,9 @@ func update_camera() -> void:
 	var offset = Vector3(sin(yaw) * cos(elevation), sin(elevation), cos(yaw) * cos(elevation)) * distance
 	camera.position = Vector3(focus.x, 0, focus.y) + offset
 	camera.look_at(Vector3(focus.x, 0, focus.y))
+	camera.size = zoom
 	if sun:
-		sun.directional_shadow_max_distance = distance + shadow_reach
+		sun.directional_shadow_max_distance = minf(view_depth() + 8.0, distance + shadow_reach)
 
 func ground_at(screen: Vector2) -> Vector2:
 	var p = Plane(Vector3.UP, 0).intersects_ray(camera.project_ray_origin(screen), camera.project_ray_normal(screen))
@@ -1003,10 +1143,6 @@ func pan(direction: Vector2, dt: float) -> void:
 	var forward = Vector2(sin(yaw), cos(yaw))
 	focus += (right*direction.x + forward*direction.y) * dt * zoom * 0.65
 	update_camera()
-
-## Screen-right on the ground for the current yaw (see update_camera).
-func camera_right_ground() -> Vector2:
-	return Vector2(cos(yaw), -sin(yaw))
 
 ## The visual for an entity: a photoreal sprite card when the kind has one,
 ## otherwise the Blender model with the same contact shadow and owner disc
@@ -1033,6 +1169,9 @@ func sync(dt: float, selected: Array) -> void:
 			models[id].queue_free()
 			models.erase(id)
 			selections.erase(id)
+			anim_state.erase(id)
+	anim_time += dt
+	ease_fog(dt)
 	var batch_transforms: Dictionary = {}
 	for e in sim.entities.values():
 		if not models.has(e.id):
@@ -1059,18 +1198,27 @@ func sync(dt: float, selected: Array) -> void:
 			if e.building:
 				var progress = 1.0 if e.complete else 1.0 - e.build_left / sim.catalog.buildings[e.kind].time
 				if DASprites.is_card(model):
-					DASprites.set_rise(model, progress)
+					# Rendered buildings go up in three scaffolded stages.
+					var cell: Vector2i = DASprites.idle_cell(e.kind, anim_time + e.id * 0.37) if e.complete else DASprites.state_cell(e.kind, "stage%d" % clampi(int(progress * 3.0), 0, 2))
+					DASprites.set_frame(model, cell.x, cell.y)
+					update_damage(e, model)
 				else:
 					model.scale.y = 0.15 + progress * 0.85
+			elif DASprites.is_card(model):
+				animate_unit(e, model, dt)
 			elif e.order != "idle":
 				var direction: Vector2 = e.destination - e.pos
 				if not e.path.is_empty():
 					direction = e.path[0] - e.pos
 				if direction.length() > 0.1:
-					if DASprites.is_card(model):
-						DASprites.set_flip(model, direction.dot(camera_right_ground()) < 0.0)
-					else:
-						model.rotation.y = lerp_angle(model.rotation.y, atan2(direction.x, direction.y), dt * 10)
+					model.rotation.y = lerp_angle(model.rotation.y, atan2(direction.x, direction.y), dt * 10)
+		elif DASprites.is_card(model):
+			# Deposits thin out as they are harvested.
+			var state: Dictionary = anim_state.get_or_add(e.id, {"full": maxf(1.0, e.get("amount", 1.0))})
+			state.full = maxf(state.full, e.get("amount", 1.0))
+			var share: float = e.get("amount", 1.0) / state.full
+			var cell: Vector2i = DASprites.state_cell(e.kind, "full" if share > 0.6 else ("half" if share > 0.25 else "low"))
+			DASprites.set_frame(model, cell.x, cell.y)
 		if e.owner >= 0 and not e.building and model.visible and not DASprites.is_card(model):
 			var key = e.kind + str(e.owner)
 			if not batch_transforms.has(key):
@@ -1089,10 +1237,187 @@ func sync(dt: float, selected: Array) -> void:
 			effects.erase(effect)
 		elif effect.type == "blast":
 			effect.node.scale += Vector3.ONE * dt * 5
+		elif effect.type == "ring":
+			effect.node.scale += Vector3(1, 0, 1) * dt * effect.grow
+		elif effect.type == "shell":
+			# Along the line, lifted on an arc that peaks half-way.
+			var t = 1.0 - effect.left / effect.total
+			var at: Vector3 = effect.from.lerp(effect.to, t)
+			at.y += sin(t * PI) * minf(2.5, effect.from.distance_to(effect.to) * 0.18)
+			if at.distance_to(effect.node.position) > 0.01:
+				effect.node.look_at(at)
+			effect.node.position = at
+		elif effect.type == "wreck" and effect.left < 6.0:
+			DASprites.set_tint(effect.node, Color(1, 1, 1, effect.left / 6.0))
+		elif effect.type == "death":
+			effect.age += dt
+			DASprites.set_frame(effect.node, DASprites.death_column(effect.kind, effect.age), effect.row)
+			if effect.left < 3.0:
+				DASprites.set_tint(effect.node, Color(1, 1, 1, effect.left / 3.0))
+	update_rally_flag(selected)
 	if marker_left > 0:
 		marker_left -= dt
 		marker.scale = Vector3.ONE * (1.0 + marker_left*0.4)
 	marker.visible = marker_left > 0
+
+## A point at `height` above a building's centre, moved in front of its card
+## (toward the camera and up by the same screen amount) so an effect placed
+## there is drawn over the picture instead of behind it.
+func over_card(kind: String, cells: int, height: float) -> Vector3:
+	var ahead = DASprites.anchor_offset(kind, cells) + 0.4
+	return Vector3(sin(yaw) * ahead, height + ahead * DASprites.ELEVATION_SIN / DASprites.ELEVATION_COS, cos(yaw) * ahead)
+
+static var puff_texture: GradientTexture2D
+
+## Soft round puff shared by the smoke, fire and spark particles.
+static func puff() -> GradientTexture2D:
+	if not puff_texture:
+		var gradient = Gradient.new()
+		gradient.set_color(0, Color(1, 1, 1, 1))
+		gradient.set_color(1, Color(1, 1, 1, 0))
+		puff_texture = GradientTexture2D.new()
+		puff_texture.gradient = gradient
+		puff_texture.fill = GradientTexture2D.FILL_RADIAL
+		puff_texture.fill_from = Vector2(0.5, 0.5)
+		puff_texture.fill_to = Vector2(0.5, 0.0)
+		puff_texture.width = 64
+		puff_texture.height = 64
+	return puff_texture
+
+## Billboarded particles: grey rising smoke, a short bright flame, or a burst of sparks.
+static func particles(style: String) -> CPUParticles3D:
+	var p = CPUParticles3D.new()
+	var quad = QuadMesh.new()
+	var material = StandardMaterial3D.new()
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	material.billboard_mode = BaseMaterial3D.BILLBOARD_PARTICLES
+	material.vertex_color_use_as_albedo = true
+	material.albedo_texture = puff()
+	var ramp = Gradient.new()
+	var grow = Curve.new()
+	p.direction = Vector3.UP
+	if style == "smoke":
+		quad.size = Vector2(1.0, 1.0)
+		p.amount = 16
+		p.lifetime = 2.6
+		p.spread = 14.0
+		p.initial_velocity_min = 0.5
+		p.initial_velocity_max = 0.9
+		p.gravity = Vector3(0.35, 0.25, -0.1)
+		p.emission_shape = CPUParticles3D.EMISSION_SHAPE_SPHERE
+		p.emission_sphere_radius = 0.25
+		ramp.set_color(0, Color(0.16, 0.15, 0.14, 0.0))
+		ramp.add_point(0.15, Color(0.2, 0.19, 0.18, 0.6))
+		ramp.set_color(ramp.get_point_count() - 1, Color(0.45, 0.45, 0.45, 0.0))
+		grow.add_point(Vector2(0, 0.35))
+		grow.add_point(Vector2(1, 1.3))
+	elif style == "fire":
+		quad.size = Vector2(0.55, 0.55)
+		material.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+		p.amount = 14
+		p.lifetime = 0.7
+		p.spread = 20.0
+		p.initial_velocity_min = 0.6
+		p.initial_velocity_max = 1.1
+		p.gravity = Vector3(0, 0.6, 0)
+		p.emission_shape = CPUParticles3D.EMISSION_SHAPE_SPHERE
+		p.emission_sphere_radius = 0.3
+		ramp.set_color(0, Color(1.0, 0.85, 0.4, 0.9))
+		ramp.add_point(0.5, Color(1.0, 0.45, 0.1, 0.7))
+		ramp.set_color(ramp.get_point_count() - 1, Color(0.6, 0.1, 0.0, 0.0))
+		grow.add_point(Vector2(0, 1.0))
+		grow.add_point(Vector2(1, 0.3))
+	else:
+		quad.size = Vector2(0.12, 0.12)
+		material.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+		p.amount = 10
+		p.lifetime = 0.35
+		p.one_shot = true
+		p.explosiveness = 1.0
+		p.spread = 180.0
+		p.initial_velocity_min = 1.5
+		p.initial_velocity_max = 3.5
+		p.gravity = Vector3(0, -6.0, 0)
+		ramp.set_color(0, Color(1.0, 0.95, 0.7, 1.0))
+		ramp.set_color(1, Color(1.0, 0.5, 0.1, 0.0))
+		grow.add_point(Vector2(0, 1.0))
+		grow.add_point(Vector2(1, 0.4))
+	quad.material = material
+	p.mesh = quad
+	p.color_ramp = ramp
+	p.scale_amount_curve = grow
+	p.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	return p
+
+## Smoke from a building under half its integrity, fire as well under a quarter.
+func update_damage(e: Dictionary, model: Node3D) -> void:
+	var share: float = e.hp / maxf(1.0, e.max_hp)
+	var want_smoke: bool = e.complete and share < 0.5 and not low_effects
+	var want_fire: bool = want_smoke and share < 0.25
+	for entry in [["Smoke", want_smoke, 0.62], ["Fire", want_fire, 0.4]]:
+		var node: Node = model.get_node_or_null(entry[0])
+		if entry[1] and node == null:
+			var cells: int = sim.catalog.buildings[e.kind].radius * 2 + 1
+			var emitter = particles(entry[0].to_lower())
+			emitter.name = entry[0]
+			emitter.position = over_card(e.kind, cells, DASprites.bar_height(e.kind, cells) * entry[2])
+			model.add_child(emitter)
+		elif not entry[1] and node != null:
+			node.queue_free()
+
+var rally_flag: Node3D
+
+## The flag standing on the rally point of the selected production building.
+func update_rally_flag(selected: Array) -> void:
+	var at = Vector2.INF
+	if selected.size() == 1 and sim.entities.has(selected[0]):
+		var e: Dictionary = sim.entities[selected[0]]
+		if e.owner == 0 and e.building and e.complete and e.kind in ["core", "fabricator"]:
+			at = e.rally
+	if at == Vector2.INF or DASprites.atlas("flag").is_empty():
+		if rally_flag:
+			rally_flag.visible = false
+		return
+	if not rally_flag:
+		rally_flag = DASprites.card("flag", 0, 1, sim.faction_color(0), false)
+		add_child(rally_flag)
+	rally_flag.visible = true
+	rally_flag.position = Vector3(at.x, 0, at.y)
+
+## Facing and animation frame of a rendered unit card: it turns toward where it
+## is going or shooting, walks while its position changes, and plays the attack
+## frames while firing (or, for a Worker, while gathering or building).
+func animate_unit(e: Dictionary, model: Node3D, dt: float) -> void:
+	var state: Dictionary = anim_state.get_or_add(e.id, {"pos": e.pos, "row": 0 if e.owner == 0 else 4, "attack": 0.0, "aim": Vector2.ZERO, "moving": 0.0})
+	var step: Vector2 = e.pos - state.pos
+	state.pos = e.pos
+	state.attack = maxf(0.0, state.attack - dt)
+	state.moving = 0.25 if step.length() > 0.0005 else maxf(0.0, state.moving - dt)
+	var anim = "idle"
+	if state.attack > 0.0:
+		anim = "attack"
+		if state.aim != Vector2.ZERO:
+			state.row = DASprites.facing_row(state.aim)
+	elif state.moving > 0.0:
+		anim = "move"
+		var direction: Vector2 = (e.path[0] - e.pos) if not e.path.is_empty() else (e.destination - e.pos)
+		if direction.length() < 0.1:
+			direction = step
+		if direction.length() > 0.0005:
+			state.row = DASprites.facing_row(direction)
+	elif e.kind == "worker" and e.order in ["gather", "build", "repair"]:
+		anim = "attack"
+		var target: Dictionary = sim.entities.get(e.get("target", -1), {})
+		if not target.is_empty() and target.pos.distance_to(e.pos) > 0.05:
+			state.row = DASprites.facing_row(target.pos - e.pos)
+	DASprites.set_frame(model, DASprites.anim_column(e.kind, anim, anim_time + e.id * 0.37), state.row)
+	# Status shown on the card: a cloaked unit of your own is translucent, a stunned one is washed blue,
+	# a braced or overdriven one is lit. Set only when it changes.
+	var status = "stun" if sim.stunned(e) else ("cloak" if sim.cloak_kinds.has(e.kind) and sim.cloaked(e) else ("charged" if e.get("braced", false) or float(e.get("overdrive_until", 0.0)) > sim.elapsed else ""))
+	if state.get("status", "") != status:
+		state["status"] = status
+		DASprites.set_tint(model, {"stun": Color(0.55, 0.8, 1.6, 1.0), "cloak": Color(0.8, 0.95, 1.2, 0.5), "charged": Color(1.25, 1.12, 0.9, 1.0)}.get(status, Color.WHITE))
 
 func create_unit_batch(kind: String, side: int) -> void:
 	var key = kind + str(side)
@@ -1135,6 +1460,12 @@ func preview(kind: String, p: Vector2, valid: bool) -> void:
 func on_shot(from: Vector2, to: Vector2, owner: int, kind: String) -> void:
 	if not sim.seen(0, from) and not sim.seen(0, to):
 		return
+	# The shooter's card turns to its target and plays its firing frames.
+	for e in sim.entities.values():
+		if e.owner == owner and e.kind == kind and not e.building and e.pos.distance_to(from) < 0.05 and anim_state.has(e.id):
+			anim_state[e.id].attack = 0.45
+			anim_state[e.id].aim = to - from
+			break
 	var n = Node3D.new()
 	add_child(n)
 	var start = Vector3(from.x, 1.1, from.y)
@@ -1142,12 +1473,77 @@ func on_shot(from: Vector2, to: Vector2, owner: int, kind: String) -> void:
 	n.position = (start + finish) * 0.5
 	if start.distance_to(finish) > 0.01:
 		n.look_at(finish)
-	DAModels.box(n, Vector3(0.04 if kind != "walker" else 0.12, 0.04, start.distance_to(finish)), Vector3.ZERO, DAModels.CYAN if owner == 0 else DAModels.RED, true)
+	var speed: float = float(sim.catalog.definition(kind).get("projectile", 0.0))
+	if speed > 0:
+		# A shell that travels: a short glowing slug on an arc, with a flash at the muzzle.
+		DAModels.box(n, Vector3(0.1, 0.1, 0.45), Vector3.ZERO, Color("ffd9a0"), true)
+		n.position = start
+		effects.append({"node": n, "left": start.distance_to(finish) / speed, "total": maxf(0.05, start.distance_to(finish) / speed), "from": start, "to": finish, "type": "shell"})
+		var flash = Node3D.new()
+		add_child(flash)
+		flash.position = start + Vector3(sin(yaw) * 0.4, 0.1, cos(yaw) * 0.4)
+		DAModels.cylinder(flash, 0.28, 0.28, Vector3.ZERO, Color("fff0c8"), 0.02, true)
+		effects.append({"node": flash, "left": 0.07, "type": "shot"})
+		return
+	DAModels.box(n, Vector3(0.04, 0.04, start.distance_to(finish)), Vector3.ZERO, DAModels.CYAN if owner == 0 else DAModels.RED, true)
 	effects.append({"node": n, "left": 0.09, "type": "shot"})
+	if not low_effects:
+		# Sparks where the shot lands, nudged toward the camera so they show over the target's card.
+		var sparks = particles("sparks")
+		add_child(sparks)
+		sparks.position = Vector3(to.x + sin(yaw) * 0.5, 0.9, to.y + cos(yaw) * 0.5)
+		sparks.emitting = true
+		effects.append({"node": sparks, "left": 0.6, "type": "sparks"})
+
+## A shell landing: a burst sized to its splash. An EMP: a flat ring of light spreading over the ground.
+func on_impact(p: Vector2, kind: String, radius: float) -> void:
+	if not sim.seen(0, p):
+		return
+	var n = Node3D.new()
+	add_child(n)
+	n.position = Vector3(p.x, 0.12 if kind == "emp" else 0.5, p.y)
+	if kind == "emp":
+		DAModels.cylinder(n, maxf(0.5, radius * 0.25), 0.05, Vector3.ZERO, Color("7fd8ff"), -1, true)
+		effects.append({"node": n, "left": 0.45, "type": "ring", "grow": radius * 2.2})
+	else:
+		DAModels.cylinder(n, 0.35 + radius * 0.25, 0.7, Vector3.ZERO, Color("ffc787"), 0.1, true)
+		effects.append({"node": n, "left": 0.22, "type": "blast"})
+	if not low_effects:
+		var burst = particles("sparks")
+		add_child(burst)
+		burst.position = Vector3(p.x + sin(yaw) * 0.5, 0.7, p.y + cos(yaw) * 0.5)
+		burst.amount = int(burst.amount * (1.5 + radius))
+		burst.emitting = true
+		effects.append({"node": burst, "left": 0.7, "type": "sparks"})
 
 func on_destroyed(p: Vector2, _kind: String) -> void:
 	if not sim.seen(0, p):
 		return
+	if sim.catalog.buildings.has(_kind) and not DASprites.atlas(_kind).is_empty():
+		# A fallen building leaves its wreck on the ground for a while.
+		var wreck = DASprites.card(_kind, -1, sim.catalog.buildings[_kind].radius * 2 + 1, Color.WHITE, false)
+		add_child(wreck)
+		wreck.position = Vector3(p.x, 0, p.y)
+		var cell: Vector2i = DASprites.state_cell(_kind, "wreck")
+		DASprites.set_frame(wreck, cell.x, cell.y)
+		effects.append({"node": wreck, "left": 45.0, "type": "wreck"})
+	elif sim.catalog.units.has(_kind) and DASprites.atlas(_kind).get("anims", {}).has("death"):
+		# A fallen unit plays its collapse once, facing the way it stood, then fades.
+		var row = 0
+		var paint = Color.WHITE
+		for id in models:
+			var model: Node3D = models[id]
+			if model.name.begins_with(_kind) and DASprites.is_card(model) and Vector2(model.position.x, model.position.z).distance_to(p) < 0.6:
+				row = anim_state.get(id, {}).get("row", 0)
+				var team = DASprites.param(model.get_node("Card"), "team")
+				if team != null:
+					paint = team
+				break
+		var husk = DASprites.card(_kind, 0, 1, paint, false)
+		add_child(husk)
+		husk.position = Vector3(p.x, 0, p.y)
+		DASprites.set_frame(husk, DASprites.death_column(_kind, 0.0), row)
+		effects.append({"node": husk, "left": 9.0, "type": "death", "kind": _kind, "row": row, "age": 0.0})
 	var n = Node3D.new()
 	add_child(n)
 	n.position = Vector3(p.x, 0.6, p.y)

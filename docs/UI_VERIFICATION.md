@@ -1,9 +1,17 @@
-# Desktop UI verification — 1.0.0-rc2
+> Layout as of 2026-11-10: 48 px top bar (resources, age, seven icon buttons)
+> and a full-width bottom dock, 150 to 196 px tall, holding the diamond
+> minimap, the selection panel and a 5 x 3 command grid (keys Q-T, A-G, Z-B).
+> The technology tree is a modal opened from the top bar. Sizes quoted further
+> down that disagree with this describe the earlier floating panel.
+
+# Desktop UI verification — 1.0.0-rc3
 
 ## Supported desktop matrix
 
-1280×720, 1600×900, 1920×1080, 2560×1080, and 3440×1440 at 100%, 115%,
-and 125% UI scale. The battlefield uses the full viewport; essential HUD
+1280×720, 1600×900, 1920×1080, 2560×1080, 3440×1440 and 3840×2160 at 100%,
+115%, 125% and 150% UI scale. The layout needs 576 logical pixels of height, so
+a scale too large for the window is fitted down (150% applies from 864 px of
+height). The battlefield uses the full viewport; essential HUD
 content is centered within a maximum 1920 logical pixels. Tests exercise
 the underlying layout at each exact resolution, independently of OS scaling.
 
@@ -15,27 +23,19 @@ input, viewport changes, and modal transitions force a fresh layout.
 
 ## HUD layout
 
-- A 52 px translucent top bar: resource groups (icon, total, income per minute
-  from `DASimulation.income_per_minute`), population, the centred display title
-  (Cinzel, hidden when it would collide with the resource or navigation blocks),
-  and TECH / UNITS / BUILD / OBJECTIVES navigation plus the ≡ pause button.
-- The world fills everything below the top bar. Floating panels register as
-  blocked regions: the minimap frame with a five-button side column
-  (focus Core, speed, manual, settings, sound), the selection panel, the
-  objectives panel (toggle), captions, and the order-mode notice strip.
-- The selection panel (160 px tall, up to 980 px wide) shows a rendered
-  portrait with a health bar, name, role, status and description, thumbnail
-  production/build slots, a 2×2 icon command block (attack/stop, age and weapons
-  research, rally) and an "active job" slot with progress. It has three tiers:
-  A (≥ 960 px: full), B (≥ 800 px: no description, smaller slots) and
-  C (< 800 px, e.g. 1280×720 at 125 %: no portrait). Numbers shrink or compact
-  (`99.9K`, `1.2M`) and descriptions shrink before they would be truncated.
-- Icons are 24 px SVGs rasterised at the physical size (`assets/ui/icons/`,
-  `importer="keep"`); portraits are Blender renders in `assets/ui/portraits/`
-  with an icon fallback when a render is missing.
-- Palette constants are opaque so the contrast test measures them honestly;
-  panel alpha is applied at draw time. Control borders use `LINE`; decorative
-  separators use `LINE_SOFT` and are never a control boundary.
+- A 48 px top bar: metal, energy and data with income per minute
+  (`DASimulation.income_per_minute`), population, the current age with the
+  match clock, and icon buttons (idle Workers, army, technology, objectives,
+  focus Core, speed, pause).
+- A full-width bottom dock: the diamond minimap (terrain, entities, the view
+  rectangle and alert pings), the selection panel (portrait, health, role,
+  status, stats, description, the active job and its queue) and the 5 × 3
+  command grid on Q-T, A-G and Z-B.
+- Over the world: the objectives panel (toggle), captions, the order-mode
+  strip (placement, attack-move, rally, patrol, aimed ability) and one
+  notification line (notice, complete, alert, error).
+- Full-screen panels: main menu, skirmish setup, save and load slots, settings,
+  field manual, credits, technology tree, pause, result and confirmation.
 
 ## Interaction and persistence
 
@@ -78,8 +78,8 @@ rendering, not the user's visible desktop. Install Xvfb or set `XVFB_BIN` to an
 existing executable. On this workstation an official Ubuntu Xvfb package was
 extracted under `.tools/virtual-display/runtime` without a system installation.
 
-The production suite exercises 29 screens/states × 5 resolutions × 3 scales:
-435 layout scenarios, plus two rendered fullscreen/windowed transition checks.
+The production suite exercises 42 screens/states × 6 resolutions × 4 scales:
+1,008 layout scenarios, plus two rendered fullscreen/windowed transition checks.
 Checks cover control overlap, text bounds, clipping, minimum button height,
 contrast, modal input, settings recovery, caption queueing, and failed saves.
 Manual text and captions are explicitly checked for unwanted abbreviation.

@@ -15,7 +15,15 @@
     "corrugated_iron": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "kit facades"},
     "rubber_tiles": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "kit tracks"},
     "bark_willow": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "kit bark"},
-    "mossy_rock": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "kit moss"}
+    "mossy_rock": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "kit moss"},
+    "metal_plate_02": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "sprite hull steel"},
+    "rusty_painted_metal": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "sprite worn paint"},
+    "container_side": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "sprite painted cladding"},
+    "rusty_metal_sheet": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "sprite dark steel"},
+    "rusty_metal_04": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "sprite weathered steel"},
+    "wood_planks_grey": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "sprite scaffold decks"},
+    "gravel_ground_01": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "sprite ground apron"},
+    "rubberized_track": {"res": "1k", "fmt": "jpg", "maps": ["Diffuse", "nor_gl", "arm"], "use": "sprite tyres and tracks"}
   },
   "models": {
     "island_tree_01": {"res": "1k", "class": "tree"},

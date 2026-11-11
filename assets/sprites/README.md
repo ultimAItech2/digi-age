@@ -1,94 +1,68 @@
-# Photoreal sprite set
+# Rendered sprite atlases
 
-Photoreal isometric sprites drawn in the 3D battlefield as camera-facing
-cards (`scripts/sprite_cards.gd`). The set was generated for **Age of AI**
-(`github.com/ultimAItechORG/age-of-ai`, branch `claude/keen-lamport-xkem6m`,
-commit `c42b0f8`, 2026-11-05) and is carried over unchanged, together with
-`generations.tsv`, which maps every file to its ElevenLabs flow node, session
-and generation id (flow `MK3BnnGfyEgxj9kHEFNi` "Age of AI sprites", model
-`gpt-image-2.5-sunburst`, 1280x720 PNG). The renders were cut out with rembg
-(isnet, alpha matting) and downscaled: ground 512 px wide, props and units
-256, buildings 384 to 896.
+Buildings, units, deposits and scenery are drawn in the 3D battlefield as
+camera-facing cards (`scripts/sprite_cards.gd`) from the atlases in
+`rendered/`, one colour atlas and one faction mask per kind, rendered from
+original Blender models by `tools/sprites/`. `scripts/sprite_atlas_data.gd`
+(generated) describes each atlas. A kind without an atlas keeps its 3D model
+from `DAModels.entity()`.
 
+The earlier set of single AI-generated stills (and its `generations.tsv`) was
+removed once every kind had an atlas; it is in the git history up to `902aec6`.
+
+## Placement
+
+One map cell is one world unit and atlases are rendered at 96 pixels per cell
+(less for the largest units, see `ppu` in the atlas data), so a card is its
+frame at that scale. The picture's origin row sits on the entity's ground
+point. Every card has a sun-cast silhouette shadow sheared along the sun
+direction, a soft contact shadow and an owner disc in the faction colour; the
+masked parts of the picture are painted in the faction colour. The HUD
+portrait of a kind is cut from its atlas.
+
+## Pipeline
+
+- `tools/sprites/rig.py`: the shared stage. Orthographic camera at the game's
+  fixed view (30 degrees above the ground, 45 degrees to the grid), a sun
+  travelling along `DABattlefield.SUN_ROTATION`, and the game's own sky
+  photograph (`processed/hdri`) turned so its sun agrees, for fill and
+  reflections. AgX tone response; exposure was set so a grey card matches the
+  earlier look. Transparent film, 96 pixels per map cell. Cast shadows are
+  drawn in the game, not baked.
+- `tools/sprites/kit.py`: PBR surfaces over the Poly Haven CC0 texture sets in
+  `assets/third_party/polyhaven/raw` (run `tools/fetch_cc0_assets.py` first on
+  a clean clone), with rounded edges and layers of use: paint chipped to steel
+  and rust, streaks down walls, dust on upward faces, dirt near the ground,
+  grime in corners. Primitives: boxes clad in panels with raised joints, drums
+  with weld seams, rounded tapered shells and limbs for cast and pressed
+  parts. The `team` and `team_coat` surfaces are worn grey paint that also
+  writes the mask the game recolours per faction (chips and dirt are left out
+  of the mask, so they keep their own colour).
+- `tools/sprites/models.py`: one builder per kind. Buildings stand on a gravel
+  apron that fades out toward the edge of the footprint, and have three
+  scaffolded build stages, a six-frame idle loop when finished and a wreck.
+  Units are built from shells, limbs, drums and spheres, never bare boxes,
+  and have eight facings of idle, move (8 frames), attack (6 frames) and
+  death (6 frames). The eight unit kinds are the five shared ones and
+  one per faction (Warden, Mortar, Phantom); a new unit needs a builder here,
+  an entry in `BUILDERS` and in the unit tuple of `build()`, and its stats in
+  `data/catalog.tres`. Deposits have three
+  depletion states. Trees and shrubs are the Poly Haven photoscans in
+  `assets/third_party/processed`; ruins and gutted towers are procedural.
+- `tools/sprites/ui.py` and `grade_ui.py`: render and grade the HUD's 9-slice
+  plates into `assets/ui/frames/`.
+- `tools/sprites/pack.py`: builds the colour and mask atlases and writes
+  `scripts/sprite_atlas_data.gd` (frame grid, scale, anchor, animations).
+
+Rebuild everything, or only some kinds:
+
+```bash
+tools/render_sprites.sh
+tools/render_sprites.sh --kinds core,worker
 ```
-buildings/  30 buildings, one per Age of AI building type
-units/      16 units, facing lower right, neutral colours
-props/      tree, stone, gold, berries
-ground/     grass, dirt, sand, water (seamless top-down, unused here)
-```
 
-## Mapping to Digital Age kinds
-
-Only the Digital-and-AI-age sprites fit a machine civilization in industrial
-ruins. The table lives in `DASprites.SPRITES`; a kind without a file keeps
-its Blender model.
-
-| Kind | Sprite | Kind | Sprite |
-|---|---|---|---|
-| core | buildings/ai_core | worker | units/drone |
-| fabricator | buildings/mech_hangar | scout | units/swarm |
-| data_center | buildings/data_center | sentinel | units/mech |
-| generator | buildings/fusion_reactor | disruptor | units/tank |
-| depot | buildings/factory | walker | units/walker (missing) |
-| tower | buildings/shield_generator | metal | props/gold |
-| | | data | props/archive (missing) |
-
-Drop `units/walker.png` and `props/archive.png` into this folder (same
-cut-out and downscale as the others: transparent background, trimmed, 256 px
-wide for the unit, 256 for the prop) and both kinds switch to cards on the
-next launch. No code change is needed.
-
-## Recipe
-
-Every image is a single take with one shared preamble, so the set stays
-consistent:
-
-> Isometric video game building asset for a real-time strategy game. Subject:
-> *…era and subject…*. Projection: 2:1 isometric (dimetric) view, the building
-> rotated 45 degrees so one corner points toward the camera, camera elevated
-> about 30 degrees above the ground, orthographic, no perspective distortion.
-> The building sits on a square footprint whose base forms a 2:1 diamond.
-> Rendering: photorealistic 3D render, physically based materials, soft
-> overcast daylight with the key light from the upper left, a subtle soft
-> contact shadow baked onto the ground directly under and to the lower right
-> of the building, nothing else on the ground. Object centred, filling about
-> 85 percent of the frame, nothing cut off, no people, no text, no watermark,
-> no ground plane beyond the small contact shadow. Fully transparent
-> background (PNG alpha).
-
-Units use the same light and camera with "the figure seen from the
-front-right, facing toward the lower right of the frame, full body from head
-to feet" and neutral colours; ownership is drawn by the game as a ground disc.
-
-### Prompts for the two missing sprites
-
-**units/walker.png** (Siege Walker): Isometric video game unit asset for a
-real-time strategy game. Subject: a heavy four-legged autonomous siege walker
-platform, dark gunmetal and weathered steel, a long-barrel electromagnetic
-cannon on its back, hydraulic legs mid-stride, no pilot. The machine seen from
-the front-right, facing toward the lower right of the frame, full body from
-the top of the cannon to the feet. Projection and rendering as the preamble
-(2:1 isometric, 30 degrees elevation, orthographic, photorealistic PBR, soft
-overcast daylight, key light upper left, small contact shadow only, neutral
-colours, no faction markings). Fully transparent background (PNG alpha).
-
-**props/archive.png** (data archive): Isometric video game resource asset
-for a real-time strategy game. Subject: a half-buried violet data archive
-monolith, a tall obsidian server pillar with three glowing violet rings and
-cracked concrete at its base, no people. Projection and rendering as the
-preamble (2:1 isometric, 30 degrees elevation, orthographic, photorealistic
-PBR, soft overcast daylight, key light upper left, small contact shadow only).
-Fully transparent background (PNG alpha).
-
-## Placement in Digital Age
-
-One map cell is one world unit. Building cards are `cells × √2 × 1.05` wide
-(the footprint diagonal, as the sprite shows the footprint as a diamond) and
-anchored at the footprint centre plus half the diagonal toward the camera;
-unit cards are 1.4 units tall (1.9 for disruptor and walker); deposits are
-`√2` wide. Every card has a sun-cast silhouette shadow sheared along the sun
-direction, a soft contact shadow (1.3 × footprint) and an owner disc in the
-faction colour. Age of AI draws the shadows at 38 % and 30 % black on an sRGB
-canvas; Godot blends in linear space, so the shaders use 0.65 and 0.5 to
-darken the ground by the same visible amount. The HUD portrait of a kind with a
-sprite is the sprite itself.
+Rendering uses the GPU through Cycles when one is available (about one second
+a frame on an RTX 3070; the first run compiles kernels for a minute or two).
+`python3 tools/sprites/sheet.py` writes a contact sheet to `builds/sprites/`.
+Run `tools/godot.sh --headless --import` afterwards so Godot imports the new
+textures.

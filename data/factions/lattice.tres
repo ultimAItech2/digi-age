@@ -9,3 +9,4 @@ primary_color = Color(0.706, 0.584, 0.969, 1)
 secondary_color = Color(0.275, 0.247, 0.416, 1)
 ai_profile = "network"
 modifiers = {"research_speed": 0.8, "vision_radius": 1.2}
+roster = Array[String](["worker", "scout", "sentinel", "disruptor", "walker", "phantom"])

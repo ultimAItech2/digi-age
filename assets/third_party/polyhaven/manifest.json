@@ -415,6 +415,238 @@
         }
       ]
     },
+    "metal_plate_02": {
+      "type": "texture",
+      "name": "Metal Plate 02",
+      "authors": [
+        "Rob Tuytel"
+      ],
+      "resolution": "1k",
+      "bytes": 1885020,
+      "files": [
+        {
+          "path": "metal_plate_02/metal_plate_02_diffuse_1k.jpg",
+          "size": 625917,
+          "md5": "531b7e067dc537e0b3c7962175e04ffd",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/metal_plate_02/metal_plate_02_diff_1k.jpg"
+        },
+        {
+          "path": "metal_plate_02/metal_plate_02_nor_gl_1k.jpg",
+          "size": 183264,
+          "md5": "ce8198004fd9409f592a7f024be0c01e",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/metal_plate_02/metal_plate_02_nor_gl_1k.jpg"
+        },
+        {
+          "path": "metal_plate_02/metal_plate_02_arm_1k.jpg",
+          "size": 1075839,
+          "md5": "ff6e0499763d76c76b1568b16f5f93f6",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/metal_plate_02/metal_plate_02_arm_1k.jpg"
+        }
+      ]
+    },
+    "rusty_painted_metal": {
+      "type": "texture",
+      "name": "Rusty Painted Metal",
+      "authors": [
+        "Amal Kumar"
+      ],
+      "resolution": "1k",
+      "bytes": 1328639,
+      "files": [
+        {
+          "path": "rusty_painted_metal/rusty_painted_metal_diffuse_1k.jpg",
+          "size": 471866,
+          "md5": "3846f5567b6e7985b275a6b3867a648f",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rusty_painted_metal/rusty_painted_metal_diff_1k.jpg"
+        },
+        {
+          "path": "rusty_painted_metal/rusty_painted_metal_nor_gl_1k.jpg",
+          "size": 484158,
+          "md5": "b5a2c2b08219304dcd4e0b00837f3e2d",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rusty_painted_metal/rusty_painted_metal_nor_gl_1k.jpg"
+        },
+        {
+          "path": "rusty_painted_metal/rusty_painted_metal_arm_1k.jpg",
+          "size": 372615,
+          "md5": "fdbc2e55370ea387899e25d84c49b203",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rusty_painted_metal/rusty_painted_metal_arm_1k.jpg"
+        }
+      ]
+    },
+    "container_side": {
+      "type": "texture",
+      "name": "Container Side",
+      "authors": [
+        "Dimitrios Savva"
+      ],
+      "resolution": "1k",
+      "bytes": 1593971,
+      "files": [
+        {
+          "path": "container_side/container_side_diffuse_1k.jpg",
+          "size": 667470,
+          "md5": "af4c3140ca86cfba8bbe4d8bf85c5064",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/container_side/container_side_diff_1k.jpg"
+        },
+        {
+          "path": "container_side/container_side_nor_gl_1k.jpg",
+          "size": 538519,
+          "md5": "4162f65b9d8661fea8a57b43ce0b3963",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/container_side/container_side_nor_gl_1k.jpg"
+        },
+        {
+          "path": "container_side/container_side_arm_1k.jpg",
+          "size": 387982,
+          "md5": "5ae1b41abc50bc7e13782e13c6ce2100",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/container_side/container_side_arm_1k.jpg"
+        }
+      ]
+    },
+    "rusty_metal_sheet": {
+      "type": "texture",
+      "name": "Rusty Metal Sheet",
+      "authors": [
+        "Amal Kumar"
+      ],
+      "resolution": "1k",
+      "bytes": 1934896,
+      "files": [
+        {
+          "path": "rusty_metal_sheet/rusty_metal_sheet_diffuse_1k.jpg",
+          "size": 793031,
+          "md5": "ccbfebdd62b6d021d1b3f890ab0e5a6d",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rusty_metal_sheet/rusty_metal_sheet_diff_1k.jpg"
+        },
+        {
+          "path": "rusty_metal_sheet/rusty_metal_sheet_nor_gl_1k.jpg",
+          "size": 409291,
+          "md5": "ace5dbc3f612ed8f46e70a0bef3c162e",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rusty_metal_sheet/rusty_metal_sheet_nor_gl_1k.jpg"
+        },
+        {
+          "path": "rusty_metal_sheet/rusty_metal_sheet_arm_1k.jpg",
+          "size": 732574,
+          "md5": "a91f97aaae115b5c3e86a17f9ffbd45b",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rusty_metal_sheet/rusty_metal_sheet_arm_1k.jpg"
+        }
+      ]
+    },
+    "rusty_metal_04": {
+      "type": "texture",
+      "name": "Rusty Metal 04",
+      "authors": [
+        "Amal Kumar"
+      ],
+      "resolution": "1k",
+      "bytes": 2622997,
+      "files": [
+        {
+          "path": "rusty_metal_04/rusty_metal_04_diffuse_1k.jpg",
+          "size": 938338,
+          "md5": "91832efd8e5896387e2af18a5b49b895",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rusty_metal_04/rusty_metal_04_diff_1k.jpg"
+        },
+        {
+          "path": "rusty_metal_04/rusty_metal_04_nor_gl_1k.jpg",
+          "size": 896980,
+          "md5": "25f7f28b3546391532a5567b86e65aeb",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rusty_metal_04/rusty_metal_04_nor_gl_1k.jpg"
+        },
+        {
+          "path": "rusty_metal_04/rusty_metal_04_arm_1k.jpg",
+          "size": 787679,
+          "md5": "279a6d62861e32e4ee43cce84b932e43",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rusty_metal_04/rusty_metal_04_arm_1k.jpg"
+        }
+      ]
+    },
+    "wood_planks_grey": {
+      "type": "texture",
+      "name": "Wood Planks Grey",
+      "authors": [
+        "Rob Tuytel"
+      ],
+      "resolution": "1k",
+      "bytes": 540896,
+      "files": [
+        {
+          "path": "wood_planks_grey/wood_planks_grey_diffuse_1k.jpg",
+          "size": 228279,
+          "md5": "f2b4a70fed329c13850917c5f2d1498c",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/wood_planks_grey/wood_planks_grey_diff_1k.jpg"
+        },
+        {
+          "path": "wood_planks_grey/wood_planks_grey_nor_gl_1k.jpg",
+          "size": 157419,
+          "md5": "fe633ea606ac22b732d4204a7fa52b03",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/wood_planks_grey/wood_planks_grey_nor_gl_1k.jpg"
+        },
+        {
+          "path": "wood_planks_grey/wood_planks_grey_arm_1k.jpg",
+          "size": 155198,
+          "md5": "2da2c5b43105bd0b1bcc8712e8164406",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/wood_planks_grey/wood_planks_grey_arm_1k.jpg"
+        }
+      ]
+    },
+    "gravel_ground_01": {
+      "type": "texture",
+      "name": "Gravel Ground 01",
+      "authors": [
+        "Rob Tuytel"
+      ],
+      "resolution": "1k",
+      "bytes": 2419793,
+      "files": [
+        {
+          "path": "gravel_ground_01/gravel_ground_01_diffuse_1k.jpg",
+          "size": 954257,
+          "md5": "ee99ef89fb50cfeb198db369bb7151f0",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/gravel_ground_01/gravel_ground_01_diff_1k.jpg"
+        },
+        {
+          "path": "gravel_ground_01/gravel_ground_01_nor_gl_1k.jpg",
+          "size": 1314248,
+          "md5": "8a54072ce38665da29081d57dc10cb69",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/gravel_ground_01/gravel_ground_01_nor_gl_1k.jpg"
+        },
+        {
+          "path": "gravel_ground_01/gravel_ground_01_arm_1k.jpg",
+          "size": 151288,
+          "md5": "1d4ee24a4dc226c24a2e8b5701c31797",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/gravel_ground_01/gravel_ground_01_arm_1k.jpg"
+        }
+      ]
+    },
+    "rubberized_track": {
+      "type": "texture",
+      "name": "Rubberized Track",
+      "authors": [
+        "Charlotte Baglioni"
+      ],
+      "resolution": "1k",
+      "bytes": 2745694,
+      "files": [
+        {
+          "path": "rubberized_track/rubberized_track_diffuse_1k.jpg",
+          "size": 768955,
+          "md5": "43c4cec5ce3578919440af1491d3c50e",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rubberized_track/rubberized_track_diff_1k.jpg"
+        },
+        {
+          "path": "rubberized_track/rubberized_track_nor_gl_1k.jpg",
+          "size": 1162333,
+          "md5": "4b60a99598fd2a0e24c2234468f5f31c",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rubberized_track/rubberized_track_nor_gl_1k.jpg"
+        },
+        {
+          "path": "rubberized_track/rubberized_track_arm_1k.jpg",
+          "size": 814406,
+          "md5": "fcfec3fbcd809206fa15e01f4fa62261",
+          "url": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rubberized_track/rubberized_track_arm_1k.jpg"
+        }
+      ]
+    },
     "island_tree_01": {
       "type": "model",
       "name": "Island Tree 01",

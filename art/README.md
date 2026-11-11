@@ -56,3 +56,11 @@ preservation, grounded orientation, faction colors, cache separation, and
 shared batch geometry with zero failures. The Blender gallery was visually
 inspected. A native game screenshot was unavailable in the sandbox because
 the display server could not be opened.
+
+## Superseded in play by the rendered sprites
+
+The game now draws every building, unit, deposit and scenery kind from the
+atlases in `assets/sprites/rendered/`, built by `tools/sprites/` (see
+`assets/sprites/README.md`). The kit in this directory remains as the 3D
+fallback for a kind without an atlas and as the source of the lane dashes and
+other small meshes; `tests/model_assets_test.gd` still covers it.

@@ -1,9 +1,13 @@
 class_name DASaveGame
 extends RefCounted
 ## Versioned, atomic local persistence. Steam Auto-Cloud can sync this directory.
-const VERSION: int = 1
+const VERSION: int = 3
+## Schema versions this build can still read; older slots are migrated in place.
+const SUPPORTED_VERSIONS: Array[int] = [1, 2, 3]
 const SAVE_DIR: String = "user://saves"
 const SLOT_COUNT: int = 3
+const MANUAL_SLOTS: Array[String] = ["manual_1", "manual_2", "manual_3"]
+const AUTO_SLOTS: Array[String] = ["autosave_0", "autosave_1", "autosave_2"]
 
 static func path_for(slot: String) -> String:
 	return SAVE_DIR + "/" + slot + ".save"
@@ -12,7 +16,7 @@ static func save_slot(slot: String, sim: DASimulation, mission: DAMissionControl
 	if slot.is_empty() or sim == null or mission == null:
 		return "Cannot save an incomplete game state."
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(SAVE_DIR))
-	var state = {"schema_version": VERSION, "slot": slot, "saved_at": Time.get_datetime_string_from_system(true), "simulation": sim.serialize_state(), "mission": mission.serialize_state(), "campaign": campaign_resource(campaign), "metadata": metadata.duplicate(true)}
+	var state = {"schema_version": VERSION, "slot": slot, "saved_at": Time.get_datetime_string_from_system(false), "simulation": sim.serialize_state(), "mission": mission.serialize_state(), "campaign": campaign_resource(campaign), "metadata": metadata.duplicate(true)}
 	var temp = path_for(slot) + ".tmp"
 	var file = FileAccess.open(temp, FileAccess.WRITE)
 	if file == null:
@@ -26,7 +30,8 @@ static func save_slot(slot: String, sim: DASimulation, mission: DAMissionControl
 	var error = DirAccess.rename_absolute(ProjectSettings.globalize_path(temp), ProjectSettings.globalize_path(path_for(slot)))
 	return "" if error == OK else "Unable to commit the save safely."
 
-static func load_slot(slot: String, sim: DASimulation, mission: DAMissionController, campaign: DACampaignProgress) -> String:
+## The slot's raw state and "" when it can be read by this build, otherwise an error.
+static func read_slot(slot: String, out: Dictionary) -> String:
 	var path = path_for(slot)
 	if not FileAccess.file_exists(path):
 		return "No save exists in this slot."
@@ -35,12 +40,33 @@ static func load_slot(slot: String, sim: DASimulation, mission: DAMissionControl
 		return "Unable to read the save."
 	var state = bytes_to_var(file.get_buffer(file.get_length()))
 	file.close()
-	if not state is Dictionary or int(state.get("schema_version", -1)) != VERSION:
+	if not state is Dictionary or int(state.get("schema_version", -1)) not in SUPPORTED_VERSIONS:
 		return "This save is from an unsupported version."
 	if not state.has_all(["simulation", "mission", "campaign"]):
 		return "This save is incomplete."
 	if not state.simulation is Dictionary or not state.mission is Dictionary or not state.campaign is Dictionary:
 		return "This save is malformed."
+	out.merge(state, true)
+	return ""
+
+## What a slot holds, for the load screen: {} when it is empty or unreadable.
+static func describe(slot: String) -> Dictionary:
+	var state: Dictionary = {}
+	if read_slot(slot, state) != "":
+		return {}
+	var metadata: Dictionary = state.get("metadata", {}) if state.get("metadata", {}) is Dictionary else {}
+	return {"slot": slot, "mission_id": str(state.mission.get("mission_id", "")), "saved_at": str(state.get("saved_at", "")), "elapsed": float(state.simulation.get("elapsed", 0.0)) if is_number(state.simulation.get("elapsed")) else 0.0, "metadata": metadata}
+
+## `out`, when given, receives the slot's metadata (session state such as the opponent's timers).
+static func load_slot(slot: String, sim: DASimulation, mission: DAMissionController, campaign: DACampaignProgress, out: Dictionary = {}) -> String:
+	var state: Dictionary = {}
+	var read_error = read_slot(slot, state)
+	if read_error != "":
+		return read_error
+	if int(state.schema_version) == 1:
+		migrate_v1(state, sim.catalog)
+	if int(state.schema_version) == 2:
+		migrate_v2(state)
 	if state.mission.get("mission_id", "") != (mission.definition.mission_id if mission.definition else ""):
 		return "Save belongs to a different mission. Select that mission before loading."
 	if state.simulation.get("map_id", "") != mission.definition.map_id:
@@ -60,7 +86,42 @@ static func load_slot(slot: String, sim: DASimulation, mission: DAMissionControl
 	sim.restore_state(state.simulation)
 	mission.restore_state(state.mission)
 	apply_campaign(campaign, state.campaign)
+	if state.get("metadata", {}) is Dictionary:
+		out.merge(state.metadata, true)
 	return ""
+
+## Version 2 had no technology ceiling, gather scale or Core rebuild window.
+static func migrate_v2(state: Dictionary) -> void:
+	var s = state.simulation
+	if s is Dictionary:
+		if not s.has("tech_ceiling"): s["tech_ceiling"] = [2, 2]
+		if not s.has("gather_scale"): s["gather_scale"] = [1.0, 1.0]
+		if not s.has("core_deadline"): s["core_deadline"] = [-1.0, -1.0]
+	state.schema_version = VERSION
+
+## Version 1 stored the two-level Core weapons track as "upgrades"; it becomes the
+## Military weapons upgrade, and an in-flight weapons project is refunded.
+static func migrate_v1(state: Dictionary, catalog: Resource) -> void:
+	var s = state.simulation
+	if not s is Dictionary:
+		return
+	var upgrades = s.get("upgrades", [0, 0])
+	var tech: Array = [{}, {}]
+	for i in 2:
+		var level = int(upgrades[i]) if upgrades is Array and upgrades.size() > i and is_number(upgrades[i]) else 0
+		if level > 0:
+			tech[i] = {"weapons": level}
+	s["tech"] = tech
+	s.erase("upgrades")
+	if s.get("entities") is Dictionary:
+		for e in s.entities.values():
+			if e is Dictionary and e.get("research", "") == "weapons":
+				var side = int(e.get("owner", -1))
+				if side >= 0 and side < 2 and s.get("resources") is Array and s.resources.size() > side:
+					s.resources[side] += catalog.tech_cost("weapons", int(tech[side].get("weapons", 0)) + 1)
+				e.research = ""
+				e.research_left = 0.0
+	state.schema_version = 2
 
 static func validate_state(state: Dictionary, catalog: Resource) -> String:
 	var s: Dictionary = state.simulation
@@ -77,11 +138,18 @@ static func validate_state(state: Dictionary, catalog: Resource) -> String:
 	if not s.get("faction_ids") is Array: return "Save factions are incomplete."
 	for faction in s.faction_ids:
 		if not faction is String or not ResourceLoader.exists("res://data/factions/"+faction+".tres"): return "Save faction is unavailable."
-	for key in ["resources", "ages", "upgrades", "visible", "explored"]:
+	for key in ["resources", "ages", "tech", "visible", "explored"]:
 		if not s.get(key) is Array or s[key].size() != 2: return "Simulation save is incomplete."
+	for key in ["tech_ceiling", "gather_scale", "core_deadline"]:
+		var pair = s.get(key, [0, 0])
+		if not pair is Array or pair.size() != 2 or not is_number(pair[0]) or not is_number(pair[1]): return "Simulation save has invalid match rules."
 	for i in 2:
 		if not s.resources[i] is Vector3 or not s.visible[i] is Dictionary or not s.explored[i] is Dictionary: return "Simulation save is malformed."
-		if not s.ages[i] is int or s.ages[i] < 0 or s.ages[i] > 2 or not s.upgrades[i] is int or s.upgrades[i] < 0 or s.upgrades[i] > 2: return "Simulation save has invalid progression."
+		if not s.ages[i] is int or s.ages[i] < 0 or s.ages[i] > 2: return "Simulation save has invalid progression."
+		if not s.tech[i] is Dictionary: return "Simulation save has invalid progression."
+		for id in s.tech[i]:
+			var level = s.tech[i][id]
+			if not id is String or not catalog.tech.has(id) or not level is int or level < 0 or level > DACatalog.TECH_MAX_LEVEL: return "Simulation save has invalid progression."
 	if not s.get("entities") is Dictionary: return "Simulation save is incomplete."
 	for e in s.entities.values():
 		if not e is Dictionary or not e.has_all(["id","kind","owner","pos","hp","max_hp","building","complete"]): return "Save contains an incomplete entity."
@@ -95,6 +163,10 @@ static func validate_state(state: Dictionary, catalog: Resource) -> String:
 		for key in ["build_left","cargo","research_left","cooldown"]:
 			if not is_number(e.get(key)): return "Save contains an invalid entity counter."
 		if not e.order is String or not e.research is String or not e.rally is Vector2: return "Save contains invalid orders."
+		if e.research != "":
+			if e.research == "age":
+				if e.kind != "core": return "Save contains invalid research."
+			elif not catalog.tech.has(e.research) or e.kind != "lab": return "Save contains invalid research."
 		if not e.pos is Vector2 or not e.destination is Vector2 or not e.path is Array or not e.queue is Array or not e.owner is int or e.owner < -1 or e.owner > 1: return "Save contains an invalid entity."
 		if e.building != catalog.buildings.has(e.kind): return "Save contains an invalid building."
 		for item in e.queue:
@@ -137,7 +209,7 @@ static func load_campaign(campaign: DACampaignProgress) -> String:
 		return "Unable to read campaign progress."
 	var state = bytes_to_var(file.get_buffer(file.get_length()))
 	file.close()
-	if not state is Dictionary or int(state.get("schema_version", -1)) != VERSION or not state.has("campaign"):
+	if not state is Dictionary or int(state.get("schema_version", -1)) not in SUPPORTED_VERSIONS or not state.has("campaign"):
 		return "Campaign progress is unsupported."
 	apply_campaign(campaign, state.campaign)
 	return ""

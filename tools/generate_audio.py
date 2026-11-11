@@ -210,6 +210,12 @@ def build_manifest(voice_src: dict, prompts: dict, records: list[dict]) -> dict:
         "ui_click": {"bus": "UI", "file": "sfx/ui_click.mp3", "cooldown": 0.04},
         "construction": {"bus": "Effects", "file": "sfx/construction.mp3"},
         "research": {"bus": "UI", "file": "sfx/research.mp3"},
+        "ui_confirm": {"bus": "UI", "file": "sfx/ui_confirm.mp3", "cooldown": 0.08},
+        "ui_error": {"bus": "UI", "file": "sfx/ui_error.mp3", "cooldown": 0.25},
+        "impact": {"bus": "Effects", "file": "sfx/impact.mp3", "cooldown": 0.12, "volume": -6.0},
+        "unit_destroyed": {"bus": "Effects", "file": "sfx/unit_destroyed.mp3", "cooldown": 0.2},
+        "structure_destroyed": {"bus": "Effects", "file": "sfx/structure_destroyed.mp3", "cooldown": 0.3},
+        "ambient": {"bus": "Effects", "file": "sfx/ambient_hum.mp3", "volume": -16.0},
     }
     return {
         "version": 1,

@@ -3,11 +3,14 @@
 [resource]
 script = ExtResource("1")
 units = {
-"worker": {"name": "Worker", "cost": Vector3(45, 15, 0), "hp": 75.0, "speed": 3.0, "damage": 3.0, "range": 1.4, "cooldown": 1.2, "time": 9.0, "age": 0, "vision": 9.0, "description": "Harvests salvage and archives. Constructs and repairs your civilization."},
-"scout": {"name": "Scout", "cost": Vector3(55, 35, 0), "hp": 100.0, "speed": 5.0, "damage": 7.0, "range": 4.0, "cooldown": 0.8, "time": 12.0, "age": 0, "vision": 15.0, "description": "Fast reconnaissance platform. Extended vision; light armor."},
-"sentinel": {"name": "Sentinel", "cost": Vector3(85, 45, 0), "hp": 200.0, "speed": 2.6, "damage": 16.0, "range": 4.5, "cooldown": 1.0, "time": 16.0, "age": 0, "vision": 9.0, "description": "Frontline guardian. Deals double damage to Disruptors."},
-"disruptor": {"name": "Disruptor", "cost": Vector3(110, 90, 15), "hp": 110.0, "speed": 2.8, "damage": 22.0, "range": 6.0, "cooldown": 1.5, "time": 20.0, "age": 1, "vision": 10.0, "description": "Electromagnetic artillery. Deals triple damage to Siege Walkers."},
-"walker": {"name": "Siege Walker", "cost": Vector3(230, 180, 30), "hp": 480.0, "speed": 1.6, "damage": 45.0, "range": 8.0, "cooldown": 2.4, "time": 30.0, "age": 2, "vision": 11.0, "description": "Heavy siege platform. Deals triple damage to structures."}
+"worker": {"name": "Worker", "cost": Vector3(45, 15, 0), "hp": 75.0, "speed": 3.0, "damage": 3.0, "range": 1.4, "cooldown": 1.2, "time": 9.0, "age": 0, "vision": 9.0, "armor": "light", "description": "Harvests salvage and archives. Constructs and repairs your civilization."},
+"scout": {"name": "Scout", "cost": Vector3(55, 35, 0), "hp": 100.0, "speed": 5.0, "damage": 7.0, "range": 4.0, "cooldown": 0.8, "time": 12.0, "age": 0, "vision": 15.0, "armor": "light", "hover": true, "description": "Fast reconnaissance platform. Extended vision; light armor. Hovers over rough ground."},
+"sentinel": {"name": "Sentinel", "cost": Vector3(85, 45, 0), "hp": 200.0, "speed": 2.6, "damage": 16.0, "range": 4.5, "cooldown": 1.0, "time": 16.0, "age": 0, "vision": 9.0, "armor": "infantry", "description": "Frontline guardian. Deals double damage to armoured units such as Disruptors."},
+"disruptor": {"name": "Disruptor", "cost": Vector3(110, 90, 15), "hp": 110.0, "speed": 2.8, "damage": 22.0, "range": 6.0, "cooldown": 1.5, "time": 20.0, "age": 1, "vision": 10.0, "armor": "armored", "projectile": 14.0, "splash": 1.2, "description": "Electromagnetic artillery. Its shells splash, and deal triple damage to heavy units such as Siege Walkers."},
+"walker": {"name": "Siege Walker", "cost": Vector3(230, 180, 30), "hp": 480.0, "speed": 1.6, "damage": 45.0, "range": 8.0, "cooldown": 2.4, "time": 30.0, "age": 2, "vision": 11.0, "armor": "heavy", "projectile": 12.0, "splash": 1.6, "description": "Heavy siege platform. Its shells splash, and deal triple damage to structures."},
+"warden": {"name": "Warden", "cost": Vector3(180, 120, 40), "hp": 280.0, "speed": 2.2, "damage": 8.0, "range": 4.0, "cooldown": 1.2, "time": 22.0, "age": 1, "vision": 9.0, "armor": "armored", "faction": "origin", "aura": {"radius": 4.0, "reduction": 0.25}, "description": "Origin shield carrier. Friendly units within 4 cells take 25% less damage."},
+"mortar": {"name": "Mortar", "cost": Vector3(240, 160, 60), "hp": 240.0, "speed": 1.6, "damage": 46.0, "range": 11.0, "cooldown": 3.6, "time": 26.0, "age": 1, "vision": 9.0, "armor": "armored", "faction": "foundry", "projectile": 9.0, "splash": 2.0, "description": "Foundry tracked launcher. Long range and a wide splash; slow to move and to reload."},
+"phantom": {"name": "Phantom", "cost": Vector3(150, 140, 80), "hp": 150.0, "speed": 4.6, "damage": 16.0, "range": 5.0, "cooldown": 1.0, "time": 20.0, "age": 1, "vision": 11.0, "armor": "light", "faction": "lattice", "hover": true, "cloak": 4.0, "description": "Lattice hover raider. Invisible unless an enemy unit is within 4 cells, a Tower is near, or it has just fired."}
 }
 buildings = {
 "core": {"name": "Core", "cost": Vector3(600, 400, 0), "hp": 5200.0, "time": 60.0, "age": 0, "radius": 2, "capacity": 15, "vision": 13.0, "description": "Your civilization's heart. Trains Workers and researches ages. Protect it."},
@@ -15,5 +18,20 @@ buildings = {
 "depot": {"name": "Salvage Depot", "cost": Vector3(85, 25, 0), "hp": 550.0, "time": 12.0, "age": 0, "radius": 1, "capacity": 0, "vision": 7.0, "description": "A nearby drop-off point for metal and data. Shortens worker journeys."},
 "data_center": {"name": "Data Center", "cost": Vector3(120, 80, 0), "hp": 650.0, "time": 20.0, "age": 0, "radius": 1, "capacity": 20, "vision": 8.0, "description": "Provides 20 compute capacity for additional units, up to 100."},
 "fabricator": {"name": "Fabricator", "cost": Vector3(180, 100, 0), "hp": 850.0, "time": 25.0, "age": 0, "radius": 2, "capacity": 0, "vision": 9.0, "description": "Manufactures Scouts, Sentinels, Disruptors, and Siege Walkers."},
-"tower": {"name": "Defense Tower", "cost": Vector3(150, 100, 0), "hp": 750.0, "time": 20.0, "age": 1, "radius": 1, "capacity": 0, "vision": 13.0, "damage": 22.0, "range": 10.0, "cooldown": 1.3, "description": "An autonomous defensive weapon with extended detection range."}
+"tower": {"name": "Defense Tower", "cost": Vector3(150, 100, 0), "hp": 750.0, "time": 20.0, "age": 1, "radius": 1, "capacity": 0, "vision": 13.0, "damage": 22.0, "range": 10.0, "cooldown": 1.3, "description": "An autonomous defensive weapon with extended detection range."},
+"lab": {"name": "Research Lab", "cost": Vector3(140, 90, 0), "hp": 600.0, "time": 22.0, "age": 0, "radius": 1, "capacity": 0, "vision": 8.0, "description": "Researches Resource, Building, and Military upgrades. Each Lab runs one project at a time; build more to research in parallel."}
+}
+tech = {
+"mining": {"branch": "resources", "name": "Salvage Mining", "icon": "metal", "effects": {"gather_metal": 0.1}, "description": "Workers extract metal 10% faster per level."},
+"harvesting": {"branch": "resources", "name": "Archive Harvesting", "icon": "data", "effects": {"gather_data": 0.1}, "description": "Workers retrieve data 10% faster per level."},
+"power": {"branch": "resources", "name": "Power Grid", "icon": "energy", "effects": {"generator_output": 0.1}, "description": "Generators produce 10% more energy per level."},
+"logistics": {"branch": "resources", "name": "Logistics", "icon": "cargo", "effects": {"cargo": 4.0, "worker_speed": 0.05}, "description": "Workers carry 4 more resources and move 5% faster per level."},
+"construction": {"branch": "buildings", "name": "Rapid Construction", "icon": "build", "effects": {"construction_rate": 0.1}, "description": "Workers construct buildings 10% faster per level."},
+"reinforcement": {"branch": "buildings", "name": "Reinforced Structures", "icon": "building", "effects": {"building_health": 0.08}, "description": "All buildings gain 8% integrity per level."},
+"fortification": {"branch": "buildings", "name": "Fortification", "icon": "fortify", "effects": {"tower_damage": 0.1, "tower_range": 0.6}, "description": "Defense Towers deal 10% more damage and reach 0.6 cells further per level."},
+"fabrication": {"branch": "buildings", "name": "Fabrication Lines", "icon": "units", "effects": {"production_rate": 0.1}, "description": "Units are produced 10% faster per level."},
+"weapons": {"branch": "military", "name": "Weapons Systems", "icon": "weapons", "effects": {"unit_damage": 0.1}, "description": "Units deal 10% more damage per level."},
+"armor": {"branch": "military", "name": "Composite Armor", "icon": "armor", "effects": {"armor": 0.05}, "description": "Units take 5% less damage per level."},
+"mobility": {"branch": "military", "name": "Mobility Drives", "icon": "speed", "effects": {"unit_speed": 0.06}, "description": "Combat units move 6% faster per level."},
+"sensors": {"branch": "military", "name": "Sensor Arrays", "icon": "sensors", "effects": {"unit_vision": 0.08, "unit_range": 0.04}, "description": "Units see 8% further and fire 4% further per level."}
 }

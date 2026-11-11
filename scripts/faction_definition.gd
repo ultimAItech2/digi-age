@@ -7,6 +7,6 @@ extends Resource
 @export var primary_color: Color = Color("57ebd5")
 @export var secondary_color: Color = Color("536872")
 @export var roster: Array[String] = ["worker", "scout", "sentinel", "disruptor", "walker"]
-@export var buildings: Array[String] = ["core", "generator", "depot", "data_center", "fabricator", "tower"]
+@export var buildings: Array[String] = ["core", "generator", "depot", "data_center", "fabricator", "tower", "lab"]
 @export var modifiers: Dictionary = {}
 @export var ai_profile: String = "balanced"

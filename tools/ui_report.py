@@ -15,7 +15,7 @@ for folder in ("scripts", "assets", "data", "scenes"):
             source_hash.update(str(path.relative_to(root)).encode())
             source_hash.update(hashlib.sha256(path.read_bytes()).digest())
 source_hash.update((root / "project.godot").read_bytes())
-identity = {"version": "1.0.0-rc2", "runtime_source_sha256": source_hash.hexdigest(),
+identity = {"version": "1.0.0-rc3", "runtime_source_sha256": source_hash.hexdigest(),
             "renderer": report["renderer"], "rendered_checks": report["checks"],
             "rendered_failures": report["failures"], "screenshots": len(captures)}
 (root / "builds" / "BUILD_ID.json").write_text(json.dumps(identity, indent=2)+"\n")

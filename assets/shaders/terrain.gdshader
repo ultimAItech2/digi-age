@@ -14,6 +14,8 @@ uniform float macro_tiling = 0.11;
 uniform float detail_tiling = 0.55;
 uniform float normal_strength = 1.0;
 uniform float single_scale = 0.0;
+// Grades the photo textures toward the damp green the sprites were lit for.
+uniform vec3 ground_tone = vec3(0.7, 1.0, 0.7);
 
 varying vec3 world_pos;
 varying vec3 world_normal;
@@ -34,10 +36,13 @@ vec3 sample_layer(sampler2DArray arr, vec2 uv, float layer, float macro_w) {
 
 void fragment() {
 	vec2 cuv = (world_pos.xz - control_bounds.xy) / control_bounds.zw;
-	vec3 control = texture(control_tex, clamp(cuv, vec2(0.0), vec2(1.0))).rgb;
+	vec4 control4 = texture(control_tex, clamp(cuv, vec2(0.0), vec2(1.0)));
+	vec3 control = control4.rgb;
 	float macro = texture(macro_tex, world_pos.xz * 0.012).r;
 	float slope = 1.0 - clamp(world_normal.y, 0.0, 1.0);
-	float rock_w = smoothstep(0.32, 0.6, slope);
+	// Alpha below one marks high ground: bare rock shows through, broken up by the macro noise.
+	float plateau = smoothstep(0.15, 0.7, (1.0 - control4.a) * (0.75 + 0.5 * macro));
+	float rock_w = max(smoothstep(0.32, 0.6, slope), plateau * 0.85);
 	float bank = smoothstep(0.05, -0.55, world_pos.y);
 	float mud_w = max(control.g, bank) * (1.0 - rock_w);
 	float asphalt_w = control.r * (1.0 - rock_w) * (1.0 - bank);
@@ -73,6 +78,10 @@ void fragment() {
 		nm += vec3(0.0, 0.0, 1.0) * rock_w;
 	}
 	albedo *= 0.86 + 0.28 * macro;
+	albedo *= ground_tone;
+	// The bank darkens and turns glossy where it runs down into the water.
+	float wet = smoothstep(0.02, -0.3, world_pos.y);
+	albedo *= mix(1.0, 0.55, wet);
 	albedo *= vertex_tint;
 	float f = fog_level(world_pos);
 	ALBEDO = fog_tint(albedo, f);
@@ -82,7 +91,7 @@ void fragment() {
 	NORMAL = normalize((VIEW_MATRIX * vec4(bent, 0.0)).xyz);
 	AO = mix(1.0, arm.r, 0.8);
 	AO_LIGHT_AFFECT = 0.35;
-	ROUGHNESS = clamp(arm.g, 0.35, 1.0);
+	ROUGHNESS = mix(clamp(arm.g, 0.35, 1.0), 0.25, wet);
 	METALLIC = 0.0;
 	SPECULAR = 0.3 * mix(0.3, 1.0, f);
 }

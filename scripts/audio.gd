@@ -22,6 +22,13 @@ var voice_queue: Array[Dictionary] = []
 var warned_missing: Dictionary = {}
 var caption_left: float = 0.0
 var caption_pages: Array[Dictionary] = []
+## Short spoken alerts ("under attack"): their own player, spaced so they never pile up.
+const ANNOUNCE_GAP := 3.0
+const ANNOUNCE_REPEAT := 14.0
+var announce_player: AudioStreamPlayer
+var announce_last: Dictionary = {}
+var announce_time: float = -100.0
+var ambient_player: AudioStreamPlayer
 
 func _ready() -> void:
 	_load_manifest()
@@ -32,6 +39,12 @@ func _ready() -> void:
 	voice_player.bus = "Voice"
 	voice_player.finished.connect(_on_voice_finished)
 	add_child(voice_player)
+	announce_player = AudioStreamPlayer.new()
+	announce_player.bus = "Voice"
+	add_child(announce_player)
+	ambient_player = AudioStreamPlayer.new()
+	ambient_player.bus = "Effects"
+	add_child(ambient_player)
 	for bus in ["Music", "Effects", "Voice", "UI"]:
 		pools[bus] = []
 
@@ -98,12 +111,48 @@ func speak(dialogue_id: String, text: String = "", speaker: String = "archivist"
 	if not voice_player.playing and caption_left <= 0:
 		_play_next_voice()
 
+## A spoken alert from the manifest's voice table. Dialogue keeps priority, and
+## the same line is not repeated within ANNOUNCE_REPEAT seconds.
+## An urgent line (the base is under attack) is not held back by a line that just played.
+func announce(id: String, urgent: bool = false) -> bool:
+	var now = Time.get_ticks_msec() * 0.001
+	if (not urgent and now - announce_time < ANNOUNCE_GAP) or now - float(announce_last.get(id, -100.0)) < ANNOUNCE_REPEAT:
+		return false
+	announce_time = now
+	announce_last[id] = now
+	play("announce", {"id": id})
+	if not enabled or DisplayServer.get_name() == "headless" or voice_player.playing:
+		return true
+	var stream = _stream(str((manifest.get("voice", {}) as Dictionary).get(id, "")))
+	if stream:
+		announce_player.stream = stream
+		announce_player.play()
+	return true
+
+## The low machine hum under a match; silent in the menu and on the result screen.
+func update_ambient() -> void:
+	if not ambient_player:
+		return
+	var wanted = enabled and current_music in ["ambient", "combat"] and DisplayServer.get_name() != "headless"
+	if wanted and not ambient_player.playing:
+		var spec: Dictionary = (manifest.get("events", {}) as Dictionary).get("ambient", {})
+		var stream = _stream(str(spec.get("file", "")))
+		if stream:
+			if stream is AudioStreamMP3:
+				stream.loop = true
+			ambient_player.stream = stream
+			ambient_player.volume_db = float(spec.get("volume", -16.0))
+			ambient_player.play()
+	elif not wanted and ambient_player.playing:
+		ambient_player.stop()
+
 func set_music(state: String) -> void:
 	if state == current_music:
 		return
 	if state == "combat" and current_music in ["menu", "result"]:
 		return
 	current_music = state
+	update_ambient()
 	if not enabled or DisplayServer.get_name() == "headless":
 		return
 	var tracks: Dictionary = manifest.get("music", {})
@@ -137,6 +186,8 @@ func apply_settings(values: Dictionary) -> void:
 	if not enabled and music_player:
 		music_player.stop()
 		voice_player.stop()
+		announce_player.stop()
+	update_ambient()
 
 func _set_linear(bus: String, linear: float) -> void:
 	var index = AudioServer.get_bus_index(bus)
@@ -251,6 +302,10 @@ func _exit_tree() -> void:
 	if voice_player:
 		voice_player.stop()
 		voice_player.stream = null
+	for player in [announce_player, ambient_player]:
+		if player:
+			player.stop()
+			player.stream = null
 	for bus in pools:
 		for player in pools[bus]:
 			if is_instance_valid(player):

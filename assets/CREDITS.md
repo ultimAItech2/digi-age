@@ -39,4 +39,4 @@ project uses its own title, setting, machine designs, code, and presentation.
 
 ## Photoreal sprite set
 
-`assets/sprites/`: generated for Age of AI (`github.com/ultimAItechORG/age-of-ai`, branch `claude/keen-lamport-xkem6m`) with ElevenLabs image generation, model `gpt-image-2.5-sunburst`, flow `MK3BnnGfyEgxj9kHEFNi`; one generation id per file in `assets/sprites/generations.tsv`. Cut out with rembg and downscaled there; used here unchanged. See `assets/sprites/README.md` for the prompt recipe.
+`assets/sprites/rendered/`: original work, rendered with Blender (Cycles) from the procedural models in `tools/sprites/`, using the Poly Haven CC0 textures and photoscans in `assets/third_party/polyhaven`. See `assets/sprites/README.md`.

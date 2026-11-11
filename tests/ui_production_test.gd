@@ -1,5 +1,5 @@
 extends SceneTree
-const RESOLUTIONS = [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080),Vector2i(2560,1080),Vector2i(3440,1440)]
+const RESOLUTIONS = [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080),Vector2i(2560,1080),Vector2i(3440,1440),Vector2i(3840,2160)]
 var game
 var failures = 0
 var checks = 0
@@ -91,6 +91,8 @@ func scenario(name: String):
 	game.build_kind = ""
 	game.attack_mode = false
 	game.rally_mode = false
+	game.patrol_mode = false
+	game.ability_mode = false
 	game.mode = "playing"
 	game.sim.winner = -1
 	game.mission.mission_won = false
@@ -108,6 +110,36 @@ func scenario(name: String):
 		game.hud.prepare_layout(true)
 		game.hud.scroll_offset = game.hud.scroll_max
 	elif name == "manual": game.hud.open_overlay("manual")
+	elif name == "credits":
+		game.mode = "menu"
+		game.hud.open_overlay("credits")
+	elif name == "skirmish":
+		game.mode = "menu"
+		game.hud.open_overlay("skirmish")
+	elif name == "saves_load" or name == "saves_save":
+		game.mode = "paused"
+		game.hud.saves_mode = name.get_slice("_",1)
+		game.hud.open_overlay("saves")
+	elif name == "patrol":
+		for e in game.sim.entities.values():
+			if e.kind == "scout" and e.owner == 0:
+				game.selected = [e.id]
+				break
+		game.patrol_mode = true
+	elif name == "ability":
+		for e in game.sim.entities.values():
+			if e.kind == "scout" and e.owner == 0:
+				game.selected = [e.id]
+				e["ability_ready"] = game.sim.elapsed+30.0
+				e["stance"] = "aggressive"
+				break
+		game.ability_mode = true
+	elif name == "alert":
+		game.hud.toast("Under attack. Press N to look.","alert")
+		game.hud.ping(Vector2(20,30),"danger")
+	elif name == "tech": game.hud.open_overlay("tech")
+	elif name == "group":
+		game.selected = game.sim.entities.values().filter(func(e): return e.owner == 0 and not e.building).map(func(e): return e.id)
 	elif name == "victory" or name == "defeat":
 		game.mode = "result"
 		game.sim.winner = 0 if name == "victory" else 1
@@ -147,6 +179,14 @@ func run():
 		for foreground in [DAInterface.TEXT,DAInterface.MUTED,DAInterface.ACCENT,DAInterface.GOLD,DAInterface.ERROR,DAInterface.GREEN,DAInterface.VIOLET]:
 			expect(contrast(background.blend(foreground),background)>=4.5,"informative text contrast")
 		expect(contrast(background.blend(DAInterface.LINE),background)>=3,"control boundary contrast")
+	# The rendered plates sit under text too: their mean colour must hold the same contrast.
+	for plate_name in ["panel","dock","button","button_hover","button_pressed","button_disabled","slot"]:
+		var plate_image = Image.new()
+		expect(plate_image.load_png_from_buffer(FileAccess.get_file_as_bytes("res://assets/ui/frames/%s.png" % plate_name)) == OK and game.hud.plate(plate_name) != null,"rendered plate loads: "+plate_name)
+		plate_image.resize(1,1,Image.INTERPOLATE_LANCZOS)
+		var mean: Color = plate_image.get_pixel(0,0)
+		for foreground in [DAInterface.TEXT,DAInterface.MUTED,DAInterface.ACCENT,DAInterface.GOLD]:
+			expect(contrast(foreground,mean)>=4.5,"text contrast on rendered plate: "+plate_name)
 	game.hud.prepare_layout(true)
 	var start = control("start")
 	expect(not start.is_empty(),"menu launch exists before drawing")
@@ -248,11 +288,11 @@ func run():
 	DirAccess.remove_absolute("user://saves/manual_1.save.tmp")
 	game.ui_action("confirm_save")
 	expect(game.hud.confirmation.is_empty() and game.mode=="playing" and FileAccess.file_exists(DASaveGame.path_for("manual_1")),"save-and-continue commits before restart")
-	for kind in ["fabricator","generator","data_center","tower","depot","scout","sentinel","disruptor","walker"]:
+	for kind in ["fabricator","generator","data_center","tower","depot","lab","scout","sentinel","disruptor","walker","warden","mortar","phantom"]:
 		game.sim.spawn(kind,0,Vector2(22,35))
 	game.sim.resources[0] = Vector3(99999999,99999999,99999999)
 	game.sim.ages[0] = 2
-	var states = ["menu","worker","core","fabricator","generator","data_center","tower","depot","scout","sentinel","disruptor","walker","metal","data","placement","subtitle","error","pause","settings","bindings","manual","victory","defeat","confirmation","menu_error","disabled","queue","objectives","empty"]
+	var states = ["menu","worker","core","fabricator","generator","data_center","tower","depot","lab","scout","sentinel","disruptor","walker","metal","data","group","tech","placement","subtitle","error","pause","settings","bindings","manual","victory","defeat","confirmation","menu_error","disabled","queue","objectives","empty","credits","skirmish","saves_load","saves_save","patrol","alert","ability","warden","mortar","phantom"]
 	DirAccess.make_dir_recursive_absolute("res://builds/ui")
 	for resolution in RESOLUTIONS:
 		root.size = resolution
@@ -283,7 +323,7 @@ func run():
 			expect(game.mode=="playing","scaled resume control restores play")
 			game.hud.prepare_layout(true)
 			var previous_focus: Vector2 = game.field.focus
-			var map_point: Vector2 = game.hud.map_rect.position+game.hud.map_rect.size*.75
+			var map_point: Vector2 = game.hud.map_point(Vector2.ONE*54)
 			click(map_point)
 			expect(game.field.focus.distance_to(Vector2.ONE*54)<.01,"scaled minimap points to correct world coordinates")
 			click(map_point,MOUSE_BUTTON_RIGHT)

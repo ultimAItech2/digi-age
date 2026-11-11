@@ -53,7 +53,7 @@ func run() -> void:
 	await process_frame
 	# Drive the actual controller and UI, not a second implementation of their logic.
 	expect(game.mode == "menu", "starts on main menu")
-	expect(game.hud.portrait("worker") == DASprites.portrait("worker") and game.hud.portrait("walker") != null, "HUD portraits come from the sprites, Blender renders remain for the rest")
+	expect(game.hud.portrait("worker") == DASprites.portrait("worker") and game.hud.portrait("walker") != null and game.hud.portrait("lab") != null, "HUD portraits are cut from the rendered sprites")
 	expect(await button("start"), "launch button is clickable")
 	expect(game.mode == "playing", "launch starts a fresh match")
 	game.set_process(false)
@@ -99,13 +99,13 @@ func run() -> void:
 	var foundation=game.sim.entities.values().filter(func(e): return e.owner==0 and e.kind=="generator" and not e.complete)[0]
 	game.field.sync(0.1, game.selected)
 	var foundation_node: Node3D = game.field.models[foundation.id]
-	var rise = foundation_node.get_child(0).get_instance_shader_parameter("rise")
-	expect(DASprites.is_card(foundation_node) and rise != null and rise < 1.0 and foundation_node.scale == Vector3.ONE, "construction uses the card's rise, not node scale")
+	var stage = foundation_node.get_child(0).get_instance_shader_parameter("cell")
+	expect(DASprites.is_card(foundation_node) and stage != null and Vector2(stage).x < 3.0 and foundation_node.scale == Vector3.ONE, "construction shows a build-stage frame, not node scale")
 	for i in 500:
 		game.sim.tick()
 	expect(foundation.complete,"UI-ordered construction finishes in simulation")
 	game.field.sync(0.1, game.selected)
-	expect(foundation_node.get_child(0).get_instance_shader_parameter("rise") == 1.0, "finished building is fully risen")
+	expect(Vector2i(Vector2(foundation_node.get_child(0).get_instance_shader_parameter("cell"))) == DASprites.idle_cell("generator", game.field.anim_time + foundation.id * 0.37), "finished building shows a frame of its idle loop")
 	key(KEY_HOME)
 	await process_frame
 	var core=game.sim.entities[game.selected[0]]
@@ -115,21 +115,41 @@ func run() -> void:
 	var rally_target = visible_ground(Vector2(18,40))
 	click(game.field.screen_at(rally_target),true)
 	expect(core.rally.distance_to(rally_target)<0.1,"building right-click sets rally point")
-	# Sprite cards: facing follows the camera yaw, ghost tint stays per instance, cards survive a load.
+	# Sprite cards: a unit faces where it walks, ghost tint stays per instance, cards survive a load.
 	var sentinel_id = game.sim.spawn("sentinel", 0, Vector2(20, 20))
-	game.sim.set_order(game.sim.entities[sentinel_id], "move", Vector2(10, 20))
-	game.field.yaw = -0.62
-	game.field.update_camera()
 	game.field.sync(0.1, game.selected)
 	var sentinel_node: Node3D = game.field.models[sentinel_id]
 	expect(DASprites.is_card(sentinel_node), "sentinel is drawn as a sprite card")
-	expect(sentinel_node.get_child(0).get_instance_shader_parameter("flip") == 1.0, "moving to world -x flips at default yaw")
-	game.field.yaw = -0.62 + PI
-	game.field.update_camera()
+	game.sim.set_order(game.sim.entities[sentinel_id], "move", Vector2(10, 20))
+	for i in 3:
+		game.sim.tick()
+		game.field.sync(0.1, game.selected)
+	var walking = Vector2(sentinel_node.get_child(0).get_instance_shader_parameter("cell"))
+	expect(walking.y == 4.0 and walking.x >= 1.0 and walking.x <= 8.0, "walking toward world -x shows a move frame on the -x facing")
+	game.sim.set_order(game.sim.entities[sentinel_id], "move", Vector2(20, 26))
+	for i in 3:
+		game.sim.tick()
+		game.field.sync(0.1, game.selected)
+	expect(Vector2(sentinel_node.get_child(0).get_instance_shader_parameter("cell")).y == 2.0, "turning toward world +y changes the facing row")
+	game.sim.command(0, "stop", [sentinel_id])
+	# Effects: a fallen unit leaves its collapse, a battered building smokes then burns, the rally point gets a flag.
+	var victim = game.sim.spawn("scout", 0, game.sim.bases[0] + Vector2(3, 3))
 	game.field.sync(0.1, game.selected)
-	expect(sentinel_node.get_child(0).get_instance_shader_parameter("flip") == 0.0, "same move after a half-turn does not flip")
-	game.field.yaw = -0.62
-	game.field.update_camera()
+	game.sim.remove_entity(victim)
+	expect(game.field.effects.any(func(fx): return fx.type == "death" and fx.kind == "scout"), "a destroyed unit leaves its death animation")
+	var hurt = game.sim.entities[game.selected[0]]
+	var hurt_node: Node3D = game.field.models[hurt.id]
+	expect(game.field.rally_flag != null and game.field.rally_flag.visible and DASprites.is_card(game.field.rally_flag), "selected Core shows a flag card on its rally point")
+	game.field.apply_settings({"profile": "normal"})   # earlier suites may leave reduced effects saved; smoke is an effect
+	hurt.hp = hurt.max_hp * 0.4
+	game.field.sync(0.1, game.selected)
+	expect(hurt_node.get_node_or_null("Smoke") != null and hurt_node.get_node_or_null("Fire") == null, "a building under half integrity smokes")
+	hurt.hp = hurt.max_hp * 0.2
+	game.field.sync(0.1, game.selected)
+	expect(hurt_node.get_node_or_null("Fire") != null, "under a quarter it burns")
+	hurt.hp = hurt.max_hp
+	game.field.sync(0.1, game.selected)
+	expect(hurt_node.get_node("Smoke").is_queued_for_deletion() and hurt_node.get_node("Fire").is_queued_for_deletion(), "repairs put the fire out")
 	game.field.preview("generator", Vector2(30, 30), true)
 	expect(game.field.ghost != null and DASprites.is_card(game.field.ghost) and game.field.ghost.get_child(0).get_instance_shader_parameter("tint") != null, "placement ghost is a tinted card")
 	var tint = sentinel_node.get_child(0).get_instance_shader_parameter("tint")
@@ -138,7 +158,7 @@ func run() -> void:
 	game.field.preview("", Vector2.ZERO, false)
 	var archive = game.sim.entities.values().filter(func(e): return e.kind == "data")[0]
 	game.field.sync(0.1, game.selected)
-	expect(game.field.models[archive.id].get_node_or_null("Ground") != null, "archive model gets the contact shadow quad")
+	expect(DASprites.is_card(game.field.models[archive.id]) and game.field.models[archive.id].get_node_or_null("Fx/Ground") != null, "archive is a rendered card with its contact shadow")
 	# Clicking the drawn base of a building card (anchor_offset toward the camera,
 	# below the node's ground point on screen) selects it when no unit stands there.
 	var lone_id = game.sim.spawn("fabricator", 0, Vector2(60, 12))
@@ -181,6 +201,27 @@ func run() -> void:
 	game._process(0.2)
 	expect(game.sim.elapsed==elapsed,"field manual pauses active simulation")
 	key(KEY_F1)
+	# The command grid answers its slot keys, and the Lab researches from both the grid and the tree.
+	game.sim.resources[0]=Vector3(30000,30000,30000)
+	key(KEY_Q)
+	expect(core.queue.size()==2,"grid key Q queues the Core's first slot")
+	var lab_id = game.sim.spawn("lab",0,Vector2(16,30))
+	game.selected.assign([lab_id])
+	expect(await button("research","mining"),"Lab grid offers Salvage Mining")
+	expect(game.sim.entities[lab_id].research=="mining","Lab grid starts research")
+	for i in 300:
+		game.sim.tick()
+	expect(game.sim.tech_level(0,"mining")==1,"Lab research completes a level")
+	await button("tech")
+	expect(game.hud.tech_open,"top bar opens the technology tree")
+	expect(await button("research_tech","weapons"),"technology tree lists Weapons Systems")
+	expect(game.sim.entities[lab_id].research=="weapons","tree research goes to an idle Lab")
+	key(KEY_ESCAPE)
+	expect(not game.hud.tech_open and game.mode=="playing","Escape closes the technology tree")
+	var idle_before = game.hud.idle_workers().size()
+	key(KEY_PERIOD)
+	expect(idle_before==0 or (game.selected.size()==1 and game.sim.entities[game.selected[0]].kind=="worker"),"period selects an idle Worker")
+	game.selected.assign([core.id])
 	# Both age paths are accessible through the actual Core action buttons.
 	game.sim.resources[0]=Vector3(3000,3000,3000)
 	await button("research","age")
@@ -196,6 +237,9 @@ func run() -> void:
 	click(game.field.screen_at(core.pos,2.5))
 	expect(game.selected.has(core.id),"clicking tall Core mesh selects it")
 	var enemy=game.sim.entities.values().filter(func(e):return e.kind=="core" and e.owner==1)[0]
+	# The rival loses when its Core falls and no Worker is left to raise another.
+	for rival_worker in game.sim.entities.values().filter(func(e):return e.kind=="worker" and e.owner==1):
+		game.sim.remove_entity(rival_worker.id)
 	game.sim.remove_entity(enemy.id)
 	game._process(0.2)
 	expect(game.mode=="result","victory opens results screen")
