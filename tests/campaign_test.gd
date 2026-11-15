@@ -35,9 +35,13 @@ func run() -> void:
 	mission.tick(0.5)
 	expect(fired.has("opening"), "opening dialogue event fires")
 	expect(mission.completed.get("restore_power", false), "starting generator completes restore power")
-	sim.resources[0].z = 120
+	sim.resources[0].z = 500
 	mission.tick(0.1)
-	expect(mission.completed.get("recover_archive", false), "gather objective completes from data")
+	expect(not mission.completed.get("recover_archive", false), "stock on hand does not count as gathered")
+	sim.stats[0]["gathered_data"] = 120.0
+	sim.resources[0].z = 0
+	mission.tick(0.1)
+	expect(mission.completed.get("recover_archive", false), "gather objective completes from delivered data, even once spent")
 	var save_error = DASaveGame.save_slot("campaign_event", sim, mission, DACampaignProgress.new())
 	expect(save_error == "", "mid-mission save commits")
 	var restored = DAMissionController.new()
@@ -45,7 +49,17 @@ func run() -> void:
 	expect(DASaveGame.load_slot("campaign_event", sim, restored, DACampaignProgress.new()) == "", "mid-mission load")
 	expect(restored.fired_events.get("opening", false) and restored.completed.get("recover_archive", false), "fired events and objectives restore")
 
-	mission.tick(120.0)
+	mission.tick(170.0)
+	expect(not mission.mission_won and not fired.has("counterattack"), "first signal cannot be won before the counterattack arrives")
+	mission.tick(10.0)
+	expect(fired.has("counterattack") and not mission.mission_won, "the survival clock starts when the counterattack arrives")
+	var clock = DAMissionController.new()
+	clock.setup(sim, first)
+	expect(clock.restore_state(mission.serialize_state()) == "" and is_equal_approx(clock.event_times.get("counterattack", -1.0), mission.event_times.counterattack), "event times survive a save")
+	var legacy_state: Dictionary = mission.serialize_state()
+	legacy_state.erase("event_times")
+	expect(clock.restore_state(legacy_state) == "" and is_equal_approx(clock.event_times.get("counterattack", -1.0), 180.0), "older saves take the authored event time")
+	mission.tick(60.0)
 	expect(mission.mission_won, "first signal required objectives complete the mission")
 
 	var salvage: DAMissionDefinition = catalog.get_definition("salvage_rights")

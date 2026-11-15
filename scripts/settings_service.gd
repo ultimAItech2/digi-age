@@ -2,8 +2,8 @@ class_name DASettingsService
 extends RefCounted
 ## Validated preferences, independent from campaign data. Commit before applying.
 const PATH = "user://settings.cfg"
-const DEFAULTS = {"profile": "normal", "ui_scale": 1.0, "reduced_effects": false, "subtitles": true, "window_mode": "windowed", "resolution": "1600x900", "vsync": true, "frame_cap": 0, "shadows": true, "colorblind": false, "muted": false, "master_volume": 1.0, "ui_volume": 1.0, "voice_volume": 1.0, "effects_volume": 1.0, "music_volume": 0.7, "skirmish": {"map": "silent_grid", "player": "origin", "enemy": "foundry", "resources": "standard", "side": "left"}, "bindings": {"fullscreen": KEY_F11, "manual": KEY_F1, "cancel": KEY_ESCAPE, "pause": KEY_SPACE, "speed": KEY_F2, "events": KEY_M, "save": KEY_F5, "load": KEY_F9, "attack": KEY_A, "stop": KEY_S, "home": KEY_HOME, "alert": KEY_N}}
-const CATEGORIES = {"audio": ["master_volume", "music_volume", "effects_volume", "voice_volume", "ui_volume"], "display": ["profile", "ui_scale", "reduced_effects", "subtitles", "window_mode", "resolution", "vsync", "frame_cap", "shadows", "colorblind"], "bindings": ["bindings"]}
+const DEFAULTS = {"profile": "normal", "ui_scale": 1.0, "reduced_effects": false, "subtitles": true, "window_mode": "windowed", "resolution": "1600x900", "vsync": true, "frame_cap": 0, "shadows": true, "colorblind": false, "pause_unfocused": true, "muted": false, "master_volume": 1.0, "ui_volume": 1.0, "voice_volume": 1.0, "effects_volume": 1.0, "music_volume": 0.7, "skirmish": {"map": "silent_grid", "player": "origin", "enemy": "foundry", "resources": "standard", "side": "left"}, "bindings": {"fullscreen": KEY_F11, "manual": KEY_F1, "cancel": KEY_ESCAPE, "pause": KEY_SPACE, "speed": KEY_F2, "events": KEY_M, "save": KEY_F5, "load": KEY_F9, "attack": KEY_A, "stop": KEY_S, "home": KEY_HOME, "alert": KEY_N}}
+const CATEGORIES = {"audio": ["master_volume", "music_volume", "effects_volume", "voice_volume", "ui_volume"], "display": ["profile", "ui_scale", "reduced_effects", "subtitles", "window_mode", "resolution", "vsync", "frame_cap", "shadows", "colorblind", "pause_unfocused"], "bindings": ["bindings"]}
 const SCALES = [1.0, 1.15, 1.25, 1.5]
 const WINDOW_MODES = ["windowed", "borderless", "fullscreen"]
 const RESOLUTIONS = ["1280x720", "1600x900", "1920x1080", "2560x1440"]
@@ -23,7 +23,7 @@ func valid_value(key: String, value: Variant) -> bool:
 		return value is Dictionary and value.get("map") in SKIRMISH_MAPS and value.get("player") in SKIRMISH_FACTIONS and value.get("enemy") in SKIRMISH_FACTIONS and SKIRMISH_RESOURCES.has(value.get("resources")) and value.get("side") in SKIRMISH_SIDES
 	if key == "profile": return value is String and value in ["normal", "low"]
 	if key == "ui_scale": return (value is float or value is int) and value in SCALES
-	if key in ["reduced_effects", "subtitles", "vsync", "shadows", "colorblind", "muted"]: return value is bool
+	if key in ["reduced_effects", "subtitles", "vsync", "shadows", "colorblind", "pause_unfocused", "muted"]: return value is bool
 	if key == "window_mode": return value is String and value in WINDOW_MODES
 	if key == "resolution": return value is String and value in RESOLUTIONS
 	if key == "frame_cap": return value is int and value in FRAME_CAPS
@@ -39,6 +39,9 @@ func binding_error(bindings: Dictionary) -> String:
 		if action == "cancel":
 			if code != KEY_ESCAPE: return "Escape is reserved for cancel."
 		elif code in [KEY_NONE, KEY_ESCAPE, KEY_TAB, KEY_ENTER, KEY_KP_ENTER, KEY_SHIFT, KEY_CTRL, KEY_ALT, KEY_META, KEY_CAPSLOCK, KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN, KEY_Q, KEY_W, KEY_E, KEY_R, KEY_T, KEY_D, KEY_F, KEY_G, KEY_Z, KEY_X, KEY_C, KEY_V, KEY_B, KEY_PERIOD] or (code >= KEY_0 and code <= KEY_9):
+			return "That key is reserved for navigation, the command grid, or control groups."
+		elif (code == KEY_A and action != "attack") or (code == KEY_S and action != "stop"):
+			# A and S are command-grid slots; only the orders that sit there may keep them.
 			return "That key is reserved for navigation, the command grid, or control groups."
 		if OS.get_keycode_string(code) == "": return "Choose a supported keyboard key."
 		if used.has(code): return "Already assigned to %s. Choose another key." % str(used[code]).capitalize()
@@ -118,4 +121,15 @@ func binding(action: String, fallback: int) -> int:
 	return int(values.bindings.get(action, fallback))
 
 func prompt(action: String) -> String:
-	return OS.get_keycode_string(binding(action, KEY_NONE))
+	return key_label(binding(action, KEY_NONE))
+
+## The name printed on the key at this physical position in the player's keyboard layout.
+static func key_label(physical: int) -> String:
+	# A headless run has no keyboard layout to ask.
+	var label: int = DisplayServer.keyboard_get_label_from_physical(physical as Key) if DisplayServer.get_name() != "headless" else KEY_NONE
+	return OS.get_keycode_string(label if label != KEY_NONE else physical)
+
+## Development switches (--demo, --benchmark, --autoplay, --focus, ...) given after "--".
+## A release export ignores them unless it was built with the "dev" feature.
+static func dev_args() -> PackedStringArray:
+	return OS.get_cmdline_user_args() if OS.is_debug_build() or OS.has_feature("dev") else PackedStringArray()

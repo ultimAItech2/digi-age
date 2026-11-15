@@ -18,6 +18,8 @@ var active: bool = true
 var mission_won: bool = false
 var checkpoint: String = "opening"
 var fired_events: Dictionary = {}
+## When each fired event happened, in mission seconds.
+var event_times: Dictionary = {}
 
 func setup(world: DASimulation, mission: DAMissionDefinition) -> void:
 	sim = world
@@ -25,6 +27,7 @@ func setup(world: DASimulation, mission: DAMissionDefinition) -> void:
 	objective_state.clear()
 	completed.clear()
 	fired_events.clear()
+	event_times.clear()
 	active = true
 	mission_won = false
 	elapsed = 0.0
@@ -67,6 +70,9 @@ func evaluate_events() -> void:
 			fire_event(event)
 
 func trigger_ready(trigger: Dictionary) -> bool:
+	# "not_before" holds any trigger back until that many mission seconds have passed.
+	if trigger.has("not_before") and elapsed < float(trigger.not_before):
+		return false
 	if trigger.has("at_seconds") and elapsed >= float(trigger.at_seconds):
 		return true
 	if trigger.has("on_objective") and completed.get(str(trigger.on_objective), false):
@@ -78,6 +84,7 @@ func trigger_ready(trigger: Dictionary) -> bool:
 func fire_event(event: Dictionary) -> void:
 	var event_id = str(event.get("id", ""))
 	fired_events[event_id] = true
+	event_times[event_id] = elapsed
 	var kind = str(event.get("kind", ""))
 	match kind:
 		"dialogue":
@@ -146,11 +153,18 @@ func progress_for(objective: Dictionary) -> float:
 		"build":
 			return sim.entities.values().filter(func(e): return e.owner == 0 and e.kind == target and e.complete).size()
 		"gather":
-			return sim.resources[0].z if target == "data" else sim.resources[0].x
+			# What Workers have delivered, so the starting stock does not count and spending does not undo it.
+			# Saves from before the delivered totals existed fall back to the stock.
+			var banked: float = sim.resources[0].z if target == "data" else sim.resources[0].x
+			return float(sim.stats[0].get("gathered_" + ("data" if target == "data" else "metal"), banked))
 		"train":
 			return sim.entities.values().filter(func(e): return e.owner == 0 and e.kind == target).size()
 		"survive":
-			return elapsed
+			# "after" names the event the clock starts from; without it, the mission start.
+			var after: String = str(objective.get("after", ""))
+			if after == "":
+				return elapsed
+			return elapsed - float(event_times[after]) if event_times.has(after) else 0.0
 		"age":
 			return float(sim.ages[0])
 		"explore":
@@ -194,7 +208,7 @@ func fail(reason: String) -> void:
 	mission_failed.emit(reason)
 
 func serialize_state() -> Dictionary:
-	return {"mission_id": definition.mission_id if definition else "", "objective_state": objective_state.duplicate(true), "completed": completed.duplicate(true), "elapsed": elapsed, "active": active, "mission_won": mission_won, "checkpoint": checkpoint, "fired_events": fired_events.duplicate(true)}
+	return {"mission_id": definition.mission_id if definition else "", "objective_state": objective_state.duplicate(true), "completed": completed.duplicate(true), "elapsed": elapsed, "active": active, "mission_won": mission_won, "checkpoint": checkpoint, "fired_events": fired_events.duplicate(true), "event_times": event_times.duplicate(true)}
 
 func restore_state(state: Dictionary) -> String:
 	if definition == null or state.get("mission_id", "") != definition.mission_id:
@@ -208,4 +222,10 @@ func restore_state(state: Dictionary) -> String:
 	mission_won = bool(state.get("mission_won", false))
 	checkpoint = str(state.get("checkpoint", "opening"))
 	fired_events = state.get("fired_events", {}).duplicate(true)
+	event_times = state.get("event_times", {}).duplicate(true) if state.get("event_times", {}) is Dictionary else {}
+	# Older saves did not record when events fired: use the authored time, else now.
+	for event in definition.events:
+		var event_id: String = str(event.get("id", ""))
+		if fired_events.get(event_id, false) and not event_times.has(event_id):
+			event_times[event_id] = minf(elapsed, float(event.get("trigger", {}).get("at_seconds", elapsed)))
 	return ""

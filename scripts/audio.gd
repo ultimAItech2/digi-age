@@ -248,6 +248,8 @@ func _stream(path: String) -> AudioStream:
 	if not ResourceLoader.exists(path):
 		if not warned_missing.has(path):
 			warned_missing[path] = true
+			# Once per clip, in the log only: a missing sound never stops the game.
+			print("Audio clip missing, playing silence: " + path)
 		return null
 	var stream = load(path)
 	if stream is AudioStream:

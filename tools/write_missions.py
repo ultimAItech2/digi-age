@@ -90,7 +90,7 @@ def main() -> None:
             "objectives": [
                 {"id": "restore_power", "title": "Restore the relay", "kind": "build", "target": "generator", "required": 1, "optional": False},
                 {"id": "recover_archive", "title": "Recover an archive", "kind": "gather", "target": "data", "required": 120, "optional": False},
-                {"id": "survive_counterattack", "title": "Survive the Foundry counterattack", "kind": "survive", "required": 120.0, "optional": False},
+                {"id": "survive_counterattack", "title": "Survive the Foundry counterattack", "kind": "survive", "after": "counterattack", "required": 60.0, "optional": False},
                 {"id": "scout_ruins", "title": "Map the old relay road", "kind": "explore", "required": 0.3, "optional": True},
             ],
             "checkpoint_ids": ["opening", "restore_power", "recover_archive", "counterattack"],
@@ -339,7 +339,8 @@ def main() -> None:
                 {
                     "id": "rewrite_wave",
                     "kind": "spawn_wave",
-                    "trigger": {"on_objective": "map_network"},
+                    # A Scout maps the network within seconds; the wave must not land on an unbuilt base.
+                    "trigger": {"on_objective": "map_network", "not_before": 240.0},
                     "side": 1,
                     "origin": "enemy",
                     "order": "attack_move",

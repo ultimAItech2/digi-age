@@ -52,7 +52,7 @@ func _ready() -> void:
 	audio = DAAudio.new()
 	add_child(audio)
 	settings.load_settings()
-	DASaveGame.load_campaign(campaign)
+	var campaign_notice: String = DASaveGame.load_campaign(campaign)
 	if campaign.current_mission != "" and campaign.unlocked_missions.has(campaign.current_mission):
 		pending_mission_id = campaign.current_mission
 	platform.initialize()
@@ -81,9 +81,11 @@ func _ready() -> void:
 	get_window().close_requested.connect(func(): ui_action("quit"))
 	apply_runtime_settings()
 	if settings.recovery_notice != "": hud.toast(settings.recovery_notice, "error")
+	if campaign_notice != "": hud.toast(campaign_notice, "error")
 	audio.set_music("menu")
-	var args = OS.get_cmdline_user_args()
-	if "--ui-smoke" in args: launch_smoke.call_deferred()
+	# The export smoke check stays available; every other switch is development only.
+	if "--ui-smoke" in OS.get_cmdline_user_args(): launch_smoke.call_deferred()
+	var args = DASettingsService.dev_args()
 	if "--autoplay" in args or "--benchmark" in args:
 		mode = "playing"
 		auto_player = DAOpponent.new(sim, 0)
@@ -341,8 +343,10 @@ func apply_window_settings() -> void:
 		var size = Vector2i(int(parts[0]), int(parts[1]))
 		var screen = DisplayServer.screen_get_usable_rect(DisplayServer.window_get_current_screen())
 		if borderless:
-			DisplayServer.window_set_position(screen.position)
-			DisplayServer.window_set_size(screen.size)
+			# The whole screen, not the usable area: a borderless window covers the taskbar.
+			var monitor: int = DisplayServer.window_get_current_screen()
+			DisplayServer.window_set_position(DisplayServer.screen_get_position(monitor))
+			DisplayServer.window_set_size(DisplayServer.screen_get_size(monitor))
 		elif DisplayServer.window_get_size() != size:
 			size = Vector2i(mini(size.x, screen.size.x), mini(size.y, screen.size.y))
 			DisplayServer.window_set_size(size)
@@ -352,10 +356,12 @@ func _on_checkpoint_created(slot_id: String) -> void:
 	campaign.current_mission = mission_definition.mission_id
 	campaign.last_checkpoint = slot_id
 	DASaveGame.save_campaign(campaign)
+	# Continue the rotation across launches: an empty slot first, else the oldest.
+	autosave_index = DASaveGame.next_auto_slot()
 	var error = DASaveGame.save_slot("autosave_" + str(autosave_index), sim, mission, campaign, {"checkpoint": slot_id, "difficulty": campaign.selected_difficulty, "title": mission_definition.title, "session": session_state()})
-	autosave_index = (autosave_index + 1) % DASaveGame.SLOT_COUNT
+	if hud: hud.refresh_slots()
 	if error != "" and hud:
-		hud.toast(error)
+		hud.toast(error, "error")
 
 func _on_mission_completed() -> void:
 	mode = "result"
@@ -417,6 +423,10 @@ func save_game(slot: String = "manual_1") -> String:
 
 func load_game(slot: String = "manual_1") -> String:
 	# A save from another mission switches to that mission first.
+	# Nothing of the running match is touched until the save has been read and validated.
+	var check_error: String = DASaveGame.check_slot(slot, sim.catalog)
+	if check_error != "":
+		return check_error
 	var info: Dictionary = DASaveGame.describe(slot)
 	var saved_mission: String = str(info.get("mission_id", ""))
 	if saved_mission == "skirmish":
@@ -481,7 +491,7 @@ func _process(dt: float) -> void:
 			ability_mode = false
 			audio.play("alert")
 		camera_controls(dt)
-	if "--benchmark" in OS.get_cmdline_user_args():
+	if "--benchmark" in DASettingsService.dev_args():
 		for x in DASimulation.SIZE:
 			for y in DASimulation.SIZE:
 				sim.visible[0][Vector2i(x,y)] = true
@@ -582,6 +592,12 @@ func camera_controls(dt: float) -> void:
 			direction.y += 1
 	if direction != Vector2.ZERO:
 		field.pan(direction.normalized(), dt)
+
+## A match pauses when the player switches to another window, unless they turned that off.
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and mode == "playing" and hud and auto_player == null and bool(settings.values.get("pause_unfocused", true)):
+		mode = "paused"
+		hud.cancel_pointer()
 
 func _input(event: InputEvent) -> void:
 	if not hud:
@@ -936,6 +952,8 @@ func ui_action(action: String, payload: Dictionary = {}) -> void:
 			commit_preferences(settings.toggle("vsync"))
 		"colorblind":
 			commit_preferences(settings.toggle("colorblind"))
+		"pause_unfocused":
+			commit_preferences(settings.toggle("pause_unfocused"))
 		"credits":
 			if hud.panel_open == "credits": hud.close_overlay()
 			else: hud.open_overlay("credits")
@@ -960,6 +978,10 @@ func ui_action(action: String, payload: Dictionary = {}) -> void:
 		"effects":
 			commit_preferences(settings.set_value("reduced_effects", not settings.values.reduced_effects))
 		"save", "save_slot":
+			# A slot holding a save this build cannot read (damaged, or from a newer version) asks first.
+			if DASaveGame.describe(str(payload.get("slot", "manual_1"))).has("error") and not payload.get("confirmed", false):
+				hud.confirm_action("save_slot", payload)
+				return
 			var save_error = save_game(str(payload.get("slot", "manual_1")))
 			if action == "save_slot" and save_error == "": hud.close_overlay()
 			if save_error == "": audio.play("ui_confirm")

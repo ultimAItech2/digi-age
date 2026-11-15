@@ -19,6 +19,7 @@ run_check tests/model_assets_test.gd
 run_check tests/sprite_cards_test.gd
 run_check tests/ui_production_test.gd
 run_check tests/integration_test.gd
+run_check tests/mission_completion_test.gd
 if [[ "${1:-}" == "--soak" ]]; then
   run_check tests/soak_test.gd
   run_check tests/skirmish_test.gd

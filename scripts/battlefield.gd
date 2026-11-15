@@ -205,7 +205,7 @@ func build_sun() -> void:
 	sun.light_energy = 2.3 if has_hdri() else 2.0
 	sun.light_angular_distance = 0.5
 	sun.light_volumetric_fog_energy = 1.5
-	sun.shadow_enabled = "--no-shadows" not in OS.get_cmdline_user_args()
+	sun.shadow_enabled = "--no-shadows" not in DASettingsService.dev_args()
 	DASprites.set_shadows_enabled(sun.shadow_enabled)
 	sun.shadow_bias = 0.03
 	sun.shadow_normal_bias = 1.5
@@ -284,7 +284,7 @@ func apply_settings(values: Dictionary) -> void:
 	var low = profile == "low"
 	low_effects = low or reduced
 	shadow_reach = 50.0 if low else 90.0
-	var no_shadows = "--no-shadows" in OS.get_cmdline_user_args()
+	var no_shadows = "--no-shadows" in DASettingsService.dev_args()
 	if sun:
 		sun.shadow_enabled = not low and not reduced and not no_shadows and bool(values.get("shadows", true))
 		DASprites.set_shadows_enabled(sun.shadow_enabled)

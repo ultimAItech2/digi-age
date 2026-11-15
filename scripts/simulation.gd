@@ -39,7 +39,7 @@ var next_id: int = 1
 var elapsed: float = 0.0
 var winner: int = -1
 var ticks: int = 0
-var stats: Array[Dictionary] = [{"kills": 0, "gathered": 0.0}, {"kills": 0, "gathered": 0.0}]
+var stats: Array[Dictionary] = [{"kills": 0, "gathered": 0.0, "gathered_metal": 0.0, "gathered_data": 0.0}, {"kills": 0, "gathered": 0.0, "gathered_metal": 0.0, "gathered_data": 0.0}]
 var destroyed_counts: Array[Dictionary] = [{}, {}]
 var active_mission_id: String = "skirmish"
 var active_map_id: String = "silent_grid"
@@ -1067,6 +1067,8 @@ func tick_worker(e: Dictionary, dt: float) -> void:
 			else:
 				credit(e.owner, Vector3(0, 0, amount))
 			stats[e.owner].gathered += amount
+			var delivered: String = "gathered_" + ("metal" if e.cargo_kind == "metal" else "data")
+			stats[e.owner][delivered] = float(stats[e.owner].get(delivered, 0.0)) + amount
 			e.cargo = 0.0
 			e.order = "gather"
 			e.path_goal = Vector2(-999, -999)
@@ -1211,7 +1213,7 @@ func reset_from_mission(definition: DAMissionDefinition) -> void:
 	winner = -1
 	elapsed = 0.0
 	ticks = 0
-	stats = [{"kills": 0, "gathered": 0.0}, {"kills": 0, "gathered": 0.0}]
+	stats = [{"kills": 0, "gathered": 0.0, "gathered_metal": 0.0, "gathered_data": 0.0}, {"kills": 0, "gathered": 0.0, "gathered_metal": 0.0, "gathered_data": 0.0}]
 	destroyed_counts = [{}, {}]
 	gather_scale = [1.0, 1.0]
 	core_deadline = [-1.0, -1.0]

@@ -253,7 +253,7 @@ func run():
 	game.hud.clear_overlays()
 	expect(game.save_game("production_ui")=="","save succeeds")
 	var file = FileAccess.open(DASaveGame.path_for("production_ui"),FileAccess.READ)
-	var saved: Dictionary = bytes_to_var(file.get_buffer(file.get_length()))
+	var saved: Dictionary = DASaveGame.unpack(file.get_buffer(file.get_length()))
 	file.close()
 	saved.mission.mission_id = "wrong_mission"
 	file = FileAccess.open(DASaveGame.path_for("production_ui_invalid"),FileAccess.WRITE)

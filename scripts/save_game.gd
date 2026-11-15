@@ -5,6 +5,8 @@ const VERSION: int = 3
 ## Schema versions this build can still read; older slots are migrated in place.
 const SUPPORTED_VERSIONS: Array[int] = [1, 2, 3]
 const SAVE_DIR: String = "user://saves"
+const MAGIC: String = "DASV"
+const HEADER_SIZE: int = 40
 const SLOT_COUNT: int = 3
 const MANUAL_SLOTS: Array[String] = ["manual_1", "manual_2", "manual_3"]
 const AUTO_SLOTS: Array[String] = ["autosave_0", "autosave_1", "autosave_2"]
@@ -15,31 +17,81 @@ static func path_for(slot: String) -> String:
 static func save_slot(slot: String, sim: DASimulation, mission: DAMissionController, campaign: DACampaignProgress, metadata: Dictionary = {}) -> String:
 	if slot.is_empty() or sim == null or mission == null:
 		return "Cannot save an incomplete game state."
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(SAVE_DIR))
 	var state = {"schema_version": VERSION, "slot": slot, "saved_at": Time.get_datetime_string_from_system(false), "simulation": sim.serialize_state(), "mission": mission.serialize_state(), "campaign": campaign_resource(campaign), "metadata": metadata.duplicate(true)}
-	var temp = path_for(slot) + ".tmp"
+	return write_atomic(path_for(slot), pack(state))
+
+static func digest(payload: PackedByteArray) -> PackedByteArray:
+	var context = HashingContext.new()
+	context.start(HashingContext.HASH_SHA256)
+	context.update(payload)
+	return context.finish()
+
+## State bytes behind a header (magic, length, SHA-256) so a short or damaged file is detected.
+static func pack(state: Dictionary) -> PackedByteArray:
+	var payload: PackedByteArray = var_to_bytes(state)
+	var header: PackedByteArray = MAGIC.to_ascii_buffer()
+	header.resize(8)
+	header.encode_u32(4, payload.size())
+	return header + digest(payload) + payload
+
+## The stored state, or null when the bytes are not a complete save.
+static func unpack(bytes: PackedByteArray) -> Variant:
+	if bytes.size() >= HEADER_SIZE and bytes.slice(0, 4) == MAGIC.to_ascii_buffer():
+		var payload: PackedByteArray = bytes.slice(HEADER_SIZE)
+		if payload.size() != bytes.decode_u32(4) or digest(payload) != bytes.slice(8, HEADER_SIZE):
+			return null
+		return bytes_to_var(payload)
+	# Saves written before the header existed are a bare dictionary.
+	if bytes.size() < 8 or bytes.decode_u32(0) != TYPE_DICTIONARY:
+		return null
+	return bytes_to_var(bytes)
+
+## Write to a temporary file, verify it, keep the previous file as .bak, then swap.
+static func write_atomic(path: String, bytes: PackedByteArray) -> String:
+	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(path.get_base_dir()))
+	var temp: String = ProjectSettings.globalize_path(path + ".tmp")
+	var target: String = ProjectSettings.globalize_path(path)
+	var backup: String = ProjectSettings.globalize_path(path + ".bak")
 	var file = FileAccess.open(temp, FileAccess.WRITE)
 	if file == null:
 		return "Unable to open the save location."
-	file.store_buffer(var_to_bytes(state))
+	var stored: bool = file.store_buffer(bytes)
 	file.flush()
+	var write_error: int = file.get_error()
 	file.close()
-	if FileAccess.file_exists(path_for(slot)):
-		DirAccess.remove_absolute(ProjectSettings.globalize_path(path_for(slot) + ".bak"))
-		DirAccess.rename_absolute(ProjectSettings.globalize_path(path_for(slot)), ProjectSettings.globalize_path(path_for(slot) + ".bak"))
-	var error = DirAccess.rename_absolute(ProjectSettings.globalize_path(temp), ProjectSettings.globalize_path(path_for(slot)))
-	return "" if error == OK else "Unable to commit the save safely."
+	# A full disk leaves a short file; it must never replace a good save.
+	if not stored or write_error != OK or FileAccess.get_file_as_bytes(temp) != bytes:
+		DirAccess.remove_absolute(temp)
+		return "Unable to write the save. Check the free disk space."
+	var had_previous: bool = FileAccess.file_exists(target)
+	if had_previous:
+		if FileAccess.file_exists(backup): DirAccess.remove_absolute(backup)
+		DirAccess.rename_absolute(target, backup)
+	if DirAccess.rename_absolute(temp, target) != OK:
+		if had_previous: DirAccess.rename_absolute(backup, target)
+		DirAccess.remove_absolute(temp)
+		return "Unable to commit the save safely."
+	return ""
+
+## The state in `path`, falling back to the previous copy when the file is missing or damaged.
+static func read_file(path: String) -> Variant:
+	for candidate in [path, path + ".bak"]:
+		if FileAccess.file_exists(candidate):
+			var state = unpack(FileAccess.get_file_as_bytes(candidate))
+			if state != null:
+				return state
+	return null
+
+static func exists(slot: String) -> bool:
+	return FileAccess.file_exists(path_for(slot)) or FileAccess.file_exists(path_for(slot) + ".bak")
 
 ## The slot's raw state and "" when it can be read by this build, otherwise an error.
 static func read_slot(slot: String, out: Dictionary) -> String:
-	var path = path_for(slot)
-	if not FileAccess.file_exists(path):
+	if not exists(slot):
 		return "No save exists in this slot."
-	var file = FileAccess.open(path, FileAccess.READ)
-	if file == null:
-		return "Unable to read the save."
-	var state = bytes_to_var(file.get_buffer(file.get_length()))
-	file.close()
+	var state = read_file(path_for(slot))
+	if state == null:
+		return "This save is damaged and cannot be read."
 	if not state is Dictionary or int(state.get("schema_version", -1)) not in SUPPORTED_VERSIONS:
 		return "This save is from an unsupported version."
 	if not state.has_all(["simulation", "mission", "campaign"]):
@@ -49,30 +101,27 @@ static func read_slot(slot: String, out: Dictionary) -> String:
 	out.merge(state, true)
 	return ""
 
-## What a slot holds, for the load screen: {} when it is empty or unreadable.
+## What a slot holds, for the load screen: {} when it is empty, and only
+## {"slot", "error"} when it holds a save this build cannot read.
 static func describe(slot: String) -> Dictionary:
 	var state: Dictionary = {}
-	if read_slot(slot, state) != "":
-		return {}
+	var read_error: String = read_slot(slot, state)
+	if read_error != "":
+		return {"slot": slot, "error": read_error} if exists(slot) else {}
 	var metadata: Dictionary = state.get("metadata", {}) if state.get("metadata", {}) is Dictionary else {}
 	return {"slot": slot, "mission_id": str(state.mission.get("mission_id", "")), "saved_at": str(state.get("saved_at", "")), "elapsed": float(state.simulation.get("elapsed", 0.0)) if is_number(state.simulation.get("elapsed")) else 0.0, "metadata": metadata}
 
 ## `out`, when given, receives the slot's metadata (session state such as the opponent's timers).
 static func load_slot(slot: String, sim: DASimulation, mission: DAMissionController, campaign: DACampaignProgress, out: Dictionary = {}) -> String:
 	var state: Dictionary = {}
-	var read_error = read_slot(slot, state)
+	var read_error = check_slot(slot, sim.catalog, state)
 	if read_error != "":
 		return read_error
-	if int(state.schema_version) == 1:
-		migrate_v1(state, sim.catalog)
-	if int(state.schema_version) == 2:
-		migrate_v2(state)
 	if state.mission.get("mission_id", "") != (mission.definition.mission_id if mission.definition else ""):
 		return "Save belongs to a different mission. Select that mission before loading."
 	if state.simulation.get("map_id", "") != mission.definition.map_id:
 		return "Save map does not match this mission."
-	var error = validate_state(state, sim.catalog)
-	if error != "": return error
+	var error: String = ""
 	# Validate on disposable instances before mutating the live session.
 	var candidate_sim = DASimulation.new()
 	var candidate_mission = DAMissionController.new()
@@ -85,10 +134,25 @@ static func load_slot(slot: String, sim: DASimulation, mission: DAMissionControl
 		return error
 	sim.restore_state(state.simulation)
 	mission.restore_state(state.mission)
-	apply_campaign(campaign, state.campaign)
+	merge_campaign(campaign, state.campaign)
 	if state.get("metadata", {}) is Dictionary:
 		out.merge(state.metadata, true)
 	return ""
+
+## Read, migrate and validate a slot without touching the live session. `out` receives the state.
+static func check_slot(slot: String, catalog: Resource, out: Dictionary = {}) -> String:
+	var state: Dictionary = {}
+	var read_error: String = read_slot(slot, state)
+	if read_error != "":
+		return read_error
+	if int(state.schema_version) == 1:
+		migrate_v1(state, catalog)
+	if int(state.schema_version) == 2:
+		migrate_v2(state)
+	var error: String = validate_state(state, catalog)
+	if error == "":
+		out.merge(state, true)
+	return error
 
 ## Version 2 had no technology ceiling, gather scale or Core rebuild window.
 static func migrate_v2(state: Dictionary) -> void:
@@ -193,26 +257,48 @@ const CAMPAIGN_PATH: String = "user://campaign.save"
 static func save_campaign(campaign: DACampaignProgress) -> String:
 	if campaign == null:
 		return "Cannot save campaign progress."
-	var file = FileAccess.open(CAMPAIGN_PATH, FileAccess.WRITE)
-	if file == null:
-		return "Unable to save campaign progress."
-	file.store_buffer(var_to_bytes({"schema_version": VERSION, "campaign": campaign_resource(campaign)}))
-	file.flush()
-	file.close()
-	return ""
+	var error: String = write_atomic(CAMPAIGN_PATH, pack({"schema_version": VERSION, "campaign": campaign_resource(campaign)}))
+	return "" if error == "" else "Unable to save campaign progress."
 
+## A damaged progress file is set aside as campaign.save.damaged, never overwritten in place.
 static func load_campaign(campaign: DACampaignProgress) -> String:
-	if not FileAccess.file_exists(CAMPAIGN_PATH):
+	if not FileAccess.file_exists(CAMPAIGN_PATH) and not FileAccess.file_exists(CAMPAIGN_PATH + ".bak"):
 		return ""
-	var file = FileAccess.open(CAMPAIGN_PATH, FileAccess.READ)
-	if file == null:
-		return "Unable to read campaign progress."
-	var state = bytes_to_var(file.get_buffer(file.get_length()))
-	file.close()
-	if not state is Dictionary or int(state.get("schema_version", -1)) not in SUPPORTED_VERSIONS or not state.has("campaign"):
-		return "Campaign progress is unsupported."
+	var state = read_file(CAMPAIGN_PATH)
+	if not state is Dictionary or int(state.get("schema_version", -1)) not in SUPPORTED_VERSIONS or not state.get("campaign") is Dictionary:
+		if FileAccess.file_exists(CAMPAIGN_PATH):
+			var aside: String = ProjectSettings.globalize_path(CAMPAIGN_PATH + ".damaged")
+			if FileAccess.file_exists(aside): DirAccess.remove_absolute(aside)
+			DirAccess.rename_absolute(ProjectSettings.globalize_path(CAMPAIGN_PATH), aside)
+		return "Campaign progress could not be read and starts again. The old file was kept as campaign.save.damaged."
 	apply_campaign(campaign, state.campaign)
 	return ""
+
+## Loading a match keeps every mission the player has already unlocked or completed.
+static func merge_campaign(campaign: DACampaignProgress, state: Dictionary) -> void:
+	var completed: Array = campaign.completed_missions.duplicate()
+	var unlocked: Array = campaign.unlocked_missions.duplicate()
+	var optional: Dictionary = campaign.optional_objectives.duplicate(true)
+	apply_campaign(campaign, state)
+	for id in completed:
+		if not campaign.completed_missions.has(id): campaign.completed_missions.append(id)
+	for id in unlocked:
+		if not campaign.unlocked_missions.has(id): campaign.unlocked_missions.append(id)
+	campaign.optional_objectives.merge(optional)
+
+## The automatic slot to write next: an empty one, else the oldest.
+static func next_auto_slot() -> int:
+	var best: int = 0
+	var best_time: int = -1
+	for i in AUTO_SLOTS.size():
+		var path: String = path_for(AUTO_SLOTS[i])
+		if not FileAccess.file_exists(path):
+			return i
+		var modified: int = FileAccess.get_modified_time(path)
+		if best_time < 0 or modified < best_time:
+			best_time = modified
+			best = i
+	return best
 
 static func apply_campaign(campaign: DACampaignProgress, state: Dictionary) -> void:
 	campaign.schema_version = int(state.get("schema_version", VERSION))

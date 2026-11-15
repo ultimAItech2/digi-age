@@ -580,7 +580,7 @@ func layout_menu() -> void:
 	panel(Rect2(0,0,w,h),Color(BG.r,BG.g,BG.b,.88),false)
 	var x = left+32
 	var column = (span-96)/2
-	text("D / A  ·  MACHINE CIVILIZATIONS",Rect2(x,30,column,28),16,ACCENT)
+	text("D / A  ·  MACHINE CIVILIZATIONS  ·  v"+str(ProjectSettings.get_setting("application/config/version","")),Rect2(x,30,column,28),16,ACCENT)
 	text("THE WORLD WENT QUIET.",Rect2(x,95,column,32),16,GOLD)
 	text("DIGITAL\nAGE",Rect2(x,139,column,160),58,TEXT)
 	# Short windows drop the tagline so the briefing keeps its room above the buttons.
@@ -963,7 +963,7 @@ func layout_grid(rect: Rect2, slot: float, gap: float, selected: Array) -> void:
 			if item.action == "train":
 				var strong: String = game.sim.catalog.counter_text(item.kind)
 				tooltip += "\nArmour: "+str(item.d.get("armor","light"))+(" · Strong: "+strong if strong != "" else "")
-		var hotkey: String = str(item.get("hotkey",OS.get_keycode_string(GRID_KEYS[i])))
+		var hotkey: String = str(item.get("hotkey",DASettingsService.key_label(GRID_KEYS[i])))
 		var payload = {"tooltip":tooltip+"\nHotkey: "+hotkey,"reason":reason}
 		if item.has("kind"): payload.kind = item.kind
 		if not item.get("bound",false): payload.grid = GRID_KEYS[i]
@@ -1232,11 +1232,14 @@ func layout_saves() -> void:
 		var info: Dictionary = slot_info.get(slot,{})
 		var label = ("MANUAL " if slot.begins_with("manual") else "CHECKPOINT ")+str(int(slot.get_slice("_",1))+(0 if slot.begins_with("manual") else 1))
 		var subtitle = "Empty"
-		if not info.is_empty():
+		var readable: bool = not info.is_empty() and not info.has("error")
+		if info.has("error"):
+			subtitle = "Unreadable save"
+		elif readable:
 			var definition = game.mission_catalog.get_definition(str(info.mission_id))
 			var title: String = definition.title if definition else str(info.get("metadata",{}).get("title","Skirmish"))
 			subtitle = title+" · "+time_text(float(info.elapsed))+" · "+str(info.saved_at).replace("T"," ")
-		button(Rect2(x,rect.position.y+96+i*row,cw,row-6),label+" · "+subtitle,"save_slot" if saving else "load_slot",{"id":slot,"slot":slot,"reason":"This slot is empty."},"",saving or not info.is_empty(),i == 0 and (saving or not info.is_empty()))
+		button(Rect2(x,rect.position.y+96+i*row,cw,row-6),label+" · "+subtitle,"save_slot" if saving else "load_slot",{"id":slot,"slot":slot,"reason":str(info.get("error","This slot is empty."))},"",saving or readable,i == 0 and (saving or readable))
 	button(Rect2(x,rect.end.y-66,cw,44),"RETURN","saves",{"id":"close"},"",true,false)
 
 func begin_scroll(rect: Rect2, content_height: float) -> void:
@@ -1258,7 +1261,7 @@ func layout_settings() -> void:
 	var rect = modal_shell("SETTINGS",760)
 	var x = rect.position.x+24
 	var cw = rect.size.x-48
-	text("Auto-save enabled. Scroll or ↑↓ for more. Esc cancels key capture.",Rect2(x,rect.position.y+62,cw,42),14,MUTED)
+	text("Progress saves at checkpoints. Scroll or ↑↓ for more. Esc cancels key capture.",Rect2(x,rect.position.y+62,cw,42),14,MUTED)
 	begin_scroll(Rect2(x,rect.position.y+110,cw,rect.size.y-206),1248)
 	var y = rect.position.y+110-scroll_offset
 	text("AUDIO",Rect2(x,y,cw,28),18,ACCENT)
@@ -1276,7 +1279,7 @@ func layout_settings() -> void:
 	var on = func(value: bool) -> String: return "On" if value else "Off"
 	var scale_note = "" if is_equal_approx(ui_scale,float(v.ui_scale)) else " (window fits %d%%)" % roundi(ui_scale*100)
 	var options = [
-		["Window · "+str(v.window_mode).capitalize(),"window_mode","Windowed, borderless across the screen, or exclusive fullscreen. "+game.settings.prompt("fullscreen")+" switches fullscreen."],
+		["Window · "+str(v.window_mode).capitalize(),"window_mode","Windowed, borderless across the screen, or fullscreen. "+game.settings.prompt("fullscreen")+" switches fullscreen."],
 		["Resolution · "+str(v.resolution).replace("x"," × "),"resolution","The window's size in Windowed mode."],
 		["VSync · "+on.call(v.vsync),"vsync","Match frames to the display to stop tearing."],
 		["Frame cap · "+("Off" if v.frame_cap == 0 else str(v.frame_cap)+" fps"),"frame_cap","Limit the frame rate to save power and heat."],
@@ -1286,6 +1289,7 @@ func layout_settings() -> void:
 		["Reduced effects · "+on.call(v.reduced_effects),"effects","Fewer particles and flashes."],
 		["Subtitles · "+on.call(subtitles_enabled),"subtitles","Show spoken lines as text."],
 		["Colour-blind sides · "+on.call(v.colorblind),"colorblind","Draw your side in blue and the rival in orange."],
+		["Pause in background · "+on.call(v.pause_unfocused),"pause_unfocused","Pause the match when you switch to another window."],
 		["Sound · "+on.call(not v.muted),"sound","Turn all sound on or off. "+game.settings.prompt("events")+" does the same in a match."]]
 	for i in options.size():
 		button(Rect2(x+(i%2)*(cw/2+4),y+floori(i/2.0)*54,cw/2-4,44),options[i][0],options[i][1],{"tooltip":options[i][2]})
@@ -1313,9 +1317,9 @@ func layout_manual() -> void:
 		["02 / EXPAND","Generators supply energy. Data Centers add 20 compute, up to 100. Select a Worker and a building, then choose a clear explored site. Right-click or Esc cancels placement."],
 		["03 / EVOLVE","Train Workers and advance ages at your Core. Network unlocks Disruptors and Towers; Singularity unlocks Siege Walkers. Fabricators manufacture your army. Research Labs improve resources, buildings and the military, five levels each; every Lab runs one project at a time."],
 		["04 / CONQUER","Sentinels counter armoured units such as Disruptors. Disruptors counter heavy units such as Walkers. Walkers destroy buildings. Disruptor and Walker shells travel and splash. Every combat unit has one ability on the first grid slot: the Scout's sweep reveals an area, the Sentinel fires faster, the Disruptor's EMP stuns, the Walker braces for range. Scout first: enemies outside your vision cannot be targeted, though buildings you have seen stay marked."],
-["04 / GROUND AND FACTIONS","Roads carry units a quarter faster. Rough ground around ruins slows everything that does not hover. Units on high ground see two cells farther and shoot one cell farther. Each faction fields one unit of its own from the Network age: Origin's Warden shields nearby units, the Foundry's Mortar shells from long range, the Lattice's Phantom stays unseen until an enemy comes close."],
-		["05 / COMMAND","Click or drag to select; Shift adds units; double-click selects every unit of that type in view. The command grid uses the keys Q to T, A to G and Z to B in the order shown on each slot. Right-click moves, gathers, attacks, repairs, or sets a rally point. "+game.settings.prompt("attack")+": attack-move. "+game.settings.prompt("stop")+": stop. Hold position keeps units where they stand; Patrol walks them back and forth, engaging on the way. Cancel on a building's command grid removes its last queued item, or stops its research, and refunds the cost. Ctrl+1–9 saves groups; 1–9 recalls them."],
-		["06 / NAVIGATE","Arrows, screen edges, or middle drag pan; the wheel zooms. Minimap left-click moves the camera; right-click issues orders. "+game.settings.prompt("pause")+": pause. "+game.settings.prompt("manual")+": manual. "+game.settings.prompt("fullscreen")+": fullscreen. "+game.settings.prompt("alert")+": jump to the last alert, which also pings the minimap."]
+		["05 / GROUND AND FACTIONS","Roads carry units a quarter faster. Rough ground around ruins slows everything that does not hover. Units on high ground see two cells farther and shoot one cell farther. Each faction fields one unit of its own from the Network age: Origin's Warden shields nearby units, the Foundry's Mortar shells from long range, the Lattice's Phantom stays unseen until an enemy comes close."],
+		["06 / COMMAND","Click or drag to select; Shift adds units; double-click selects every unit of that type in view. The command grid uses the keys Q to T, A to G and Z to B in the order shown on each slot. Right-click moves, gathers, attacks, repairs, or sets a rally point. "+game.settings.prompt("attack")+": attack-move. "+game.settings.prompt("stop")+": stop. Hold position keeps units where they stand; Patrol walks them back and forth, engaging on the way. Cancel on a building's command grid removes its last queued item, or stops its research, and refunds the cost. Ctrl+1–9 saves groups; 1–9 recalls them."],
+		["07 / NAVIGATE","Arrows, screen edges, or middle drag pan; the wheel zooms. Minimap left-click moves the camera; right-click issues orders. "+game.settings.prompt("pause")+": pause. "+game.settings.prompt("manual")+": manual. "+game.settings.prompt("fullscreen")+": fullscreen. "+game.settings.prompt("alert")+": jump to the last alert, which also pings the minimap."]
 	]
 	var total = 0.0
 	for section in sections:
@@ -1335,15 +1339,16 @@ func layout_confirmation() -> void:
 	var x = rect.position.x+24
 	var cw = rect.size.x-48
 	var action: String = confirmation.action
-	text("Reset all preferences?" if action == "reset_all" else "Leave this mission state?",Rect2(x,rect.position.y+100,cw,70),24)
+	text("Reset all preferences?" if action == "reset_all" else ("Replace this save?" if action == "save_slot" else "Leave this mission state?"),Rect2(x,rect.position.y+100,cw,70),24)
 	var explanation = "Unsaved progress will be lost. You can save before continuing."
 	if action == "reset_all": explanation = "Audio, display and keyboard settings will return to their defaults."
 	elif action in ["load", "load_slot"]: explanation = "Loading replaces unsaved progress. Your existing saved game will be kept."
+	elif action == "save_slot": explanation = "This slot holds a save this version cannot read. Saving here replaces it for good."
 	text(explanation,Rect2(x,rect.position.y+170,cw,62),18,MUTED)
 	button(Rect2(x,rect.end.y-204,cw,48),"CANCEL","confirm_cancel",{},"",true,true)
-	if action not in ["reset_all", "load", "load_slot"]:
+	if action not in ["reset_all", "load", "load_slot", "save_slot"]:
 		button(Rect2(x,rect.end.y-146,cw,48),"SAVE AND CONTINUE","confirm_save")
-	button(Rect2(x,rect.end.y-88,cw,48),"RESET PREFERENCES" if action == "reset_all" else ("LOAD SAVED GAME" if action in ["load", "load_slot"] else "CONTINUE WITHOUT SAVING"),"confirm_proceed")
+	button(Rect2(x,rect.end.y-88,cw,48),"RESET PREFERENCES" if action == "reset_all" else "REPLACE SAVE" if action == "save_slot" else ("LOAD SAVED GAME" if action in ["load", "load_slot"] else "CONTINUE WITHOUT SAVING"),"confirm_proceed")
 
 func layout_notification() -> void:
 	# Above modals and below their headers; world notifications use a reserved strip.

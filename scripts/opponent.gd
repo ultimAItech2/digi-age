@@ -126,6 +126,10 @@ func step(dt: float) -> void:
 		desired.append("lab")
 	if count(buildings, "fabricator") < 2 + age + int(rules.get("fabricator_extra", 0)):
 		desired.append("fabricator")
+	# With no generator and too little energy for the first choice, nothing else would ever be
+	# affordable: power comes first (a Generator costs metal only).
+	if count(buildings, "generator") == 0 and not desired.is_empty() and sim.resources[side].y < sim.catalog.buildings[desired[0]].cost.y:
+		desired.push_front("generator")
 	if pending.is_empty() and not workers.is_empty() and not desired.is_empty():
 		build(desired[0], workers, buildings)
 	var save_for_age = age < mini(2, sim.tech_ceiling[side]) and sim.elapsed > 140 + age * 220 and army.size() >= int(rules.get("age_army", 6))
