@@ -1,8 +1,54 @@
 # Validation
 
-Recorded against source `1.0.0-rc2` on Linux (Godot 4.6.3.stable).
+The latest results are in "After 1.0.0-rc3" directly below; the sections after
+it are the record of earlier candidates and are kept as written.
 
-## Automated suites
+## After 1.0.0-rc3 (2026-11-15, unreleased)
+
+`./tools/test.sh --soak` on Linux, Godot 4.6.3.stable, headless: every suite
+passed.
+
+| Suite | What it covers | Result |
+|---|---|---|
+| `tools/extract_strings.py --check` | The string template matches the game's text | 632 strings, up to date |
+| `tests/simulation_test.gd` | Each rule on its own | 169 checks, 0 failures |
+| `tests/production_foundation_test.gd` | Missions, objectives, save header, truncated and damaged saves, backups, campaign file recovery | 33 checks, 0 failures |
+| `tests/campaign_test.gd` | Missions load and run their events; gather and survival objectives | 46 checks, 0 failures |
+| `tests/audio_test.gd` | Buses, manifest, triggers | 48 checks, 0 failures |
+| `tests/interface_test.gd` | Real input route | 62 checks, 0 failures |
+| `tests/ui_production_test.gd` | 47 screens at 7 resolutions and 4 UI scales, then every screen in a pseudo-language and in French, Italian, German and Spanish at 3 resolutions and 2 scales | 2,726 layouts, 1,213,514 checks, 0 failures |
+| `tests/integration_test.gd` | The whole game through the real menu, HUD and input | 88 checks, 0 failures |
+| `tests/localisation_test.gd` | Completeness, placeholders, font coverage, the setting applied and remembered | 38 checks, 0 failures |
+| `tests/gamepad_test.gd` | A match on synthetic pad events; every control reachable with the D-pad | 67 checks, 0 failures |
+| `tests/tutorial_test.gd` | Each step waits for its action; campaign progress untouched | 40 checks, 0 failures |
+| `tests/mission_completion_test.gd` | The computer plays the player's side on Easy | 7 of 8 missions won; The Foundry not run (unproven) |
+| `tests/soak_test.gd` | Three opponent-against-opponent matches | 3 of 3 reach a winner (1,141 to 1,674 s) |
+| `tests/skirmish_test.gd` | A symmetric skirmish on each map | 8 of 8 reach a winner |
+
+`tools/build.sh`: Linux and Windows exports, archives (92 MiB and 101 MiB),
+checksums and package verification passed. The extracted Linux build launched
+headless, reached a mission, loaded all four languages, and ignored
+`--demo --autoplay`. The Windows archive was checked for contents and
+integrity only.
+
+The German screens (47, at 1280 x 720) were drawn through the real renderer
+under Xvfb and Mesa llvmpipe and four of them were looked at: main menu,
+tutorial step, gamepad command grid, controller settings.
+
+What the mission completion test does and does not show: the strategy that
+plays the rival also plays the player. It won seven missions against the Easy
+rival. On Normal it lost Salvage Rights, The Foundry and Inheritance, and on
+Easy it still lost The Foundry, where the rival starts an age ahead with four
+Generators. That is evidence about the automated player, not proof either way
+about a person; The Foundry needs a human playtest. The test found three real
+defects, now fixed: Ghost Protocol's wave could arrive within half a minute of
+the start, Salvage Rights' first objective was complete at the start, and the
+opponent stalled for good with no Generator and no energy.
+
+Not verified by anything above: a Windows run, a physical gamepad or Steam
+Deck, the quality of the translations, Steam, and play by a person.
+
+## Automated suites (1.0.0-rc3)
 
 Results for `1.0.0-rc3` (2026-11-11), `./tools/test.sh --soak`:
 
