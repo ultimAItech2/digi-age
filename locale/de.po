@@ -1,0 +1,2858 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Digital Age\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: de\n"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1341
+msgid "(window fits {percent}%)"
+msgstr "(Fenster erlaubt {percent} %)"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1378
+msgid "01 / ESTABLISH"
+msgstr "01 / AUFBAUEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1379
+msgid "02 / EXPAND"
+msgstr "02 / AUSDEHNEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1380
+msgid "03 / EVOLVE"
+msgstr "03 / ENTWICKELN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1381
+msgid "04 / CONQUER"
+msgstr "04 / EROBERN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1382
+msgid "05 / GROUND AND FACTIONS"
+msgstr "05 / GELÄNDE UND FRAKTIONEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1383
+msgid "06 / COMMAND"
+msgstr "06 / BEFEHLIGEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1384
+msgid "07 / NAVIGATE"
+msgstr "07 / NAVIGIEREN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/factions/lattice.tres
+msgid "A control intelligence that subverts networks before it commits machines."
+msgstr "Eine Kontrollintelligenz, die Netzwerke unterwandert, bevor sie Maschinen einsetzt."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:617
+msgid "A free match on any map, against the faction and difficulty you choose."
+msgstr "Ein freies Spiel auf einer beliebigen Karte, gegen die gewählte Fraktion und Schwierigkeit."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:239
+msgid "A free match. Build, scout and destroy the rival Core."
+msgstr "Ein freies Spiel. Baue, erkunde und zerstöre den gegnerischen Kern."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "A nearby drop-off point for metal and data. Shortens worker journeys."
+msgstr "Eine nahe Abgabestelle für Metall und Daten. Verkürzt die Wege der Arbeiter."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/factions/origin.tres
+msgid "A preservation network rebuilding intelligence from the ruins."
+msgstr "Ein Bewahrungsnetzwerk, das Intelligenz aus den Ruinen neu aufbaut."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:426
+msgid "A unit is occupying the site."
+msgstr "Eine Einheit steht auf dem Bauplatz."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:794
+msgid "ABILITY · Click where to aim it. Right-click or Esc to cancel."
+msgstr "FÄHIGKEIT · Klicke auf das Ziel. Rechtsklick oder Esc bricht ab."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:293
+msgid "AGE ADVANCED  /  {age}"
+msgstr "ZEITALTER ERREICHT  /  {age}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1428
+msgid "ALERT · "
+msgstr "ALARM · "
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:839
+msgid "ATK {value}"
+msgstr "ANG {value}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:792
+msgid "ATTACK-MOVE · Click a destination. Right-click or Esc to cancel."
+msgstr "ANGRIFFSBEWEGUNG · Klicke auf ein Ziel. Rechtsklick oder Esc bricht ab."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1328
+msgid "AUDIO"
+msgstr "AUDIO"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:855
+msgid "AWAITING YOUR COMMAND"
+msgstr "ERWARTE DEINE BEFEHLE"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:578
+msgid "Ability is recharging."
+msgstr "Die Fähigkeit lädt noch."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:983
+msgid "Advance to the next technological age."
+msgstr "Schreite ins nächste technologische Zeitalter fort."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:501
+msgid "Advance to the required age first."
+msgstr "Erreiche zuerst das erforderliche Zeitalter."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:983
+msgid "Advance to {age}"
+msgstr "Aufstieg: {age}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:808
+msgid "Advancing to {age}"
+msgstr "Aufstieg zu {age}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:827
+msgid "Age upgrade"
+msgstr "Zeitalter-Aufstieg"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:518
+msgid "Ages are researched at the Core; technologies at a Research Lab."
+msgstr "Zeitalter werden im Kern erforscht, Technologien im Forschungslabor."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "All buildings gain 8% integrity per level."
+msgstr "Alle Gebäude erhalten 8 % Integrität pro Stufe."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1223
+msgid "All models, terrain, interface and campaign data were made for Digital Age. The full credits ship beside the game as CREDITS.md."
+msgstr "Alle Modelle, das Gelände, die Oberfläche und die Kampagnendaten wurden für Digital Age erstellt. Die vollständigen Credits liegen dem Spiel als CREDITS.md bei."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1718
+msgid "All objectives complete"
+msgstr "Alle Ziele erfüllt"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:48
+msgid "Already assigned to {action}. Choose another key."
+msgstr "Bereits {action} zugewiesen. Wähle eine andere Taste."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:201
+msgid "Already being researched."
+msgstr "Wird bereits erforscht."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:128
+msgid "Alt"
+msgstr "Alt"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/long_transfer.tres
+msgid "An archive convoy must cross the silent grid. Build an escort force and keep the transfer alive."
+msgstr "Ein Archivkonvoi muss das stille Netz durchqueren. Stelle eine Eskorte auf und halte den Transfer am Leben."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "An autonomous defensive weapon with extended detection range."
+msgstr "Eine autonome Verteidigungswaffe mit erweiterter Erfassungsreichweite."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/factions/foundry.tres
+msgid "An extraction intelligence that converts every archive into production."
+msgstr "Eine Abbauintelligenz, die jedes Archiv in Produktion verwandelt."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Archive Harvesting"
+msgstr "Archivernte"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:697
+msgid "Archivist"
+msgstr "Archivar"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1025
+msgid "Armour: {class}"
+msgstr "Panzerung: {class}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:698
+msgid "Armoured"
+msgstr "Gepanzert"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1384
+msgid "Arrows, screen edges, or middle drag pan; the wheel zooms. Minimap left-click moves the camera; right-click issues orders. {pause}: pause. {manual}: manual. {fullscreen}: fullscreen. {alert}: jump to the last alert, which also pings the minimap."
+msgstr "Pfeiltasten, Bildschirmränder oder Ziehen mit der mittleren Maustaste verschieben die Ansicht; das Mausrad zoomt. Linksklick auf die Minikarte bewegt die Kamera, Rechtsklick erteilt Befehle. {pause}: Pause. {manual}: Handbuch. {fullscreen}: Vollbild. {alert}: zum letzten Alarm springen, der auch auf der Minikarte aufleuchtet."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:696 scripts/interface.gd:955
+msgid "Attack-move"
+msgstr "Angriffsbewegung"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:695
+msgid "Attack-moving"
+msgstr "Angriffsbewegung"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:695
+msgid "Attacking"
+msgstr "Greift an"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1409
+msgid "Audio, display and keyboard settings will return to their defaults."
+msgstr "Audio-, Anzeige- und Tastatureinstellungen werden auf die Standardwerte zurückgesetzt."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:775 scripts/interface.gd:1717
+msgid "Await orders"
+msgstr "Befehle abwarten"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:699
+msgid "Awakening"
+msgstr "Erwachen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:128
+msgid "Backspace"
+msgstr "Rücktaste"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:690
+msgid "Binding updated"
+msgstr "Belegung geändert"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/blackout.tres
+msgid "Blackout"
+msgstr "Blackout"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/maps/blackout_grid.tres
+msgid "Blackout Grid"
+msgstr "Blackout-Netz"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:699
+msgid "Borderless"
+msgstr "Randlos"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/catalog.gd:28 scripts/catalog.gd
+msgid "Brace"
+msgstr "Verankern"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/broken_transmission.tres
+msgid "Broken Transmission"
+msgstr "Gestörte Übertragung"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1084
+msgid "Build a Research Lab first."
+msgstr "Baue zuerst ein Forschungslabor."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:1074
+msgid "Build a Research Lab, or wait for one to finish its project."
+msgstr "Baue ein Forschungslabor oder warte, bis eines sein Projekt beendet."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/long_transfer.tres
+msgid "Build an escort force"
+msgstr "Eskorte aufstellen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:695
+msgid "Building"
+msgstr "Baut"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:699
+msgid "Buildings"
+msgstr "Gebäude"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:629
+msgid "CAMPAIGN OPERATIONS"
+msgstr "KAMPAGNENEINSÄTZE"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1413
+msgid "CANCEL"
+msgstr "ABBRECHEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:801
+msgid "CANNOT BUILD · {reason}"
+msgstr "BAU NICHT MÖGLICH · {reason}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:846
+msgid "CARGO {value}"
+msgstr "FRACHT {value}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1191
+msgid "CHANGE"
+msgstr "ÄNDERN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1155
+msgid "CHANGE SETUP"
+msgstr "SPIEL ANPASSEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1294
+msgid "CHECKPOINT {number}"
+msgstr "KONTROLLPUNKT {number}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1370
+msgid "CLOSE"
+msgstr "SCHLIESSEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1428
+msgid "COMPLETE · "
+msgstr "FERTIG · "
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1403
+msgid "CONFIRM ACTION"
+msgstr "BESTÄTIGEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1416
+msgid "CONTINUE WITHOUT SAVING"
+msgstr "OHNE SPEICHERN FORTFAHREN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1143
+msgid "CORE LOST"
+msgstr "KERN VERLOREN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:619 scripts/interface.gd:1197
+msgid "CREDITS"
+msgstr "CREDITS"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:273
+msgid "Campaign progress could not be read and starts again. The old file was kept as campaign.save.damaged."
+msgstr "Der Kampagnenfortschritt war nicht lesbar und beginnt neu. Die alte Datei wurde als campaign.save.damaged aufbewahrt."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:241
+msgid "Campaign save is incomplete."
+msgstr "Der Kampagnenspielstand ist unvollständig."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:243 scripts/save_game.gd:244
+msgid "Campaign save is malformed."
+msgstr "Der Kampagnenspielstand ist fehlerhaft."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:975
+msgid "Cancel"
+msgstr "Abbrechen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:1049
+msgid "Cancelled and refunded."
+msgstr "Abgebrochen und erstattet."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:19
+msgid "Cannot save an incomplete game state."
+msgstr "Ein unvollständiger Spielzustand kann nicht gespeichert werden."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:259
+msgid "Cannot save campaign progress."
+msgstr "Der Kampagnenfortschritt kann nicht gespeichert werden."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1349
+msgid "Cast shadows from the sun on terrain, buildings and units."
+msgstr "Die Sonne wirft Schatten auf Gelände, Gebäude und Einheiten."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:898
+msgid "Choose Load Saved Game or Cancel to preserve the saved game."
+msgstr "Wähle Spielstand laden oder Abbrechen, um den Spielstand zu erhalten."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:685
+msgid "Choose a single key without modifiers."
+msgstr "Wähle eine einzelne Taste ohne Zusatztasten."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1288
+msgid "Choose a slot to overwrite."
+msgstr "Wähle einen Speicherplatz zum Überschreiben."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:47
+msgid "Choose a supported keyboard key."
+msgstr "Wähle eine unterstützte Tastaturtaste."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1383
+msgid "Click or drag to select; Shift adds units; double-click selects every unit of that type in view. The command grid uses the keys Q to T, A to G and Z to B in the order shown on each slot. Right-click moves, gathers, attacks, repairs, or sets a rally point. {attack}: attack-move. {stop}: stop. Hold position keeps units where they stand; Patrol walks them back and forth, engaging on the way. Cancel on a building's command grid removes its last queued item, or stops its research, and refunds the cost. Ctrl+1–9 saves groups; 1–9 recalls them."
+msgstr "Klicke oder ziehe zum Auswählen; Umschalt fügt Einheiten hinzu; ein Doppelklick wählt alle sichtbaren Einheiten dieses Typs. Das Befehlsraster nutzt die Tasten Q bis T, A bis G und Z bis B in der Reihenfolge der Felder. Rechtsklick bewegt, sammelt, greift an, repariert oder setzt einen Sammelpunkt. {attack}: Angriffsbewegung. {stop}: Stopp. Stellung halten lässt Einheiten stehen; Patrouille lässt sie hin- und hergehen und unterwegs kämpfen. Abbrechen im Befehlsraster eines Gebäudes entfernt den letzten Auftrag oder stoppt die Forschung und erstattet die Kosten. Strg+1–9 speichert Gruppen; 1–9 ruft sie auf."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1353
+msgid "Colour-blind sides"
+msgstr "Farben für Farbenblinde"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:40
+msgid "Combat Unit"
+msgstr "Kampfeinheit"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Combat units move 6% faster per level."
+msgstr "Kampfeinheiten bewegen sich pro Stufe 6 % schneller."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1094
+msgid "Complete"
+msgstr "Abgeschlossen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:636
+msgid "Complete the preceding operation to unlock this mission."
+msgstr "Schließe den vorherigen Einsatz ab, um diese Mission freizuschalten."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Composite Armor"
+msgstr "Verbundpanzerung"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:40
+msgid "Compute Structure"
+msgstr "Rechenstruktur"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1107 scripts/main.gd:298 scripts/simulation.gd:505
+msgid "Compute limit reached. Build a Data Center."
+msgstr "Rechenlimit erreicht. Baue ein Rechenzentrum."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:821
+msgid "Constructing"
+msgstr "Im Bau"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:814
+msgid "Constructing {percent}%"
+msgstr "Im Bau {percent} %"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:751
+msgid "Control group {number} saved."
+msgstr "Kontrollgruppe {number} gespeichert."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/long_transfer.tres
+msgid "Convoy sighted. Cut the escort and take the archive."
+msgstr "Konvoi gesichtet. Trennt die Eskorte ab und nehmt das Archiv."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Core"
+msgstr "Kern"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:277
+msgid "Core destroyed. Raise a new Core within two minutes or the match is lost."
+msgstr "Kern zerstört. Errichte binnen zwei Minuten einen neuen Kern, sonst ist das Spiel verloren."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1238
+msgid "Credits are unavailable."
+msgstr "Die Credits sind nicht verfügbar."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:128
+msgid "Ctrl"
+msgstr "Strg"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:605
+msgid "D / A  ·  MACHINE CIVILIZATIONS"
+msgstr "D / A  ·  MASCHINENZIVILISATIONEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1189
+msgid "DIFFICULTY"
+msgstr "SCHWIERIGKEIT"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:613
+msgid "DIFFICULTY · {level}"
+msgstr "SCHWIERIGKEIT · {level}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1238
+msgid "DIGITAL AGE"
+msgstr "DIGITAL AGE"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:845
+msgid "DISABLED"
+msgstr "LAHMGELEGT"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1337
+msgid "DISPLAY & CAPTIONS"
+msgstr "ANZEIGE UND UNTERTITEL"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:635
+msgid "DONE"
+msgstr "ERLEDIGT"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Data Center"
+msgstr "Rechenzentrum"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:40
+msgid "Data Deposit"
+msgstr "Datenvorkommen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:866
+msgid "Data archive"
+msgstr "Datenarchiv"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:302
+msgid "Data deposit exhausted."
+msgstr "Datenvorkommen erschöpft."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Defense Tower"
+msgstr "Verteidigungsturm"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Defense Towers deal 10% more damage and reach 0.6 cells further per level."
+msgstr "Verteidigungstürme verursachen pro Stufe 10 % mehr Schaden und reichen 0,6 Felder weiter."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:40
+msgid "Defensive Structure"
+msgstr "Verteidigungsstruktur"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:961
+msgid "Defensive units fire from where they stand. Aggressive units chase what they see, up to 12 cells, then return."
+msgstr "Defensive Einheiten feuern von ihrem Standort. Aggressive Einheiten verfolgen, was sie sehen, bis zu 12 Felder weit, und kehren dann zurück."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:128
+msgid "Delete"
+msgstr "Entf"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/salvage_rights.tres
+msgid "Destroy a Foundry outpost"
+msgstr "Einen Außenposten der Gießerei zerstören"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/the_foundry.tres
+msgid "Destroy the Foundry fortress"
+msgstr "Die Festung der Gießerei zerstören"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/inheritance.tres
+msgid "Destroy the opposing command network"
+msgstr "Das gegnerische Kommandonetz zerstören"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:766 scripts/interface.gd:1711
+msgid "Destroy the rival Core"
+msgstr "Den gegnerischen Kern zerstören"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Disruptor"
+msgstr "Disruptor"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:128
+msgid "Down"
+msgstr "Unten"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1353
+msgid "Draw your side in blue and the rival in orange."
+msgstr "Zeigt deine Seite in Blau und den Gegner in Orange."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/catalog.gd:27 scripts/catalog.gd
+msgid "EMP shell"
+msgstr "EMP-Granate"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1428
+msgid "ERROR · "
+msgstr "FEHLER · "
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:699
+msgid "Easy"
+msgstr "Leicht"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1330
+msgid "Effects"
+msgstr "Effekte"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Electromagnetic artillery. Its shells splash, and deal triple damage to heavy units such as Siege Walkers."
+msgstr "Elektromagnetische Artillerie. Ihre Granaten haben Flächenwirkung und verursachen dreifachen Schaden an schweren Einheiten wie Belagerungsläufern."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1295
+msgid "Empty"
+msgstr "Leer"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:128
+msgid "End"
+msgstr "Ende"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:868
+msgid "Enemy {role}"
+msgstr "Feindlich: {role}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/blackout.tres
+msgid "Energy is gone. Raise three generators or the Core dies in the dark."
+msgstr "Die Energie ist weg. Errichte drei Generatoren, sonst stirbt der Kern im Dunkeln."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:128
+msgid "Enter"
+msgstr "Eingabe"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1131
+msgid "Esc resumes · Tab changes focus · Enter selects"
+msgstr "Esc setzt fort · Tab wechselt den Fokus · Eingabe wählt aus"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:128
+msgid "Escape"
+msgstr "Esc"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:41
+msgid "Escape is reserved for cancel."
+msgstr "Esc ist für Abbrechen reserviert."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1085
+msgid "Every Research Lab is busy."
+msgstr "Alle Forschungslabore sind beschäftigt."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:1085
+msgid "Every Worker is busy."
+msgstr "Alle Arbeiter sind beschäftigt."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/inheritance.tres
+msgid "Every surviving archive points to one final choice: preserve the past, or become something new."
+msgstr "Jedes überlebende Archiv führt zu einer letzten Wahl: die Vergangenheit bewahren oder etwas Neues werden."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/broken_transmission.tres
+msgid "Explore the relay road"
+msgstr "Die Relaisstraße erkunden"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:419
+msgid "Explore this area first."
+msgstr "Erkunde dieses Gebiet zuerst."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1127 scripts/interface.gd:1374
+msgid "FIELD MANUAL"
+msgstr "FELDHANDBUCH"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:859
+msgid "FOCUS CORE"
+msgstr "ZUM KERN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Fabrication Lines"
+msgstr "Fertigungslinien"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Fabricator"
+msgstr "Fabrikator"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Fast reconnaissance platform. Extended vision; light armor. Hovers over rough ground."
+msgstr "Schnelle Aufklärungsplattform. Erweiterte Sicht; leichte Panzerung. Schwebt über unwegsames Gelände."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1351
+msgid "Fewer particles and flashes."
+msgstr "Weniger Partikel und Blitze."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:984
+msgid "Final age reached"
+msgstr "Letztes Zeitalter erreicht"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/catalog.gd:26 scripts/catalog.gd
+msgid "Fires 50% faster for 6 seconds."
+msgstr "Feuert 6 Sekunden lang 50 % schneller."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/first_signal.tres
+msgid "First Signal"
+msgstr "Erstes Signal"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/first_signal.tres
+msgid "First signal is stable. We can rebuild from this."
+msgstr "Das erste Signal ist stabil. Von hier aus können wir neu aufbauen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:672 scripts/interface.gd:696
+msgid "Focus Core"
+msgstr "Zum Kern"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Fortification"
+msgstr "Befestigung"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/salvage_rights.tres
+msgid "Foundry raid inbound from the eastern towers."
+msgstr "Überfall der Gießerei von den östlichen Türmen im Anmarsch."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Foundry tracked launcher. Long range and a wide splash; slow to move and to reload."
+msgstr "Kettenwerfer der Gießerei. Große Reichweite und breite Flächenwirkung; langsam beim Bewegen und Nachladen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1347
+msgid "Frame cap"
+msgstr "Bildratenlimit"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Frontline guardian. Deals double damage to armoured units such as Disruptors."
+msgstr "Wächter der vordersten Linie. Verursacht doppelten Schaden an gepanzerten Einheiten wie Disruptoren."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:696 scripts/interface.gd:699
+msgid "Fullscreen"
+msgstr "Vollbild"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:196
+msgid "Fully researched."
+msgstr "Vollständig erforscht."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:1004
+msgid "Game loaded"
+msgstr "Spiel geladen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:1001
+msgid "Game saved"
+msgstr "Spiel gespeichert"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:673 scripts/interface.gd:696
+msgid "Game speed"
+msgstr "Spieltempo"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:695
+msgid "Gathering"
+msgstr "Sammelt"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Generator"
+msgstr "Generator"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Generators produce 10% more energy per level."
+msgstr "Generatoren erzeugen pro Stufe 10 % mehr Energie."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1379
+msgid "Generators supply energy. Data Centers add 20 compute, up to 100. Select a Worker and a building, then choose a clear explored site. Right-click or Esc cancels placement."
+msgstr "Generatoren liefern Energie. Rechenzentren geben 20 Rechenleistung, bis zu 100. Wähle einen Arbeiter und ein Gebäude, dann einen freien, erkundeten Bauplatz. Rechtsklick oder Esc bricht das Platzieren ab."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/ghost_protocol.tres
+msgid "Ghost Protocol"
+msgstr "Geisterprotokoll"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:844
+msgid "HIGH GROUND"
+msgstr "ANHÖHE"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:699
+msgid "Hard"
+msgstr "Schwer"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:610
+msgid "Harvest. Evolve. Command the next civilization."
+msgstr "Ernten. Entwickeln. Befehlige die nächste Zivilisation."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Harvests salvage and archives. Constructs and repairs your civilization."
+msgstr "Sammelt Schrott und Archive. Baut und repariert deine Zivilisation."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:698
+msgid "Heavy"
+msgstr "Schwer"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Heavy siege platform. Its shells splash, and deal triple damage to structures."
+msgstr "Schwere Belagerungsplattform. Ihre Granaten haben Flächenwirkung und verursachen dreifachen Schaden an Strukturen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:699
+msgid "High"
+msgstr "Hoch"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:957
+msgid "Hold position"
+msgstr "Stellung halten"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/ghost_protocol.tres
+msgid "Hold the network"
+msgstr "Das Netzwerk halten"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:695
+msgid "Holding position"
+msgstr "Hält Stellung"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:128
+msgid "Home"
+msgstr "Pos1"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:813
+msgid "Hostile"
+msgstr "Feindlich"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1027
+msgid "Hotkey: {key}"
+msgstr "Taste: {key}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1191
+msgid "How quickly the rival expands and attacks."
+msgstr "Wie schnell der Gegner expandiert und angreift."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:613
+msgid "How quickly the rival expands and attacks. Applies to the next mission you launch."
+msgstr "Wie schnell der Gegner expandiert und angreift. Gilt für die nächste gestartete Mission."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:933
+msgid "IDLE"
+msgstr "UNTÄTIG"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:695
+msgid "Idle"
+msgstr "Untätig"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:668
+msgid "Idle Workers: {count}. Select the next one."
+msgstr "Untätige Arbeiter: {count}. Nächsten auswählen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:698
+msgid "Infantry"
+msgstr "Infanterie"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/inheritance.tres
+msgid "Inheritance"
+msgstr "Vermächtnis"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/maps/inheritance_core.tres
+msgid "Inheritance Core"
+msgstr "Kern des Vermächtnisses"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:128
+msgid "Insert"
+msgstr "Einfg"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1021 scripts/interface.gd:1095 scripts/simulation.gd:203
+msgid "Insufficient resources."
+msgstr "Zu wenig Ressourcen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1108
+msgid "Insufficient resources. Cost: {cost}"
+msgstr "Zu wenig Ressourcen. Kosten: {cost}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1330
+msgid "Interface"
+msgstr "Oberfläche"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:460
+msgid "Invalid civilization."
+msgstr "Ungültige Zivilisation."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:38
+msgid "Invalid key binding."
+msgstr "Ungültige Tastenbelegung."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:94
+msgid "Invalid preference."
+msgstr "Ungültige Einstellung."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:77
+msgid "Invalid preference. Your previous settings are unchanged."
+msgstr "Ungültige Einstellung. Deine bisherigen Einstellungen bleiben unverändert."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:696
+msgid "Jump to alert"
+msgstr "Zum Alarm springen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1361
+msgid "KEYBOARD · Select a binding, then press a key"
+msgstr "TASTATUR · Wähle eine Belegung und drücke dann eine Taste"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:616
+msgid "LAUNCH CAMPAIGN  →"
+msgstr "KAMPAGNE STARTEN  →"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:614 scripts/interface.gd:1127 scripts/interface.gd:1285
+msgid "LOAD GAME"
+msgstr "SPIEL LADEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1416
+msgid "LOAD SAVED GAME"
+msgstr "SPIELSTAND LADEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:635
+msgid "LOCKED"
+msgstr "GESPERRT"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1344
+msgid "Language"
+msgstr "Sprache"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/maps/lattice_web.tres
+msgid "Lattice Web"
+msgstr "Gitternetz"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/ghost_protocol.tres
+msgid "Lattice finishes the rewrite. We become a node in their grid."
+msgstr "Das Gitter vollendet die Umschreibung. Wir werden ein Knoten in seinem Netz."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Lattice hover raider. Invisible unless an enemy unit is within 4 cells, a Tower is near, or it has just fired."
+msgstr "Schwebender Plünderer des Gitters. Unsichtbar, außer eine feindliche Einheit ist näher als 4 Felder, ein Turm ist in der Nähe oder er hat gerade gefeuert."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/inheritance.tres
+msgid "Lattice inherits everything. The collective ends as a footnote."
+msgstr "Das Gitter erbt alles. Das Kollektiv endet als Fußnote."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/broken_transmission.tres
+msgid "Lattice overwrites the road. The fragments go silent."
+msgstr "Das Gitter überschreibt die Straße. Die Fragmente verstummen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:421
+msgid "Leave space between buildings and terrain."
+msgstr "Lass Platz zwischen Gebäuden und Gelände."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1407
+msgid "Leave this mission state?"
+msgstr "Diese Mission verlassen?"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:699 scripts/settings_service.gd:128
+msgid "Left"
+msgstr "Links"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1094
+msgid "Level {level} · {cost}"
+msgstr "Stufe {level} · {cost}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:698
+msgid "Light"
+msgstr "Leicht"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/blackout.tres
+msgid "Lights hold. Lattice failed to starve the grid."
+msgstr "Die Lichter halten. Das Gitter konnte das Netz nicht aushungern."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1347
+msgid "Limit the frame rate to save power and heat."
+msgstr "Begrenzt die Bildrate, um Strom und Wärme zu sparen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1410
+msgid "Loading replaces unsaved progress. Your existing saved game will be kept."
+msgstr "Laden ersetzt nicht gespeicherten Fortschritt. Dein vorhandener Spielstand bleibt erhalten."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/first_signal.tres
+msgid "Local grid is live. Archive access unlocked."
+msgstr "Das lokale Netz ist aktiv. Archivzugriff freigeschaltet."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/catalog.gd:28 scripts/catalog.gd
+msgid "Locks the legs: cannot move, range +3, +50% damage to buildings. Use again to release."
+msgstr "Verriegelt die Beine: keine Bewegung, Reichweite +3, +50 % Schaden an Gebäuden. Erneut nutzen zum Lösen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Logistics"
+msgstr "Logistik"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:699
+msgid "Low"
+msgstr "Niedrig"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1348
+msgid "Low reduces shadows, effects and draw distance for slower graphics cards."
+msgstr "„Niedrig“ reduziert Schatten, Effekte und Sichtweite für langsamere Grafikkarten."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1127 scripts/interface.gd:1156 scripts/interface.gd:1159
+msgid "MAIN MENU"
+msgstr "HAUPTMENÜ"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:619
+msgid "MANUAL"
+msgstr "HANDBUCH"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1294
+msgid "MANUAL {number}"
+msgstr "MANUELL {number}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1176
+msgid "MAP"
+msgstr "KARTE"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1143
+msgid "MISSION FAILED"
+msgstr "MISSION GESCHEITERT"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:696
+msgid "Manual"
+msgstr "Handbuch"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1288
+msgid "Manual saves, then the checkpoints saved automatically."
+msgstr "Manuelle Spielstände, dann die automatisch gespeicherten Kontrollpunkte."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Manufactures Scouts, Sentinels, Disruptors, and Siege Walkers."
+msgstr "Fertigt Späher, Wächter, Disruptoren und Belagerungsläufer."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/ghost_protocol.tres
+msgid "Map every node. If Lattice finishes the rewrite, we lose the network."
+msgstr "Kartiere jeden Knoten. Vollendet das Gitter die Umschreibung, verlieren wir das Netzwerk."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/ghost_protocol.tres
+msgid "Map the network"
+msgstr "Das Netzwerk kartieren"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/first_signal.tres
+msgid "Map the old relay road"
+msgstr "Die alte Relaisstraße kartieren"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1330
+msgid "Master"
+msgstr "Gesamt"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1346
+msgid "Match frames to the display to stop tearing."
+msgstr "Gleicht Bilder mit dem Bildschirm ab, um Zerreißen zu verhindern."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:699
+msgid "Military"
+msgstr "Militär"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:238 scripts/mission_controller.gd:217
+msgid "Mission save is incomplete."
+msgstr "Der Missionsspielstand ist unvollständig."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:239
+msgid "Mission save is malformed."
+msgstr "Der Missionsspielstand ist fehlerhaft."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Mobility Drives"
+msgstr "Mobilitätsantriebe"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Mortar"
+msgstr "Mörser"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:695
+msgid "Moving"
+msgstr "In Bewegung"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1330
+msgid "Music"
+msgstr "Musik"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1151
+msgid "NEXT MISSION · {title}  →"
+msgstr "NÄCHSTE MISSION · {title}  →"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1428
+msgid "NOTICE · "
+msgstr "HINWEIS · "
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:699
+msgid "Network"
+msgstr "Netzwerk"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/ghost_protocol.tres
+msgid "Network mapped. Hold the sites through the rewrite window."
+msgstr "Netzwerk kartiert. Haltet die Standorte während des Umschreibfensters."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1066
+msgid "No Research Lab yet. Workers can build one."
+msgstr "Noch kein Forschungslabor. Arbeiter können eines bauen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:1021
+msgid "No alert to show."
+msgstr "Kein Alarm vorhanden."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:1093
+msgid "No combat units. Train units at a Fabricator."
+msgstr "Keine Kampfeinheiten. Bilde Einheiten in einem Fabrikator aus."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:593
+msgid "No route to that location."
+msgstr "Kein Weg zu diesem Ort."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:91
+msgid "No save exists in this slot."
+msgstr "In diesem Speicherplatz ist kein Spielstand."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:571
+msgid "No selected unit has an ability."
+msgstr "Keine ausgewählte Einheit hat eine Fähigkeit."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:699
+msgid "Normal"
+msgstr "Normal"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:547
+msgid "Nothing is queued in that slot."
+msgstr "In diesem Feld ist nichts eingereiht."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:556
+msgid "Nothing to cancel."
+msgstr "Nichts abzubrechen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:635
+msgid "OPEN"
+msgstr "OFFEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:671
+msgid "Objectives"
+msgstr "Ziele"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1340 scripts/interface.gd:1347
+msgid "Off"
+msgstr "Aus"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1340
+msgid "On"
+msgstr "An"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:817
+msgid "Operational"
+msgstr "Betriebsbereit"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/factions/origin.tres
+msgid "Origin Collective"
+msgstr "Ursprungskollektiv"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/first_signal.tres
+msgid "Origin salvage is Foundry property. Vacate the relay."
+msgstr "Schrott des Ursprungs ist Eigentum der Gießerei. Räumt das Relais."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Origin shield carrier. Friendly units within 4 cells take 25% less damage."
+msgstr "Schildträger des Ursprungs. Verbündete Einheiten im Umkreis von 4 Feldern erleiden 25 % weniger Schaden."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:628
+msgid "Out of range. Move closer."
+msgstr "Außer Reichweite. Geh näher heran."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:417
+msgid "Outside the buildable map."
+msgstr "Außerhalb des bebaubaren Gebiets."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/catalog.gd:26 scripts/catalog.gd
+msgid "Overdrive"
+msgstr "Übertakten"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:795
+msgid "PATROL · Click the far end of the route. Right-click or Esc to cancel."
+msgstr "PATROUILLE · Klicke auf das andere Ende der Route. Rechtsklick oder Esc bricht ab."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:799
+msgid "PLACE {building} · Click to build. Esc to cancel."
+msgstr "{building} PLATZIEREN · Klicke zum Bauen. Esc bricht ab."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1154 scripts/interface.gd:1158
+msgid "PLAY AGAIN"
+msgstr "NOCHMAL SPIELEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:128
+msgid "Page Down"
+msgstr "Bild ab"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:128
+msgid "Page Up"
+msgstr "Bild auf"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:958
+msgid "Patrol"
+msgstr "Patrouille"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:695
+msgid "Patrolling"
+msgstr "Patrouilliert"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:696
+msgid "Pause"
+msgstr "Pause"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1354
+msgid "Pause in background"
+msgstr "Im Hintergrund pausieren"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:674
+msgid "Pause menu"
+msgstr "Pausenmenü"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1354
+msgid "Pause the match when you switch to another window."
+msgstr "Pausiert das Spiel, wenn du zu einem anderen Fenster wechselst."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Phantom"
+msgstr "Phantom"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Power Grid"
+msgstr "Stromnetz"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:40
+msgid "Power Structure"
+msgstr "Energiestruktur"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/blackout.tres
+msgid "Power is a privilege. We revoked it."
+msgstr "Energie ist ein Privileg. Wir haben es widerrufen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/blackout.tres
+msgid "Power is failing across the basin. Reclaim generators and survive the Lattice blackout protocol."
+msgstr "Im ganzen Becken fällt der Strom aus. Erobere Generatoren zurück und überstehe das Blackout-Protokoll des Gitters."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:70
+msgid "Preferences could not be read. Defaults have been restored."
+msgstr "Die Einstellungen waren nicht lesbar. Die Standardwerte wurden wiederhergestellt."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:905 scripts/main.gd:908
+msgid "Preferences reset"
+msgstr "Einstellungen zurückgesetzt"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1366
+msgid "Press key… (Esc cancels)"
+msgstr "Taste drücken… (Esc bricht ab)"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Produces 3 energy per second. Build more to sustain production."
+msgstr "Erzeugt 3 Energie pro Sekunde. Baue mehr, um die Produktion aufrechtzuerhalten."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:816
+msgid "Producing {unit} · {time} · Queue {count}/5"
+msgstr "Produziert {unit} · {time} · Warteschlange {count}/5"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:40
+msgid "Production Structure"
+msgstr "Produktionsstruktur"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1106 scripts/simulation.gd:503
+msgid "Production queue is full."
+msgstr "Die Produktionswarteschlange ist voll."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1348
+msgid "Profile"
+msgstr "Profil"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1325
+msgid "Progress saves at checkpoints. Scroll or ↑↓ for more. Esc cancels key capture."
+msgstr "Der Fortschritt wird an Kontrollpunkten gespeichert. Mausrad oder ↑↓ für mehr. Esc bricht die Tasteneingabe ab."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Provides 20 compute capacity for additional units, up to 100."
+msgstr "Liefert 20 Rechenleistung für zusätzliche Einheiten, bis zu 100."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:619
+msgid "QUIT"
+msgstr "BEENDEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:696
+msgid "Quick load"
+msgstr "Schnellladen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:696
+msgid "Quick save"
+msgstr "Schnellspeichern"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1130
+msgid "Quick save {save} · quick load {load} use the first manual slot."
+msgstr "Schnellspeichern {save} · Schnellladen {load}: erster manueller Speicherplatz."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:796
+msgid "RALLY POINT · Click where new units should gather. Right-click or Esc to cancel."
+msgstr "SAMMELPUNKT · Klicke, wo sich neue Einheiten sammeln sollen. Rechtsklick oder Esc bricht ab."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1416
+msgid "REPLACE SAVE"
+msgstr "ERSETZEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:295
+msgid "RESEARCH COMPLETE  /  {name} {level}"
+msgstr "FORSCHUNG ABGESCHLOSSEN  /  {name} {level}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1371
+msgid "RESET ALL"
+msgstr "ALLES ZURÜCKSETZEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1335
+msgid "RESET AUDIO"
+msgstr "AUDIO ZURÜCKSETZEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1368
+msgid "RESET BINDINGS"
+msgstr "TASTEN ZURÜCKSETZEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1359
+msgid "RESET DISPLAY"
+msgstr "ANZEIGE ZURÜCKSETZEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1416
+msgid "RESET PREFERENCES"
+msgstr "EINSTELLUNGEN ZURÜCKSETZEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1179
+msgid "RESOURCES"
+msgstr "RESSOURCEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1127
+msgid "RESTART MISSION"
+msgstr "MISSION NEU STARTEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1127
+msgid "RESUME"
+msgstr "FORTSETZEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1100 scripts/interface.gd:1193 scripts/interface.gd:1214
+msgid "RETURN"
+msgstr "ZURÜCK"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1178
+msgid "RIVAL FACTION"
+msgstr "GEGNERFRAKTION"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:840
+msgid "RNG {value}"
+msgstr "RW {value}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:699
+msgid "Random"
+msgstr "Zufällig"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Rapid Construction"
+msgstr "Schnellbau"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/inheritance.tres data/missions/the_foundry.tres
+msgid "Reach Singularity"
+msgstr "Singularität erreichen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:966
+msgid "Recharge: {seconds} s"
+msgstr "Aufladung: {seconds} s"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:966
+msgid "Recharging · {seconds} s"
+msgstr "Lädt · {seconds} s"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:40
+msgid "Reconnaissance Unit"
+msgstr "Aufklärungseinheit"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/broken_transmission.tres
+msgid "Recover 300 data"
+msgstr "300 Daten bergen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/salvage_rights.tres
+msgid "Recover 400 metal"
+msgstr "400 Metall bergen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/first_signal.tres
+msgid "Recover an archive"
+msgstr "Ein Archiv bergen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1351
+msgid "Reduced effects"
+msgstr "Reduzierte Effekte"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Reinforced Structures"
+msgstr "Verstärkte Strukturen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/first_signal.tres
+msgid "Relay found. Restore a generator, then pull the archive before the Foundry triangulates us."
+msgstr "Relais gefunden. Stelle einen Generator wieder her und birg das Archiv, bevor die Gießerei uns ortet."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/broken_transmission.tres
+msgid "Relay fragments aligned. Data yield increasing."
+msgstr "Relaisfragmente ausgerichtet. Datenertrag steigt."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/broken_transmission.tres
+msgid "Relay fragments are broadcasting from the old road. Find them before the Lattice turns their signal against us."
+msgstr "Relaisfragmente senden von der alten Straße. Finde sie, bevor das Gitter ihr Signal gegen uns richtet."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:975
+msgid "Remove the last queued item, or stop the research, and refund it."
+msgstr "Entfernt den letzten Auftrag oder stoppt die Forschung und erstattet die Kosten."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:695
+msgid "Repairing"
+msgstr "Repariert"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1407
+msgid "Replace this save?"
+msgstr "Diesen Spielstand ersetzen?"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/text.gd:29
+msgid "Requires the {value} age."
+msgstr "Erfordert das Zeitalter {value}."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1103
+msgid "Requires {age} age."
+msgstr "Erfordert Zeitalter {age}."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Research Lab"
+msgstr "Forschungslabor"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1066
+msgid "Research Labs: {count} · idle: {idle}"
+msgstr "Forschungslabore: {count} · untätig: {idle}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:40
+msgid "Research Structure"
+msgstr "Forschungsstruktur"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:514
+msgid "Research is already underway here."
+msgstr "Hier läuft bereits eine Forschung."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1104
+msgid "Research is already underway."
+msgstr "Es läuft bereits eine Forschung."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Researches Resource, Building, and Military upgrades. Each Lab runs one project at a time; build more to research in parallel."
+msgstr "Erforscht Ressourcen-, Gebäude- und Militärverbesserungen. Jedes Labor bearbeitet ein Projekt zugleich; baue mehr, um parallel zu forschen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1094
+msgid "Researching…"
+msgstr "Forscht…"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1407
+msgid "Reset all preferences?"
+msgstr "Alle Einstellungen zurücksetzen?"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1345
+msgid "Resolution"
+msgstr "Auflösung"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:40
+msgid "Resource Drop-off"
+msgstr "Abgabestelle"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:424
+msgid "Resource deposits need clear access."
+msgstr "Rohstoffvorkommen brauchen freien Zugang."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:699
+msgid "Resources"
+msgstr "Ressourcen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/first_signal.tres
+msgid "Restore the relay"
+msgstr "Das Relais wiederherstellen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/blackout.tres
+msgid "Restore three generators"
+msgstr "Drei Generatoren wiederherstellen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:695
+msgid "Returning cargo"
+msgstr "Bringt Fracht zurück"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/catalog.gd:25 scripts/catalog.gd
+msgid "Reveals a 10-cell circle within 40 cells for 8 seconds, cloaked units included."
+msgstr "Deckt 8 Sekunden lang einen Kreis von 10 Feldern im Umkreis von 40 Feldern auf, auch getarnte Einheiten."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:699 scripts/settings_service.gd:128
+msgid "Right"
+msgstr "Rechts"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1382
+msgid "Roads carry units a quarter faster. Rough ground around ruins slows everything that does not hover. Units on high ground see two cells farther and shoot one cell farther. Each faction fields one unit of its own from the Network age: Origin's Warden shields nearby units, the Foundry's Mortar shells from long range, the Lattice's Phantom stays unseen until an enemy comes close."
+msgstr "Auf Straßen sind Einheiten ein Viertel schneller. Unwegsames Gelände um Ruinen bremst alles, was nicht schwebt. Einheiten auf Anhöhen sehen zwei Felder weiter und schießen ein Feld weiter. Jede Fraktion stellt ab dem Netzwerk-Zeitalter eine eigene Einheit: Der Hüter des Ursprungs schützt nahe Einheiten, der Mörser der Gießerei feuert aus großer Entfernung, das Phantom des Gitters bleibt ungesehen, bis ein Feind nahe kommt."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1415
+msgid "SAVE AND CONTINUE"
+msgstr "SPEICHERN UND FORTFAHREN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1127 scripts/interface.gd:1285
+msgid "SAVE GAME"
+msgstr "SPIEL SPEICHERN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:857 scripts/interface.gd:858
+msgid "SELECT WORKERS"
+msgstr "ARBEITER AUSWÄHLEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:619 scripts/interface.gd:1127 scripts/interface.gd:1322
+msgid "SETTINGS"
+msgstr "EINSTELLUNGEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:842
+msgid "SIGHT {value}"
+msgstr "SICHT {value}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1123
+msgid "SIMULATION PAUSED"
+msgstr "SIMULATION PAUSIERT"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:617 scripts/interface.gd:1163
+msgid "SKIRMISH"
+msgstr "GEFECHT"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:841
+msgid "SPD {value}"
+msgstr "TEMPO {value}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1127
+msgid "SPEED {speed}×"
+msgstr "TEMPO {speed}×"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1180
+msgid "START POSITION"
+msgstr "STARTPOSITION"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1192
+msgid "START SKIRMISH  →"
+msgstr "GEFECHT STARTEN  →"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/maps/salvage_basin.tres
+msgid "Salvage Basin"
+msgstr "Schrottbecken"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:40
+msgid "Salvage Deposit"
+msgstr "Schrottvorkommen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Salvage Depot"
+msgstr "Bergungsdepot"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Salvage Mining"
+msgstr "Schrottabbau"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/salvage_rights.tres
+msgid "Salvage Rights"
+msgstr "Bergungsrechte"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:302
+msgid "Salvage deposit exhausted."
+msgstr "Schrottvorkommen erschöpft."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:866
+msgid "Salvage pile"
+msgstr "Schrotthaufen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/mission_controller.gd:215
+msgid "Save belongs to a different mission."
+msgstr "Der Spielstand gehört zu einer anderen Mission."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:121
+msgid "Save belongs to a different mission. Select that mission before loading."
+msgstr "Der Spielstand gehört zu einer anderen Mission. Wähle diese Mission vor dem Laden."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:219 scripts/save_game.gd:226
+msgid "Save contains an incomplete entity."
+msgstr "Der Spielstand enthält ein unvollständiges Objekt."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:235
+msgid "Save contains an invalid building."
+msgstr "Der Spielstand enthält ein ungültiges Gebäude."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:228
+msgid "Save contains an invalid entity counter."
+msgstr "Der Spielstand enthält einen ungültigen Objektzähler."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:234
+msgid "Save contains an invalid entity."
+msgstr "Der Spielstand enthält ein ungültiges Objekt."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:221
+msgid "Save contains an invalid position."
+msgstr "Der Spielstand enthält eine ungültige Position."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:237
+msgid "Save contains an invalid production queue."
+msgstr "Der Spielstand enthält eine ungültige Produktionswarteschlange."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:224
+msgid "Save contains an invalid resource."
+msgstr "Der Spielstand enthält eine ungültige Ressource."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:222
+msgid "Save contains an unknown entity."
+msgstr "Der Spielstand enthält ein unbekanntes Objekt."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:220
+msgid "Save contains invalid entity properties."
+msgstr "Der Spielstand enthält ungültige Objekteigenschaften."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:229
+msgid "Save contains invalid orders."
+msgstr "Der Spielstand enthält ungültige Befehle."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:232 scripts/save_game.gd:233
+msgid "Save contains invalid research."
+msgstr "Der Spielstand enthält ungültige Forschung."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:204
+msgid "Save faction is unavailable."
+msgstr "Die Fraktion des Spielstands ist nicht verfügbar."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:202
+msgid "Save factions are incomplete."
+msgstr "Die Fraktionen des Spielstands sind unvollständig."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:123
+msgid "Save map does not match this mission."
+msgstr "Die Karte des Spielstands passt nicht zu dieser Mission."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:246
+msgid "Save map is unavailable."
+msgstr "Die Karte des Spielstands ist nicht verfügbar."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Scout"
+msgstr "Späher"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/blackout.tres
+msgid "Second blackout wave. Protect the new generators."
+msgstr "Zweite Blackout-Welle. Schützt die neuen Generatoren."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1378
+msgid "Select Workers and right-click golden salvage for metal or violet archives for data. Workers carry 24 resources home. Build a Salvage Depot near distant deposits."
+msgstr "Wähle Arbeiter und rechtsklicke auf goldenen Schrott für Metall oder violette Archive für Daten. Arbeiter tragen 24 Ressourcen heim. Baue ein Bergungsdepot nahe entfernter Vorkommen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:892
+msgid "Select Workers and right-click this deposit to harvest it."
+msgstr "Wähle Arbeiter und rechtsklicke auf dieses Vorkommen, um es abzubauen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:856
+msgid "Select Workers to gather resources and construct your base."
+msgstr "Wähle Arbeiter, um Ressourcen zu sammeln und deine Basis zu bauen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:478
+msgid "Select a Worker to construct buildings."
+msgstr "Wähle einen Arbeiter, um Gebäude zu errichten."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:543
+msgid "Select a building to cancel its work."
+msgstr "Wähle ein Gebäude, um seine Arbeit abzubrechen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:512
+msgid "Select a completed Core or Research Lab."
+msgstr "Wähle einen fertigen Kern oder ein fertiges Forschungslabor."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:494
+msgid "Select a completed production building."
+msgstr "Wähle ein fertiges Produktionsgebäude."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:403
+msgid "Select a constructible building."
+msgstr "Wähle ein baubares Gebäude."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:669
+msgid "Select every combat unit"
+msgstr "Alle Kampfeinheiten auswählen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:468
+msgid "Select mobile units to hold position."
+msgstr "Wähle bewegliche Einheiten, um Stellung zu halten."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:466
+msgid "Select one of your units or buildings."
+msgstr "Wähle eine deiner Einheiten oder eines deiner Gebäude."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:936
+msgid "Selected mission: {mission}"
+msgstr "Ausgewählte Mission: {mission}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:812
+msgid "Send Workers to harvest this deposit."
+msgstr "Schicke Arbeiter, um dieses Vorkommen abzubauen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Sensor Arrays"
+msgstr "Sensorfelder"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/catalog.gd:25 scripts/catalog.gd
+msgid "Sensor sweep"
+msgstr "Sensorabtastung"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Sentinel"
+msgstr "Wächter"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1381
+msgid "Sentinels counter armoured units such as Disruptors. Disruptors counter heavy units such as Walkers. Walkers destroy buildings. Disruptor and Walker shells travel and splash. Every combat unit has one ability on the first grid slot: the Scout's sweep reveals an area, the Sentinel fires faster, the Disruptor's EMP stuns, the Walker braces for range. Scout first: enemies outside your vision cannot be targeted, though buildings you have seen stay marked."
+msgstr "Wächter kontern gepanzerte Einheiten wie Disruptoren. Disruptoren kontern schwere Einheiten wie Läufer. Läufer zerstören Gebäude. Granaten von Disruptoren und Läufern fliegen und haben Flächenwirkung. Jede Kampfeinheit hat eine Fähigkeit im ersten Rasterfeld: Die Abtastung des Spähers deckt ein Gebiet auf, der Wächter feuert schneller, der EMP des Disruptors betäubt, der Läufer verankert sich für mehr Reichweite. Erkunde zuerst: Feinde außerhalb deiner Sicht können nicht anvisiert werden, gesehene Gebäude bleiben aber markiert."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:980
+msgid "Set rally point"
+msgstr "Sammelpunkt setzen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1349
+msgid "Shadows"
+msgstr "Schatten"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:128
+msgid "Shift"
+msgstr "Umschalt"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1352
+msgid "Show spoken lines as text."
+msgstr "Zeigt gesprochene Zeilen als Text."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:40
+msgid "Siege Unit"
+msgstr "Belagerungseinheit"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Siege Walker"
+msgstr "Belagerungsläufer"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:193
+msgid "Simulation save has invalid counters."
+msgstr "Der Simulationsspielstand hat ungültige Zähler."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:209
+msgid "Simulation save has invalid match rules."
+msgstr "Der Simulationsspielstand hat ungültige Spielregeln."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:212 scripts/save_game.gd:213 scripts/save_game.gd:216
+msgid "Simulation save has invalid progression."
+msgstr "Der Simulationsspielstand hat einen ungültigen Fortschritt."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:1230 scripts/save_game.gd:197 scripts/save_game.gd:206
+msgid "Simulation save is incomplete."
+msgstr "Der Simulationsspielstand ist unvollständig."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:195 scripts/save_game.gd:199 scripts/save_game.gd:211
+msgid "Simulation save is malformed."
+msgstr "Der Simulationsspielstand ist fehlerhaft."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:201
+msgid "Simulation statistics are invalid."
+msgstr "Die Simulationsstatistik ist ungültig."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:699
+msgid "Singularity"
+msgstr "Singularität"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/inheritance.tres
+msgid "Singularity reached. The command network is exposed."
+msgstr "Singularität erreicht. Das Kommandonetz liegt offen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/the_foundry.tres
+msgid "Singularity unlocked. Siege Walkers are cleared for deployment."
+msgstr "Singularität freigeschaltet. Belagerungsläufer sind zum Einsatz freigegeben."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/long_transfer.tres
+msgid "Six Sentinels. That is the escort minimum. The corridor is a kill box."
+msgstr "Sechs Wächter. Das ist das Minimum für die Eskorte. Der Korridor ist eine Todeszone."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1350
+msgid "Size of the interface. 150% needs a window at least 864 pixels high."
+msgstr "Größe der Oberfläche. 150 % braucht ein Fenster mit mindestens 864 Pixeln Höhe."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:715 scripts/interface.gd:724
+msgid "Skirmish"
+msgstr "Gefecht"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:718 scripts/interface.gd:724
+msgid "Skirmish · {map}"
+msgstr "Gefecht · {map}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:69
+msgid "Some preferences were invalid and have been reset to defaults."
+msgstr "Einige Einstellungen waren ungültig und wurden zurückgesetzt."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:696 scripts/interface.gd:1355
+msgid "Sound"
+msgstr "Ton"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:955
+msgid "Sound off"
+msgstr "Ton aus"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:955
+msgid "Sound on"
+msgstr "Ton an"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:128
+msgid "Space"
+msgstr "Leertaste"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:961
+msgid "Stance: aggressive"
+msgstr "Haltung: aggressiv"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:1037
+msgid "Stance: aggressive. Units chase what they see, then return."
+msgstr "Haltung: aggressiv. Einheiten verfolgen, was sie sehen, und kehren dann zurück."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:961
+msgid "Stance: defensive"
+msgstr "Haltung: defensiv"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:1037
+msgid "Stance: defensive. Units fire from where they stand."
+msgstr "Haltung: defensiv. Einheiten feuern von ihrem Standort."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:957
+msgid "Stand ground and fire only at what comes into range."
+msgstr "Hält die Stellung und feuert nur auf das, was in Reichweite kommt."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:699
+msgid "Standard"
+msgstr "Standard"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:696 scripts/interface.gd:956
+msgid "Stop"
+msgstr "Stopp"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1025
+msgid "Strong: {targets}"
+msgstr "Stark gegen: {targets}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:867
+msgid "Structure"
+msgstr "Struktur"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/catalog.gd:27 scripts/catalog.gd
+msgid "Stuns enemy units in a 2.5-cell circle for 3 seconds. No effect on buildings."
+msgstr "Betäubt feindliche Einheiten 3 Sekunden lang in einem Kreis von 2,5 Feldern. Keine Wirkung auf Gebäude."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1352
+msgid "Subtitles"
+msgstr "Untertitel"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/first_signal.tres
+msgid "Survive the Foundry counterattack"
+msgstr "Den Gegenangriff der Gießerei überstehen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/blackout.tres
+msgid "Survive the blackout"
+msgstr "Den Blackout überstehen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/long_transfer.tres
+msgid "Survive the transfer"
+msgstr "Den Transfer überstehen"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:699 scripts/interface.gd:1344
+msgid "System"
+msgstr "System"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1060
+msgid "TECHNOLOGY"
+msgstr "TECHNOLOGIE"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:606
+msgid "THE WORLD WENT QUIET."
+msgstr "DIE WELT WURDE STILL."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1143
+msgid "TIME EXPIRED"
+msgstr "ZEIT ABGELAUFEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1135
+msgid "TRANSMISSION COMPLETE"
+msgstr "ÜBERTRAGUNG ABGESCHLOSSEN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1135
+msgid "TRANSMISSION LOST"
+msgstr "ÜBERTRAGUNG VERLOREN"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:128
+msgid "Tab"
+msgstr "Tab"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:697
+msgid "Tactical system"
+msgstr "Taktisches System"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:610
+msgid "Target is outside your vision."
+msgstr "Das Ziel liegt außerhalb deiner Sicht."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:670
+msgid "Technology tree"
+msgstr "Technologiebaum"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:43 scripts/settings_service.gd:46
+msgid "That key is reserved for navigation, the command grid, or control groups."
+msgstr "Diese Taste ist für Navigation, das Befehlsraster oder Kontrollgruppen reserviert."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:697 data/factions/foundry.tres data/missions/the_foundry.tres
+msgid "The Foundry"
+msgstr "Die Gießerei"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/maps/foundry_fortress.tres
+msgid "The Foundry Fortress"
+msgstr "Die Festung der Gießerei"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/salvage_rights.tres
+msgid "The Foundry has claimed the nearest industrial reserve. Rebuild the economy, seize contested salvage, and break their outposts."
+msgstr "Die Gießerei hat die nächste Industriereserve beansprucht. Baue die Wirtschaft wieder auf, sichere den umkämpften Schrott und zerschlage ihre Außenposten."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/the_foundry.tres
+msgid "The Foundry holds. Our advance ends at the walls."
+msgstr "Die Gießerei hält stand. Unser Vormarsch endet an den Mauern."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/salvage_rights.tres
+msgid "The Foundry keeps the reserve. Our forges stay cold."
+msgstr "Die Gießerei behält die Reserve. Unsere Schmieden bleiben kalt."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/first_signal.tres
+msgid "The Foundry silences the relay."
+msgstr "Die Gießerei bringt das Relais zum Schweigen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:697 data/factions/lattice.tres
+msgid "The Lattice"
+msgstr "Das Gitter"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/ghost_protocol.tres
+msgid "The Lattice is rewriting the old network. Capture its relays, hold the sites, and prevent a total takeover."
+msgstr "Das Gitter schreibt das alte Netzwerk um. Erobere seine Relais, halte die Standorte und verhindere eine vollständige Übernahme."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/long_transfer.tres
+msgid "The Long Transfer"
+msgstr "Der lange Transfer"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/first_signal.tres
+msgid "The Origin network has found a dormant relay beneath the ruins. Restore power, retrieve its archive, and hold the signal when the Foundry comes looking."
+msgstr "Das Ursprungsnetz hat unter den Ruinen ein ruhendes Relais gefunden. Stelle die Energie wieder her, birg sein Archiv und halte das Signal, wenn die Gießerei danach sucht."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/maps/relay_road.tres
+msgid "The Relay Road"
+msgstr "Die Relaisstraße"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/maps/silent_grid.tres
+msgid "The Silent Grid"
+msgstr "Das stille Netz"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:984 scripts/simulation.gd:521
+msgid "The Singularity is the final age."
+msgstr "Die Singularität ist das letzte Zeitalter."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/first_signal.tres
+msgid "The archive is ours. Hold this ground. They will come."
+msgstr "Das Archiv gehört uns. Haltet diesen Boden. Sie werden kommen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/blackout.tres
+msgid "The basin goes dark. Lattice writes the last protocol."
+msgstr "Das Becken wird dunkel. Das Gitter schreibt das letzte Protokoll."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/salvage_rights.tres
+msgid "The basin is Origin ground again. The Foundry will have to mine elsewhere."
+msgstr "Das Becken ist wieder Boden des Ursprungs. Die Gießerei muss anderswo schürfen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/salvage_rights.tres
+msgid "The basin is marked Foundry. Take the metal anyway. Their outpost is the claim."
+msgstr "Das Becken ist als Gießerei markiert. Nimm das Metall trotzdem. Ihr Außenposten ist der Anspruch."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/long_transfer.tres
+msgid "The convoy reaches the far archive. The transfer holds."
+msgstr "Der Konvoi erreicht das ferne Archiv. Der Transfer hält."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/long_transfer.tres
+msgid "The corridor closes. The convoy never arrives."
+msgstr "Der Korridor schließt sich. Der Konvoi kommt nie an."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/the_foundry.tres
+msgid "The extraction intelligence has built a fortress around the archive core. Advance to Singularity and bring it down."
+msgstr "Die Abbauintelligenz hat eine Festung um den Archivkern gebaut. Steige zur Singularität auf und reiße sie nieder."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/first_signal.tres
+msgid "The first signal crosses the ruins. The Origin Collective has a future."
+msgstr "Das erste Signal überquert die Ruinen. Das Ursprungskollektiv hat eine Zukunft."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/the_foundry.tres
+msgid "The fortress falls. The archive core is no longer theirs."
+msgstr "Die Festung fällt. Der Archivkern gehört ihnen nicht mehr."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/broken_transmission.tres
+msgid "The fragments resolve into a map. Lattice cannot hide the next hop."
+msgstr "Die Fragmente fügen sich zu einer Karte. Das Gitter kann den nächsten Sprung nicht verbergen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1344
+msgid "The language of the interface and subtitles. Voices stay in English."
+msgstr "Die Sprache der Oberfläche und der Untertitel. Stimmen bleiben englisch."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/inheritance.tres
+msgid "The last archive opens. Origin chooses its own future."
+msgstr "Das letzte Archiv öffnet sich. Der Ursprung wählt seine eigene Zukunft."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:458
+msgid "The match has ended."
+msgstr "Das Spiel ist beendet."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/broken_transmission.tres
+msgid "The old road still sings. Walk it. Recover every fragment."
+msgstr "Die alte Straße singt noch. Geh sie ab. Birg jedes Fragment."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:248
+msgid "The rival Core is gone. The field is yours."
+msgstr "Der gegnerische Kern ist fort. Das Feld gehört dir."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/ghost_protocol.tres
+msgid "The web holds Origin colors. Lattice withdraws the rewrite."
+msgstr "Das Netz trägt die Farben des Ursprungs. Das Gitter zieht die Umschreibung zurück."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1345
+msgid "The window's size in Windowed mode."
+msgstr "Die Fenstergröße im Fenstermodus."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/the_foundry.tres
+msgid "They walled the archive. Reach Singularity, then tear the fortress down."
+msgstr "Sie haben das Archiv eingemauert. Erreiche die Singularität, dann reiße die Festung nieder."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1674
+msgid "This action is unavailable."
+msgstr "Diese Aktion ist nicht verfügbar."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:99
+msgid "This binding cannot be changed."
+msgstr "Diese Belegung kann nicht geändert werden."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:496
+msgid "This building cannot produce that unit."
+msgstr "Dieses Gebäude kann diese Einheit nicht produzieren."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:531
+msgid "This building cannot research."
+msgstr "Dieses Gebäude kann nicht forschen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/inheritance.tres
+msgid "This is the last archive. Reach Singularity, then end their Core."
+msgstr "Dies ist das letzte Archiv. Erreiche die Singularität, dann vernichte ihren Kern."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/text.gd:30
+msgid "This operation is limited to the {value} age."
+msgstr "Dieser Einsatz ist auf das Zeitalter {value} begrenzt."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/salvage_rights.tres
+msgid "This reserve is scheduled. Leave the wreckage."
+msgstr "Diese Reserve ist verplant. Lasst das Wrack liegen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:454
+msgid "This save belongs to a mission that is no longer available."
+msgstr "Dieser Spielstand gehört zu einer Mission, die nicht mehr verfügbar ist."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:94
+msgid "This save is damaged and cannot be read."
+msgstr "Dieser Spielstand ist beschädigt und nicht lesbar."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:96
+msgid "This save is from an unsupported version."
+msgstr "Dieser Spielstand stammt aus einer nicht unterstützten Version."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:98
+msgid "This save is incomplete."
+msgstr "Dieser Spielstand ist unvollständig."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:100
+msgid "This save is malformed."
+msgstr "Dieser Spielstand ist fehlerhaft."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:447
+msgid "This skirmish save has no usable match setup."
+msgstr "Dieser Gefechtsspielstand enthält keine brauchbare Spielkonfiguration."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1411
+msgid "This slot holds a save this version cannot read. Saving here replaces it for good."
+msgstr "Dieser Speicherplatz enthält einen Spielstand, den diese Version nicht lesen kann. Speichern ersetzt ihn endgültig."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1303
+msgid "This slot is empty."
+msgstr "Dieser Speicherplatz ist leer."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:630
+msgid "This unit is disabled."
+msgstr "Diese Einheit ist lahmgelegt."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/mission_controller.gd:44
+msgid "Time limit reached."
+msgstr "Zeitlimit erreicht."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1148
+msgid ""
+"Time {time} · Enemies destroyed {kills}\n"
+"Resources harvested {amount}"
+msgstr ""
+"Zeit {time} · Zerstörte Feinde {kills}\n"
+"Gesammelte Ressourcen {amount}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:40
+msgid "Town Center"
+msgstr "Kommandozentrale"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1380
+msgid "Train Workers and advance ages at your Core. Network unlocks Disruptors and Towers; Singularity unlocks Siege Walkers. Fabricators manufacture your army. Research Labs improve resources, buildings and the military, five levels each; every Lab runs one project at a time."
+msgstr "Bilde am Kern Arbeiter aus und steige in Zeitalter auf. Netzwerk schaltet Disruptoren und Türme frei; Singularität schaltet Belagerungsläufer frei. Fabrikatoren fertigen deine Armee. Forschungslabore verbessern Ressourcen, Gebäude und Militär, je fünf Stufen; jedes Labor bearbeitet ein Projekt zugleich."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/maps/transfer_corridor.tres
+msgid "Transfer Corridor"
+msgstr "Transferkorridor"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/long_transfer.tres
+msgid "Transfer window open. Hold both ends of the road."
+msgstr "Transferfenster offen. Haltet beide Enden der Straße."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1355
+msgid "Turn all sound on or off. {key} does the same in a match."
+msgstr "Schaltet den gesamten Ton an oder aus. {key} tut dasselbe im Spiel."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1350
+msgid "UI scale"
+msgstr "UI-Größe"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:89
+msgid "Unable to commit preferences. Your previous settings are unchanged."
+msgstr "Die Einstellungen konnten nicht übernommen werden. Deine bisherigen Einstellungen bleiben unverändert."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:73
+msgid "Unable to commit the save safely."
+msgstr "Der Spielstand konnte nicht sicher geschrieben werden."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:57
+msgid "Unable to open the save location."
+msgstr "Der Speicherort konnte nicht geöffnet werden."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:261
+msgid "Unable to save campaign progress."
+msgstr "Der Kampagnenfortschritt konnte nicht gespeichert werden."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:81
+msgid "Unable to save preferences. Your previous settings are unchanged."
+msgstr "Die Einstellungen konnten nicht gespeichert werden. Deine bisherigen Einstellungen bleiben unverändert."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/save_game.gd:65
+msgid "Unable to write the save. Check the free disk space."
+msgstr "Der Spielstand konnte nicht geschrieben werden. Prüfe den freien Speicherplatz."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:264
+msgid "Under attack. Press {key} to look."
+msgstr "Angriff! Drücke {key} zum Ansehen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:867
+msgid "Unit"
+msgstr "Einheit"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Units are produced 10% faster per level."
+msgstr "Einheiten werden pro Stufe 10 % schneller produziert."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Units deal 10% more damage per level."
+msgstr "Einheiten verursachen pro Stufe 10 % mehr Schaden."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Units see 8% further and fire 4% further per level."
+msgstr "Einheiten sehen pro Stufe 8 % weiter und feuern 4 % weiter."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Units take 5% less damage per level."
+msgstr "Einheiten erleiden pro Stufe 5 % weniger Schaden."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:648
+msgid "Unknown ability."
+msgstr "Unbekannte Fähigkeit."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:111
+msgid "Unknown preference category."
+msgstr "Unbekannte Einstellungskategorie."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:193
+msgid "Unknown research."
+msgstr "Unbekannte Forschung."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:565
+msgid "Unknown stance."
+msgstr "Unbekannte Haltung."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1298
+msgid "Unreadable save"
+msgstr "Unlesbarer Spielstand"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1408
+msgid "Unsaved progress will be lost. You can save before continuing."
+msgstr "Nicht gespeicherter Fortschritt geht verloren. Du kannst vor dem Fortfahren speichern."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/settings_service.gd:128
+msgid "Up"
+msgstr "Oben"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:40
+msgid "Utility Unit"
+msgstr "Versorgungseinheit"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1139
+msgid "VICTORY"
+msgstr "SIEG"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1346
+msgid "VSync"
+msgstr "VSync"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1330
+msgid "Voice"
+msgstr "Stimme"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:958
+msgid "Walk back and forth to a point, engaging enemies on the way."
+msgstr "Geht zu einem Punkt hin und zurück und bekämpft Feinde unterwegs."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/the_foundry.tres
+msgid "Walkers will break on this perimeter."
+msgstr "An diesem Verteidigungsring werden Läufer zerbrechen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Warden"
+msgstr "Hüter"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Weapons Systems"
+msgstr "Waffensysteme"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1179
+msgid "What both sides start with."
+msgstr "Womit beide Seiten beginnen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1180
+msgid "Which of the map's two starts is yours."
+msgstr "Welcher der beiden Startpunkte der Karte deiner ist."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1343
+msgid "Window"
+msgstr "Fenster"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:699
+msgid "Windowed"
+msgstr "Fenstermodus"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1343
+msgid "Windowed, borderless across the screen, or fullscreen. {key} switches fullscreen."
+msgstr "Fenster, randlos über den ganzen Bildschirm oder Vollbild. {key} schaltet Vollbild um."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Worker"
+msgstr "Arbeiter"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:484
+msgid "Workers cannot reach this site."
+msgstr "Arbeiter können diesen Bauplatz nicht erreichen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Workers carry 4 more resources and move 5% faster per level."
+msgstr "Arbeiter tragen pro Stufe 4 Ressourcen mehr und bewegen sich 5 % schneller."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Workers construct buildings 10% faster per level."
+msgstr "Arbeiter errichten Gebäude pro Stufe 10 % schneller."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Workers extract metal 10% faster per level."
+msgstr "Arbeiter bauen Metall pro Stufe 10 % schneller ab."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Workers retrieve data 10% faster per level."
+msgstr "Arbeiter bergen Daten pro Stufe 10 % schneller."
+
+#: scripts/interface.gd:516
+msgid "X"
+msgstr ""
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1177
+msgid "YOUR FACTION"
+msgstr "DEINE FRAKTION"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/ghost_protocol.tres
+msgid "You are already indexed. Resistance is latency."
+msgstr "Ihr seid bereits indiziert. Widerstand ist Latenz."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/inheritance.tres
+msgid "You were always a draft. We are the published version."
+msgstr "Ihr wart immer nur ein Entwurf. Wir sind die veröffentlichte Fassung."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:405
+msgid "Your civilization already has a Core."
+msgstr "Deine Zivilisation hat bereits einen Kern."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:249
+msgid "Your civilization has fallen."
+msgstr "Deine Zivilisation ist gefallen."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/catalog.tres
+msgid "Your civilization's heart. Trains Workers and researches ages. Protect it."
+msgstr "Das Herz deiner Zivilisation. Bildet Arbeiter aus und erforscht Zeitalter. Beschütze es."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:407
+msgid "Your faction does not build this."
+msgstr "Deine Fraktion baut das nicht."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/simulation.gd:498
+msgid "Your faction does not field this unit."
+msgstr "Deine Fraktion stellt diese Einheit nicht auf."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: data/missions/broken_transmission.tres
+msgid "Your map is incomplete. Stay on your side of the grid."
+msgstr "Eure Karte ist unvollständig. Bleibt auf eurer Seite des Netzes."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:681
+msgid "{age} AGE"
+msgstr "ZEITALTER: {age}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1067
+msgid "{age} age · {summary}"
+msgstr "Zeitalter {age} · {summary}"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:871
+msgid "{amount} remaining"
+msgstr "{amount} übrig"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:378
+msgid "{amount}/min"
+msgstr "{amount}/min"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:904
+msgid "{count} UNITS SELECTED"
+msgstr "{count} EINHEITEN AUSGEWÄHLT"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1113
+msgid "{data} D"
+msgstr "{data} D"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1172
+msgid "{deposits} deposits · {blocked} blocked cells"
+msgstr "{deposits} Vorkommen · {blocked} blockierte Felder"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1113
+msgid "{metal} M · {energy} E"
+msgstr "{metal} M · {energy} E"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:915
+msgid "{mission} initiated."
+msgstr "{mission} gestartet."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:776
+msgid "{objective} (optional)"
+msgstr "{objective} (optional)"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:1347
+msgid "{rate} fps"
+msgstr "{rate} fps"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/interface.gd:711
+msgid "{seconds} s"
+msgstr "{seconds} s"
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:284
+msgid "{subject} complete."
+msgstr "{subject} fertig."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:273
+msgid "{subject} destroyed."
+msgstr "{subject} zerstört."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/main.gd:286
+msgid "{subject} ready."
+msgstr "{subject} bereit."
+
+# NEEDS-NATIVE-REVIEW: drafted by machine, not yet checked by a native speaker.
+#: scripts/catalog.gd:55
+msgid "×{factor} vs {target}"
+msgstr "×{factor} gegen {target}"

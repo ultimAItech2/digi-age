@@ -10,6 +10,7 @@ run_check() {
   timeout 600 ./tools/godot.sh --headless --script "$test_script" 2>&1 | tee "$log_file"
   if grep -Eq 'SCRIPT ERROR|^ERROR:|FAIL:' "$log_file"; then return 1; fi
 }
+python3 tools/extract_strings.py --check
 run_check tests/simulation_test.gd
 run_check tests/production_foundation_test.gd
 run_check tests/campaign_test.gd
@@ -19,6 +20,7 @@ run_check tests/model_assets_test.gd
 run_check tests/sprite_cards_test.gd
 run_check tests/ui_production_test.gd
 run_check tests/integration_test.gd
+run_check tests/localisation_test.gd
 run_check tests/mission_completion_test.gd
 if [[ "${1:-}" == "--soak" ]]; then
   run_check tests/soak_test.gd

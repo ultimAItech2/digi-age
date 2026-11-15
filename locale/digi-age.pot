@@ -1,0 +1,2286 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Digital Age\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: scripts/interface.gd:1341
+msgid "(window fits {percent}%)"
+msgstr ""
+
+#: scripts/interface.gd:1378
+msgid "01 / ESTABLISH"
+msgstr ""
+
+#: scripts/interface.gd:1379
+msgid "02 / EXPAND"
+msgstr ""
+
+#: scripts/interface.gd:1380
+msgid "03 / EVOLVE"
+msgstr ""
+
+#: scripts/interface.gd:1381
+msgid "04 / CONQUER"
+msgstr ""
+
+#: scripts/interface.gd:1382
+msgid "05 / GROUND AND FACTIONS"
+msgstr ""
+
+#: scripts/interface.gd:1383
+msgid "06 / COMMAND"
+msgstr ""
+
+#: scripts/interface.gd:1384
+msgid "07 / NAVIGATE"
+msgstr ""
+
+#: data/factions/lattice.tres
+msgid "A control intelligence that subverts networks before it commits machines."
+msgstr ""
+
+#: scripts/interface.gd:617
+msgid "A free match on any map, against the faction and difficulty you choose."
+msgstr ""
+
+#: scripts/main.gd:239
+msgid "A free match. Build, scout and destroy the rival Core."
+msgstr ""
+
+#: data/catalog.tres
+msgid "A nearby drop-off point for metal and data. Shortens worker journeys."
+msgstr ""
+
+#: data/factions/origin.tres
+msgid "A preservation network rebuilding intelligence from the ruins."
+msgstr ""
+
+#: scripts/simulation.gd:426
+msgid "A unit is occupying the site."
+msgstr ""
+
+#: scripts/interface.gd:794
+msgid "ABILITY · Click where to aim it. Right-click or Esc to cancel."
+msgstr ""
+
+#: scripts/main.gd:293
+msgid "AGE ADVANCED  /  {age}"
+msgstr ""
+
+#: scripts/interface.gd:1428
+msgid "ALERT · "
+msgstr ""
+
+#: scripts/interface.gd:839
+msgid "ATK {value}"
+msgstr ""
+
+#: scripts/interface.gd:792
+msgid "ATTACK-MOVE · Click a destination. Right-click or Esc to cancel."
+msgstr ""
+
+#: scripts/interface.gd:1328
+msgid "AUDIO"
+msgstr ""
+
+#: scripts/interface.gd:855
+msgid "AWAITING YOUR COMMAND"
+msgstr ""
+
+#: scripts/simulation.gd:578
+msgid "Ability is recharging."
+msgstr ""
+
+#: scripts/interface.gd:983
+msgid "Advance to the next technological age."
+msgstr ""
+
+#: scripts/simulation.gd:501
+msgid "Advance to the required age first."
+msgstr ""
+
+#: scripts/interface.gd:983
+msgid "Advance to {age}"
+msgstr ""
+
+#: scripts/interface.gd:808
+msgid "Advancing to {age}"
+msgstr ""
+
+#: scripts/interface.gd:827
+msgid "Age upgrade"
+msgstr ""
+
+#: scripts/simulation.gd:518
+msgid "Ages are researched at the Core; technologies at a Research Lab."
+msgstr ""
+
+#: data/catalog.tres
+msgid "All buildings gain 8% integrity per level."
+msgstr ""
+
+#: scripts/interface.gd:1223
+msgid "All models, terrain, interface and campaign data were made for Digital Age. The full credits ship beside the game as CREDITS.md."
+msgstr ""
+
+#: scripts/interface.gd:1718
+msgid "All objectives complete"
+msgstr ""
+
+#: scripts/settings_service.gd:48
+msgid "Already assigned to {action}. Choose another key."
+msgstr ""
+
+#: scripts/simulation.gd:201
+msgid "Already being researched."
+msgstr ""
+
+#: scripts/settings_service.gd:128
+msgid "Alt"
+msgstr ""
+
+#: data/missions/long_transfer.tres
+msgid "An archive convoy must cross the silent grid. Build an escort force and keep the transfer alive."
+msgstr ""
+
+#: data/catalog.tres
+msgid "An autonomous defensive weapon with extended detection range."
+msgstr ""
+
+#: data/factions/foundry.tres
+msgid "An extraction intelligence that converts every archive into production."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Archive Harvesting"
+msgstr ""
+
+#: scripts/interface.gd:697
+msgid "Archivist"
+msgstr ""
+
+#: scripts/interface.gd:1025
+msgid "Armour: {class}"
+msgstr ""
+
+#: scripts/interface.gd:698
+msgid "Armoured"
+msgstr ""
+
+#: scripts/interface.gd:1384
+msgid "Arrows, screen edges, or middle drag pan; the wheel zooms. Minimap left-click moves the camera; right-click issues orders. {pause}: pause. {manual}: manual. {fullscreen}: fullscreen. {alert}: jump to the last alert, which also pings the minimap."
+msgstr ""
+
+#: scripts/interface.gd:696 scripts/interface.gd:955
+msgid "Attack-move"
+msgstr ""
+
+#: scripts/interface.gd:695
+msgid "Attack-moving"
+msgstr ""
+
+#: scripts/interface.gd:695
+msgid "Attacking"
+msgstr ""
+
+#: scripts/interface.gd:1409
+msgid "Audio, display and keyboard settings will return to their defaults."
+msgstr ""
+
+#: scripts/interface.gd:775 scripts/interface.gd:1717
+msgid "Await orders"
+msgstr ""
+
+#: scripts/interface.gd:699
+msgid "Awakening"
+msgstr ""
+
+#: scripts/settings_service.gd:128
+msgid "Backspace"
+msgstr ""
+
+#: scripts/main.gd:690
+msgid "Binding updated"
+msgstr ""
+
+#: data/missions/blackout.tres
+msgid "Blackout"
+msgstr ""
+
+#: data/maps/blackout_grid.tres
+msgid "Blackout Grid"
+msgstr ""
+
+#: scripts/interface.gd:699
+msgid "Borderless"
+msgstr ""
+
+#: scripts/catalog.gd:28 scripts/catalog.gd
+msgid "Brace"
+msgstr ""
+
+#: data/missions/broken_transmission.tres
+msgid "Broken Transmission"
+msgstr ""
+
+#: scripts/interface.gd:1084
+msgid "Build a Research Lab first."
+msgstr ""
+
+#: scripts/main.gd:1074
+msgid "Build a Research Lab, or wait for one to finish its project."
+msgstr ""
+
+#: data/missions/long_transfer.tres
+msgid "Build an escort force"
+msgstr ""
+
+#: scripts/interface.gd:695
+msgid "Building"
+msgstr ""
+
+#: scripts/interface.gd:699
+msgid "Buildings"
+msgstr ""
+
+#: scripts/interface.gd:629
+msgid "CAMPAIGN OPERATIONS"
+msgstr ""
+
+#: scripts/interface.gd:1413
+msgid "CANCEL"
+msgstr ""
+
+#: scripts/interface.gd:801
+msgid "CANNOT BUILD · {reason}"
+msgstr ""
+
+#: scripts/interface.gd:846
+msgid "CARGO {value}"
+msgstr ""
+
+#: scripts/interface.gd:1191
+msgid "CHANGE"
+msgstr ""
+
+#: scripts/interface.gd:1155
+msgid "CHANGE SETUP"
+msgstr ""
+
+#: scripts/interface.gd:1294
+msgid "CHECKPOINT {number}"
+msgstr ""
+
+#: scripts/interface.gd:1370
+msgid "CLOSE"
+msgstr ""
+
+#: scripts/interface.gd:1428
+msgid "COMPLETE · "
+msgstr ""
+
+#: scripts/interface.gd:1403
+msgid "CONFIRM ACTION"
+msgstr ""
+
+#: scripts/interface.gd:1416
+msgid "CONTINUE WITHOUT SAVING"
+msgstr ""
+
+#: scripts/interface.gd:1143
+msgid "CORE LOST"
+msgstr ""
+
+#: scripts/interface.gd:619 scripts/interface.gd:1197
+msgid "CREDITS"
+msgstr ""
+
+#: scripts/save_game.gd:273
+msgid "Campaign progress could not be read and starts again. The old file was kept as campaign.save.damaged."
+msgstr ""
+
+#: scripts/save_game.gd:241
+msgid "Campaign save is incomplete."
+msgstr ""
+
+#: scripts/save_game.gd:243 scripts/save_game.gd:244
+msgid "Campaign save is malformed."
+msgstr ""
+
+#: scripts/interface.gd:975
+msgid "Cancel"
+msgstr ""
+
+#: scripts/main.gd:1049
+msgid "Cancelled and refunded."
+msgstr ""
+
+#: scripts/save_game.gd:19
+msgid "Cannot save an incomplete game state."
+msgstr ""
+
+#: scripts/save_game.gd:259
+msgid "Cannot save campaign progress."
+msgstr ""
+
+#: scripts/interface.gd:1349
+msgid "Cast shadows from the sun on terrain, buildings and units."
+msgstr ""
+
+#: scripts/main.gd:898
+msgid "Choose Load Saved Game or Cancel to preserve the saved game."
+msgstr ""
+
+#: scripts/main.gd:685
+msgid "Choose a single key without modifiers."
+msgstr ""
+
+#: scripts/interface.gd:1288
+msgid "Choose a slot to overwrite."
+msgstr ""
+
+#: scripts/settings_service.gd:47
+msgid "Choose a supported keyboard key."
+msgstr ""
+
+#: scripts/interface.gd:1383
+msgid "Click or drag to select; Shift adds units; double-click selects every unit of that type in view. The command grid uses the keys Q to T, A to G and Z to B in the order shown on each slot. Right-click moves, gathers, attacks, repairs, or sets a rally point. {attack}: attack-move. {stop}: stop. Hold position keeps units where they stand; Patrol walks them back and forth, engaging on the way. Cancel on a building's command grid removes its last queued item, or stops its research, and refunds the cost. Ctrl+1–9 saves groups; 1–9 recalls them."
+msgstr ""
+
+#: scripts/interface.gd:1353
+msgid "Colour-blind sides"
+msgstr ""
+
+#: scripts/interface.gd:40
+msgid "Combat Unit"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Combat units move 6% faster per level."
+msgstr ""
+
+#: scripts/interface.gd:1094
+msgid "Complete"
+msgstr ""
+
+#: scripts/interface.gd:636
+msgid "Complete the preceding operation to unlock this mission."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Composite Armor"
+msgstr ""
+
+#: scripts/interface.gd:40
+msgid "Compute Structure"
+msgstr ""
+
+#: scripts/interface.gd:1107 scripts/main.gd:298 scripts/simulation.gd:505
+msgid "Compute limit reached. Build a Data Center."
+msgstr ""
+
+#: scripts/interface.gd:821
+msgid "Constructing"
+msgstr ""
+
+#: scripts/interface.gd:814
+msgid "Constructing {percent}%"
+msgstr ""
+
+#: scripts/main.gd:751
+msgid "Control group {number} saved."
+msgstr ""
+
+#: data/missions/long_transfer.tres
+msgid "Convoy sighted. Cut the escort and take the archive."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Core"
+msgstr ""
+
+#: scripts/main.gd:277
+msgid "Core destroyed. Raise a new Core within two minutes or the match is lost."
+msgstr ""
+
+#: scripts/interface.gd:1238
+msgid "Credits are unavailable."
+msgstr ""
+
+#: scripts/settings_service.gd:128
+msgid "Ctrl"
+msgstr ""
+
+#: scripts/interface.gd:605
+msgid "D / A  ·  MACHINE CIVILIZATIONS"
+msgstr ""
+
+#: scripts/interface.gd:1189
+msgid "DIFFICULTY"
+msgstr ""
+
+#: scripts/interface.gd:613
+msgid "DIFFICULTY · {level}"
+msgstr ""
+
+#: scripts/interface.gd:1238
+msgid "DIGITAL AGE"
+msgstr ""
+
+#: scripts/interface.gd:845
+msgid "DISABLED"
+msgstr ""
+
+#: scripts/interface.gd:1337
+msgid "DISPLAY & CAPTIONS"
+msgstr ""
+
+#: scripts/interface.gd:635
+msgid "DONE"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Data Center"
+msgstr ""
+
+#: scripts/interface.gd:40
+msgid "Data Deposit"
+msgstr ""
+
+#: scripts/interface.gd:866
+msgid "Data archive"
+msgstr ""
+
+#: scripts/main.gd:302
+msgid "Data deposit exhausted."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Defense Tower"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Defense Towers deal 10% more damage and reach 0.6 cells further per level."
+msgstr ""
+
+#: scripts/interface.gd:40
+msgid "Defensive Structure"
+msgstr ""
+
+#: scripts/interface.gd:961
+msgid "Defensive units fire from where they stand. Aggressive units chase what they see, up to 12 cells, then return."
+msgstr ""
+
+#: scripts/settings_service.gd:128
+msgid "Delete"
+msgstr ""
+
+#: data/missions/salvage_rights.tres
+msgid "Destroy a Foundry outpost"
+msgstr ""
+
+#: data/missions/the_foundry.tres
+msgid "Destroy the Foundry fortress"
+msgstr ""
+
+#: data/missions/inheritance.tres
+msgid "Destroy the opposing command network"
+msgstr ""
+
+#: scripts/interface.gd:766 scripts/interface.gd:1711
+msgid "Destroy the rival Core"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Disruptor"
+msgstr ""
+
+#: scripts/settings_service.gd:128
+msgid "Down"
+msgstr ""
+
+#: scripts/interface.gd:1353
+msgid "Draw your side in blue and the rival in orange."
+msgstr ""
+
+#: scripts/catalog.gd:27 scripts/catalog.gd
+msgid "EMP shell"
+msgstr ""
+
+#: scripts/interface.gd:1428
+msgid "ERROR · "
+msgstr ""
+
+#: scripts/interface.gd:699
+msgid "Easy"
+msgstr ""
+
+#: scripts/interface.gd:1330
+msgid "Effects"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Electromagnetic artillery. Its shells splash, and deal triple damage to heavy units such as Siege Walkers."
+msgstr ""
+
+#: scripts/interface.gd:1295
+msgid "Empty"
+msgstr ""
+
+#: scripts/settings_service.gd:128
+msgid "End"
+msgstr ""
+
+#: scripts/interface.gd:868
+msgid "Enemy {role}"
+msgstr ""
+
+#: data/missions/blackout.tres
+msgid "Energy is gone. Raise three generators or the Core dies in the dark."
+msgstr ""
+
+#: scripts/settings_service.gd:128
+msgid "Enter"
+msgstr ""
+
+#: scripts/interface.gd:1131
+msgid "Esc resumes · Tab changes focus · Enter selects"
+msgstr ""
+
+#: scripts/settings_service.gd:128
+msgid "Escape"
+msgstr ""
+
+#: scripts/settings_service.gd:41
+msgid "Escape is reserved for cancel."
+msgstr ""
+
+#: scripts/interface.gd:1085
+msgid "Every Research Lab is busy."
+msgstr ""
+
+#: scripts/main.gd:1085
+msgid "Every Worker is busy."
+msgstr ""
+
+#: data/missions/inheritance.tres
+msgid "Every surviving archive points to one final choice: preserve the past, or become something new."
+msgstr ""
+
+#: data/missions/broken_transmission.tres
+msgid "Explore the relay road"
+msgstr ""
+
+#: scripts/simulation.gd:419
+msgid "Explore this area first."
+msgstr ""
+
+#: scripts/interface.gd:1127 scripts/interface.gd:1374
+msgid "FIELD MANUAL"
+msgstr ""
+
+#: scripts/interface.gd:859
+msgid "FOCUS CORE"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Fabrication Lines"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Fabricator"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Fast reconnaissance platform. Extended vision; light armor. Hovers over rough ground."
+msgstr ""
+
+#: scripts/interface.gd:1351
+msgid "Fewer particles and flashes."
+msgstr ""
+
+#: scripts/interface.gd:984
+msgid "Final age reached"
+msgstr ""
+
+#: scripts/catalog.gd:26 scripts/catalog.gd
+msgid "Fires 50% faster for 6 seconds."
+msgstr ""
+
+#: data/missions/first_signal.tres
+msgid "First Signal"
+msgstr ""
+
+#: data/missions/first_signal.tres
+msgid "First signal is stable. We can rebuild from this."
+msgstr ""
+
+#: scripts/interface.gd:672 scripts/interface.gd:696
+msgid "Focus Core"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Fortification"
+msgstr ""
+
+#: data/missions/salvage_rights.tres
+msgid "Foundry raid inbound from the eastern towers."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Foundry tracked launcher. Long range and a wide splash; slow to move and to reload."
+msgstr ""
+
+#: scripts/interface.gd:1347
+msgid "Frame cap"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Frontline guardian. Deals double damage to armoured units such as Disruptors."
+msgstr ""
+
+#: scripts/interface.gd:696 scripts/interface.gd:699
+msgid "Fullscreen"
+msgstr ""
+
+#: scripts/simulation.gd:196
+msgid "Fully researched."
+msgstr ""
+
+#: scripts/main.gd:1004
+msgid "Game loaded"
+msgstr ""
+
+#: scripts/main.gd:1001
+msgid "Game saved"
+msgstr ""
+
+#: scripts/interface.gd:673 scripts/interface.gd:696
+msgid "Game speed"
+msgstr ""
+
+#: scripts/interface.gd:695
+msgid "Gathering"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Generator"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Generators produce 10% more energy per level."
+msgstr ""
+
+#: scripts/interface.gd:1379
+msgid "Generators supply energy. Data Centers add 20 compute, up to 100. Select a Worker and a building, then choose a clear explored site. Right-click or Esc cancels placement."
+msgstr ""
+
+#: data/missions/ghost_protocol.tres
+msgid "Ghost Protocol"
+msgstr ""
+
+#: scripts/interface.gd:844
+msgid "HIGH GROUND"
+msgstr ""
+
+#: scripts/interface.gd:699
+msgid "Hard"
+msgstr ""
+
+#: scripts/interface.gd:610
+msgid "Harvest. Evolve. Command the next civilization."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Harvests salvage and archives. Constructs and repairs your civilization."
+msgstr ""
+
+#: scripts/interface.gd:698
+msgid "Heavy"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Heavy siege platform. Its shells splash, and deal triple damage to structures."
+msgstr ""
+
+#: scripts/interface.gd:699
+msgid "High"
+msgstr ""
+
+#: scripts/interface.gd:957
+msgid "Hold position"
+msgstr ""
+
+#: data/missions/ghost_protocol.tres
+msgid "Hold the network"
+msgstr ""
+
+#: scripts/interface.gd:695
+msgid "Holding position"
+msgstr ""
+
+#: scripts/settings_service.gd:128
+msgid "Home"
+msgstr ""
+
+#: scripts/interface.gd:813
+msgid "Hostile"
+msgstr ""
+
+#: scripts/interface.gd:1027
+msgid "Hotkey: {key}"
+msgstr ""
+
+#: scripts/interface.gd:1191
+msgid "How quickly the rival expands and attacks."
+msgstr ""
+
+#: scripts/interface.gd:613
+msgid "How quickly the rival expands and attacks. Applies to the next mission you launch."
+msgstr ""
+
+#: scripts/interface.gd:933
+msgid "IDLE"
+msgstr ""
+
+#: scripts/interface.gd:695
+msgid "Idle"
+msgstr ""
+
+#: scripts/interface.gd:668
+msgid "Idle Workers: {count}. Select the next one."
+msgstr ""
+
+#: scripts/interface.gd:698
+msgid "Infantry"
+msgstr ""
+
+#: data/missions/inheritance.tres
+msgid "Inheritance"
+msgstr ""
+
+#: data/maps/inheritance_core.tres
+msgid "Inheritance Core"
+msgstr ""
+
+#: scripts/settings_service.gd:128
+msgid "Insert"
+msgstr ""
+
+#: scripts/interface.gd:1021 scripts/interface.gd:1095 scripts/simulation.gd:203
+msgid "Insufficient resources."
+msgstr ""
+
+#: scripts/interface.gd:1108
+msgid "Insufficient resources. Cost: {cost}"
+msgstr ""
+
+#: scripts/interface.gd:1330
+msgid "Interface"
+msgstr ""
+
+#: scripts/simulation.gd:460
+msgid "Invalid civilization."
+msgstr ""
+
+#: scripts/settings_service.gd:38
+msgid "Invalid key binding."
+msgstr ""
+
+#: scripts/settings_service.gd:94
+msgid "Invalid preference."
+msgstr ""
+
+#: scripts/settings_service.gd:77
+msgid "Invalid preference. Your previous settings are unchanged."
+msgstr ""
+
+#: scripts/interface.gd:696
+msgid "Jump to alert"
+msgstr ""
+
+#: scripts/interface.gd:1361
+msgid "KEYBOARD · Select a binding, then press a key"
+msgstr ""
+
+#: scripts/interface.gd:616
+msgid "LAUNCH CAMPAIGN  →"
+msgstr ""
+
+#: scripts/interface.gd:614 scripts/interface.gd:1127 scripts/interface.gd:1285
+msgid "LOAD GAME"
+msgstr ""
+
+#: scripts/interface.gd:1416
+msgid "LOAD SAVED GAME"
+msgstr ""
+
+#: scripts/interface.gd:635
+msgid "LOCKED"
+msgstr ""
+
+#: scripts/interface.gd:1344
+msgid "Language"
+msgstr ""
+
+#: data/maps/lattice_web.tres
+msgid "Lattice Web"
+msgstr ""
+
+#: data/missions/ghost_protocol.tres
+msgid "Lattice finishes the rewrite. We become a node in their grid."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Lattice hover raider. Invisible unless an enemy unit is within 4 cells, a Tower is near, or it has just fired."
+msgstr ""
+
+#: data/missions/inheritance.tres
+msgid "Lattice inherits everything. The collective ends as a footnote."
+msgstr ""
+
+#: data/missions/broken_transmission.tres
+msgid "Lattice overwrites the road. The fragments go silent."
+msgstr ""
+
+#: scripts/simulation.gd:421
+msgid "Leave space between buildings and terrain."
+msgstr ""
+
+#: scripts/interface.gd:1407
+msgid "Leave this mission state?"
+msgstr ""
+
+#: scripts/interface.gd:699 scripts/settings_service.gd:128
+msgid "Left"
+msgstr ""
+
+#: scripts/interface.gd:1094
+msgid "Level {level} · {cost}"
+msgstr ""
+
+#: scripts/interface.gd:698
+msgid "Light"
+msgstr ""
+
+#: data/missions/blackout.tres
+msgid "Lights hold. Lattice failed to starve the grid."
+msgstr ""
+
+#: scripts/interface.gd:1347
+msgid "Limit the frame rate to save power and heat."
+msgstr ""
+
+#: scripts/interface.gd:1410
+msgid "Loading replaces unsaved progress. Your existing saved game will be kept."
+msgstr ""
+
+#: data/missions/first_signal.tres
+msgid "Local grid is live. Archive access unlocked."
+msgstr ""
+
+#: scripts/catalog.gd:28 scripts/catalog.gd
+msgid "Locks the legs: cannot move, range +3, +50% damage to buildings. Use again to release."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Logistics"
+msgstr ""
+
+#: scripts/interface.gd:699
+msgid "Low"
+msgstr ""
+
+#: scripts/interface.gd:1348
+msgid "Low reduces shadows, effects and draw distance for slower graphics cards."
+msgstr ""
+
+#: scripts/interface.gd:1127 scripts/interface.gd:1156 scripts/interface.gd:1159
+msgid "MAIN MENU"
+msgstr ""
+
+#: scripts/interface.gd:619
+msgid "MANUAL"
+msgstr ""
+
+#: scripts/interface.gd:1294
+msgid "MANUAL {number}"
+msgstr ""
+
+#: scripts/interface.gd:1176
+msgid "MAP"
+msgstr ""
+
+#: scripts/interface.gd:1143
+msgid "MISSION FAILED"
+msgstr ""
+
+#: scripts/interface.gd:696
+msgid "Manual"
+msgstr ""
+
+#: scripts/interface.gd:1288
+msgid "Manual saves, then the checkpoints saved automatically."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Manufactures Scouts, Sentinels, Disruptors, and Siege Walkers."
+msgstr ""
+
+#: data/missions/ghost_protocol.tres
+msgid "Map every node. If Lattice finishes the rewrite, we lose the network."
+msgstr ""
+
+#: data/missions/ghost_protocol.tres
+msgid "Map the network"
+msgstr ""
+
+#: data/missions/first_signal.tres
+msgid "Map the old relay road"
+msgstr ""
+
+#: scripts/interface.gd:1330
+msgid "Master"
+msgstr ""
+
+#: scripts/interface.gd:1346
+msgid "Match frames to the display to stop tearing."
+msgstr ""
+
+#: scripts/interface.gd:699
+msgid "Military"
+msgstr ""
+
+#: scripts/save_game.gd:238 scripts/mission_controller.gd:217
+msgid "Mission save is incomplete."
+msgstr ""
+
+#: scripts/save_game.gd:239
+msgid "Mission save is malformed."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Mobility Drives"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Mortar"
+msgstr ""
+
+#: scripts/interface.gd:695
+msgid "Moving"
+msgstr ""
+
+#: scripts/interface.gd:1330
+msgid "Music"
+msgstr ""
+
+#: scripts/interface.gd:1151
+msgid "NEXT MISSION · {title}  →"
+msgstr ""
+
+#: scripts/interface.gd:1428
+msgid "NOTICE · "
+msgstr ""
+
+#: scripts/interface.gd:699
+msgid "Network"
+msgstr ""
+
+#: data/missions/ghost_protocol.tres
+msgid "Network mapped. Hold the sites through the rewrite window."
+msgstr ""
+
+#: scripts/interface.gd:1066
+msgid "No Research Lab yet. Workers can build one."
+msgstr ""
+
+#: scripts/main.gd:1021
+msgid "No alert to show."
+msgstr ""
+
+#: scripts/main.gd:1093
+msgid "No combat units. Train units at a Fabricator."
+msgstr ""
+
+#: scripts/simulation.gd:593
+msgid "No route to that location."
+msgstr ""
+
+#: scripts/save_game.gd:91
+msgid "No save exists in this slot."
+msgstr ""
+
+#: scripts/simulation.gd:571
+msgid "No selected unit has an ability."
+msgstr ""
+
+#: scripts/interface.gd:699
+msgid "Normal"
+msgstr ""
+
+#: scripts/simulation.gd:547
+msgid "Nothing is queued in that slot."
+msgstr ""
+
+#: scripts/simulation.gd:556
+msgid "Nothing to cancel."
+msgstr ""
+
+#: scripts/interface.gd:635
+msgid "OPEN"
+msgstr ""
+
+#: scripts/interface.gd:671
+msgid "Objectives"
+msgstr ""
+
+#: scripts/interface.gd:1340 scripts/interface.gd:1347
+msgid "Off"
+msgstr ""
+
+#: scripts/interface.gd:1340
+msgid "On"
+msgstr ""
+
+#: scripts/interface.gd:817
+msgid "Operational"
+msgstr ""
+
+#: data/factions/origin.tres
+msgid "Origin Collective"
+msgstr ""
+
+#: data/missions/first_signal.tres
+msgid "Origin salvage is Foundry property. Vacate the relay."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Origin shield carrier. Friendly units within 4 cells take 25% less damage."
+msgstr ""
+
+#: scripts/simulation.gd:628
+msgid "Out of range. Move closer."
+msgstr ""
+
+#: scripts/simulation.gd:417
+msgid "Outside the buildable map."
+msgstr ""
+
+#: scripts/catalog.gd:26 scripts/catalog.gd
+msgid "Overdrive"
+msgstr ""
+
+#: scripts/interface.gd:795
+msgid "PATROL · Click the far end of the route. Right-click or Esc to cancel."
+msgstr ""
+
+#: scripts/interface.gd:799
+msgid "PLACE {building} · Click to build. Esc to cancel."
+msgstr ""
+
+#: scripts/interface.gd:1154 scripts/interface.gd:1158
+msgid "PLAY AGAIN"
+msgstr ""
+
+#: scripts/settings_service.gd:128
+msgid "Page Down"
+msgstr ""
+
+#: scripts/settings_service.gd:128
+msgid "Page Up"
+msgstr ""
+
+#: scripts/interface.gd:958
+msgid "Patrol"
+msgstr ""
+
+#: scripts/interface.gd:695
+msgid "Patrolling"
+msgstr ""
+
+#: scripts/interface.gd:696
+msgid "Pause"
+msgstr ""
+
+#: scripts/interface.gd:1354
+msgid "Pause in background"
+msgstr ""
+
+#: scripts/interface.gd:674
+msgid "Pause menu"
+msgstr ""
+
+#: scripts/interface.gd:1354
+msgid "Pause the match when you switch to another window."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Phantom"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Power Grid"
+msgstr ""
+
+#: scripts/interface.gd:40
+msgid "Power Structure"
+msgstr ""
+
+#: data/missions/blackout.tres
+msgid "Power is a privilege. We revoked it."
+msgstr ""
+
+#: data/missions/blackout.tres
+msgid "Power is failing across the basin. Reclaim generators and survive the Lattice blackout protocol."
+msgstr ""
+
+#: scripts/settings_service.gd:70
+msgid "Preferences could not be read. Defaults have been restored."
+msgstr ""
+
+#: scripts/main.gd:905 scripts/main.gd:908
+msgid "Preferences reset"
+msgstr ""
+
+#: scripts/interface.gd:1366
+msgid "Press key… (Esc cancels)"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Produces 3 energy per second. Build more to sustain production."
+msgstr ""
+
+#: scripts/interface.gd:816
+msgid "Producing {unit} · {time} · Queue {count}/5"
+msgstr ""
+
+#: scripts/interface.gd:40
+msgid "Production Structure"
+msgstr ""
+
+#: scripts/interface.gd:1106 scripts/simulation.gd:503
+msgid "Production queue is full."
+msgstr ""
+
+#: scripts/interface.gd:1348
+msgid "Profile"
+msgstr ""
+
+#: scripts/interface.gd:1325
+msgid "Progress saves at checkpoints. Scroll or ↑↓ for more. Esc cancels key capture."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Provides 20 compute capacity for additional units, up to 100."
+msgstr ""
+
+#: scripts/interface.gd:619
+msgid "QUIT"
+msgstr ""
+
+#: scripts/interface.gd:696
+msgid "Quick load"
+msgstr ""
+
+#: scripts/interface.gd:696
+msgid "Quick save"
+msgstr ""
+
+#: scripts/interface.gd:1130
+msgid "Quick save {save} · quick load {load} use the first manual slot."
+msgstr ""
+
+#: scripts/interface.gd:796
+msgid "RALLY POINT · Click where new units should gather. Right-click or Esc to cancel."
+msgstr ""
+
+#: scripts/interface.gd:1416
+msgid "REPLACE SAVE"
+msgstr ""
+
+#: scripts/main.gd:295
+msgid "RESEARCH COMPLETE  /  {name} {level}"
+msgstr ""
+
+#: scripts/interface.gd:1371
+msgid "RESET ALL"
+msgstr ""
+
+#: scripts/interface.gd:1335
+msgid "RESET AUDIO"
+msgstr ""
+
+#: scripts/interface.gd:1368
+msgid "RESET BINDINGS"
+msgstr ""
+
+#: scripts/interface.gd:1359
+msgid "RESET DISPLAY"
+msgstr ""
+
+#: scripts/interface.gd:1416
+msgid "RESET PREFERENCES"
+msgstr ""
+
+#: scripts/interface.gd:1179
+msgid "RESOURCES"
+msgstr ""
+
+#: scripts/interface.gd:1127
+msgid "RESTART MISSION"
+msgstr ""
+
+#: scripts/interface.gd:1127
+msgid "RESUME"
+msgstr ""
+
+#: scripts/interface.gd:1100 scripts/interface.gd:1193 scripts/interface.gd:1214
+msgid "RETURN"
+msgstr ""
+
+#: scripts/interface.gd:1178
+msgid "RIVAL FACTION"
+msgstr ""
+
+#: scripts/interface.gd:840
+msgid "RNG {value}"
+msgstr ""
+
+#: scripts/interface.gd:699
+msgid "Random"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Rapid Construction"
+msgstr ""
+
+#: data/missions/inheritance.tres data/missions/the_foundry.tres
+msgid "Reach Singularity"
+msgstr ""
+
+#: scripts/interface.gd:966
+msgid "Recharge: {seconds} s"
+msgstr ""
+
+#: scripts/interface.gd:966
+msgid "Recharging · {seconds} s"
+msgstr ""
+
+#: scripts/interface.gd:40
+msgid "Reconnaissance Unit"
+msgstr ""
+
+#: data/missions/broken_transmission.tres
+msgid "Recover 300 data"
+msgstr ""
+
+#: data/missions/salvage_rights.tres
+msgid "Recover 400 metal"
+msgstr ""
+
+#: data/missions/first_signal.tres
+msgid "Recover an archive"
+msgstr ""
+
+#: scripts/interface.gd:1351
+msgid "Reduced effects"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Reinforced Structures"
+msgstr ""
+
+#: data/missions/first_signal.tres
+msgid "Relay found. Restore a generator, then pull the archive before the Foundry triangulates us."
+msgstr ""
+
+#: data/missions/broken_transmission.tres
+msgid "Relay fragments aligned. Data yield increasing."
+msgstr ""
+
+#: data/missions/broken_transmission.tres
+msgid "Relay fragments are broadcasting from the old road. Find them before the Lattice turns their signal against us."
+msgstr ""
+
+#: scripts/interface.gd:975
+msgid "Remove the last queued item, or stop the research, and refund it."
+msgstr ""
+
+#: scripts/interface.gd:695
+msgid "Repairing"
+msgstr ""
+
+#: scripts/interface.gd:1407
+msgid "Replace this save?"
+msgstr ""
+
+#: scripts/text.gd:29
+msgid "Requires the {value} age."
+msgstr ""
+
+#: scripts/interface.gd:1103
+msgid "Requires {age} age."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Research Lab"
+msgstr ""
+
+#: scripts/interface.gd:1066
+msgid "Research Labs: {count} · idle: {idle}"
+msgstr ""
+
+#: scripts/interface.gd:40
+msgid "Research Structure"
+msgstr ""
+
+#: scripts/simulation.gd:514
+msgid "Research is already underway here."
+msgstr ""
+
+#: scripts/interface.gd:1104
+msgid "Research is already underway."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Researches Resource, Building, and Military upgrades. Each Lab runs one project at a time; build more to research in parallel."
+msgstr ""
+
+#: scripts/interface.gd:1094
+msgid "Researching…"
+msgstr ""
+
+#: scripts/interface.gd:1407
+msgid "Reset all preferences?"
+msgstr ""
+
+#: scripts/interface.gd:1345
+msgid "Resolution"
+msgstr ""
+
+#: scripts/interface.gd:40
+msgid "Resource Drop-off"
+msgstr ""
+
+#: scripts/simulation.gd:424
+msgid "Resource deposits need clear access."
+msgstr ""
+
+#: scripts/interface.gd:699
+msgid "Resources"
+msgstr ""
+
+#: data/missions/first_signal.tres
+msgid "Restore the relay"
+msgstr ""
+
+#: data/missions/blackout.tres
+msgid "Restore three generators"
+msgstr ""
+
+#: scripts/interface.gd:695
+msgid "Returning cargo"
+msgstr ""
+
+#: scripts/catalog.gd:25 scripts/catalog.gd
+msgid "Reveals a 10-cell circle within 40 cells for 8 seconds, cloaked units included."
+msgstr ""
+
+#: scripts/interface.gd:699 scripts/settings_service.gd:128
+msgid "Right"
+msgstr ""
+
+#: scripts/interface.gd:1382
+msgid "Roads carry units a quarter faster. Rough ground around ruins slows everything that does not hover. Units on high ground see two cells farther and shoot one cell farther. Each faction fields one unit of its own from the Network age: Origin's Warden shields nearby units, the Foundry's Mortar shells from long range, the Lattice's Phantom stays unseen until an enemy comes close."
+msgstr ""
+
+#: scripts/interface.gd:1415
+msgid "SAVE AND CONTINUE"
+msgstr ""
+
+#: scripts/interface.gd:1127 scripts/interface.gd:1285
+msgid "SAVE GAME"
+msgstr ""
+
+#: scripts/interface.gd:857 scripts/interface.gd:858
+msgid "SELECT WORKERS"
+msgstr ""
+
+#: scripts/interface.gd:619 scripts/interface.gd:1127 scripts/interface.gd:1322
+msgid "SETTINGS"
+msgstr ""
+
+#: scripts/interface.gd:842
+msgid "SIGHT {value}"
+msgstr ""
+
+#: scripts/interface.gd:1123
+msgid "SIMULATION PAUSED"
+msgstr ""
+
+#: scripts/interface.gd:617 scripts/interface.gd:1163
+msgid "SKIRMISH"
+msgstr ""
+
+#: scripts/interface.gd:841
+msgid "SPD {value}"
+msgstr ""
+
+#: scripts/interface.gd:1127
+msgid "SPEED {speed}×"
+msgstr ""
+
+#: scripts/interface.gd:1180
+msgid "START POSITION"
+msgstr ""
+
+#: scripts/interface.gd:1192
+msgid "START SKIRMISH  →"
+msgstr ""
+
+#: data/maps/salvage_basin.tres
+msgid "Salvage Basin"
+msgstr ""
+
+#: scripts/interface.gd:40
+msgid "Salvage Deposit"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Salvage Depot"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Salvage Mining"
+msgstr ""
+
+#: data/missions/salvage_rights.tres
+msgid "Salvage Rights"
+msgstr ""
+
+#: scripts/main.gd:302
+msgid "Salvage deposit exhausted."
+msgstr ""
+
+#: scripts/interface.gd:866
+msgid "Salvage pile"
+msgstr ""
+
+#: scripts/mission_controller.gd:215
+msgid "Save belongs to a different mission."
+msgstr ""
+
+#: scripts/save_game.gd:121
+msgid "Save belongs to a different mission. Select that mission before loading."
+msgstr ""
+
+#: scripts/save_game.gd:219 scripts/save_game.gd:226
+msgid "Save contains an incomplete entity."
+msgstr ""
+
+#: scripts/save_game.gd:235
+msgid "Save contains an invalid building."
+msgstr ""
+
+#: scripts/save_game.gd:228
+msgid "Save contains an invalid entity counter."
+msgstr ""
+
+#: scripts/save_game.gd:234
+msgid "Save contains an invalid entity."
+msgstr ""
+
+#: scripts/save_game.gd:221
+msgid "Save contains an invalid position."
+msgstr ""
+
+#: scripts/save_game.gd:237
+msgid "Save contains an invalid production queue."
+msgstr ""
+
+#: scripts/save_game.gd:224
+msgid "Save contains an invalid resource."
+msgstr ""
+
+#: scripts/save_game.gd:222
+msgid "Save contains an unknown entity."
+msgstr ""
+
+#: scripts/save_game.gd:220
+msgid "Save contains invalid entity properties."
+msgstr ""
+
+#: scripts/save_game.gd:229
+msgid "Save contains invalid orders."
+msgstr ""
+
+#: scripts/save_game.gd:232 scripts/save_game.gd:233
+msgid "Save contains invalid research."
+msgstr ""
+
+#: scripts/save_game.gd:204
+msgid "Save faction is unavailable."
+msgstr ""
+
+#: scripts/save_game.gd:202
+msgid "Save factions are incomplete."
+msgstr ""
+
+#: scripts/save_game.gd:123
+msgid "Save map does not match this mission."
+msgstr ""
+
+#: scripts/save_game.gd:246
+msgid "Save map is unavailable."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Scout"
+msgstr ""
+
+#: data/missions/blackout.tres
+msgid "Second blackout wave. Protect the new generators."
+msgstr ""
+
+#: scripts/interface.gd:1378
+msgid "Select Workers and right-click golden salvage for metal or violet archives for data. Workers carry 24 resources home. Build a Salvage Depot near distant deposits."
+msgstr ""
+
+#: scripts/interface.gd:892
+msgid "Select Workers and right-click this deposit to harvest it."
+msgstr ""
+
+#: scripts/interface.gd:856
+msgid "Select Workers to gather resources and construct your base."
+msgstr ""
+
+#: scripts/simulation.gd:478
+msgid "Select a Worker to construct buildings."
+msgstr ""
+
+#: scripts/simulation.gd:543
+msgid "Select a building to cancel its work."
+msgstr ""
+
+#: scripts/simulation.gd:512
+msgid "Select a completed Core or Research Lab."
+msgstr ""
+
+#: scripts/simulation.gd:494
+msgid "Select a completed production building."
+msgstr ""
+
+#: scripts/simulation.gd:403
+msgid "Select a constructible building."
+msgstr ""
+
+#: scripts/interface.gd:669
+msgid "Select every combat unit"
+msgstr ""
+
+#: scripts/simulation.gd:468
+msgid "Select mobile units to hold position."
+msgstr ""
+
+#: scripts/simulation.gd:466
+msgid "Select one of your units or buildings."
+msgstr ""
+
+#: scripts/main.gd:936
+msgid "Selected mission: {mission}"
+msgstr ""
+
+#: scripts/interface.gd:812
+msgid "Send Workers to harvest this deposit."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Sensor Arrays"
+msgstr ""
+
+#: scripts/catalog.gd:25 scripts/catalog.gd
+msgid "Sensor sweep"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Sentinel"
+msgstr ""
+
+#: scripts/interface.gd:1381
+msgid "Sentinels counter armoured units such as Disruptors. Disruptors counter heavy units such as Walkers. Walkers destroy buildings. Disruptor and Walker shells travel and splash. Every combat unit has one ability on the first grid slot: the Scout's sweep reveals an area, the Sentinel fires faster, the Disruptor's EMP stuns, the Walker braces for range. Scout first: enemies outside your vision cannot be targeted, though buildings you have seen stay marked."
+msgstr ""
+
+#: scripts/interface.gd:980
+msgid "Set rally point"
+msgstr ""
+
+#: scripts/interface.gd:1349
+msgid "Shadows"
+msgstr ""
+
+#: scripts/settings_service.gd:128
+msgid "Shift"
+msgstr ""
+
+#: scripts/interface.gd:1352
+msgid "Show spoken lines as text."
+msgstr ""
+
+#: scripts/interface.gd:40
+msgid "Siege Unit"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Siege Walker"
+msgstr ""
+
+#: scripts/save_game.gd:193
+msgid "Simulation save has invalid counters."
+msgstr ""
+
+#: scripts/save_game.gd:209
+msgid "Simulation save has invalid match rules."
+msgstr ""
+
+#: scripts/save_game.gd:212 scripts/save_game.gd:213 scripts/save_game.gd:216
+msgid "Simulation save has invalid progression."
+msgstr ""
+
+#: scripts/simulation.gd:1230 scripts/save_game.gd:197 scripts/save_game.gd:206
+msgid "Simulation save is incomplete."
+msgstr ""
+
+#: scripts/save_game.gd:195 scripts/save_game.gd:199 scripts/save_game.gd:211
+msgid "Simulation save is malformed."
+msgstr ""
+
+#: scripts/save_game.gd:201
+msgid "Simulation statistics are invalid."
+msgstr ""
+
+#: scripts/interface.gd:699
+msgid "Singularity"
+msgstr ""
+
+#: data/missions/inheritance.tres
+msgid "Singularity reached. The command network is exposed."
+msgstr ""
+
+#: data/missions/the_foundry.tres
+msgid "Singularity unlocked. Siege Walkers are cleared for deployment."
+msgstr ""
+
+#: data/missions/long_transfer.tres
+msgid "Six Sentinels. That is the escort minimum. The corridor is a kill box."
+msgstr ""
+
+#: scripts/interface.gd:1350
+msgid "Size of the interface. 150% needs a window at least 864 pixels high."
+msgstr ""
+
+#: scripts/interface.gd:715 scripts/interface.gd:724
+msgid "Skirmish"
+msgstr ""
+
+#: scripts/interface.gd:718 scripts/interface.gd:724
+msgid "Skirmish · {map}"
+msgstr ""
+
+#: scripts/settings_service.gd:69
+msgid "Some preferences were invalid and have been reset to defaults."
+msgstr ""
+
+#: scripts/interface.gd:696 scripts/interface.gd:1355
+msgid "Sound"
+msgstr ""
+
+#: scripts/main.gd:955
+msgid "Sound off"
+msgstr ""
+
+#: scripts/main.gd:955
+msgid "Sound on"
+msgstr ""
+
+#: scripts/settings_service.gd:128
+msgid "Space"
+msgstr ""
+
+#: scripts/interface.gd:961
+msgid "Stance: aggressive"
+msgstr ""
+
+#: scripts/main.gd:1037
+msgid "Stance: aggressive. Units chase what they see, then return."
+msgstr ""
+
+#: scripts/interface.gd:961
+msgid "Stance: defensive"
+msgstr ""
+
+#: scripts/main.gd:1037
+msgid "Stance: defensive. Units fire from where they stand."
+msgstr ""
+
+#: scripts/interface.gd:957
+msgid "Stand ground and fire only at what comes into range."
+msgstr ""
+
+#: scripts/interface.gd:699
+msgid "Standard"
+msgstr ""
+
+#: scripts/interface.gd:696 scripts/interface.gd:956
+msgid "Stop"
+msgstr ""
+
+#: scripts/interface.gd:1025
+msgid "Strong: {targets}"
+msgstr ""
+
+#: scripts/interface.gd:867
+msgid "Structure"
+msgstr ""
+
+#: scripts/catalog.gd:27 scripts/catalog.gd
+msgid "Stuns enemy units in a 2.5-cell circle for 3 seconds. No effect on buildings."
+msgstr ""
+
+#: scripts/interface.gd:1352
+msgid "Subtitles"
+msgstr ""
+
+#: data/missions/first_signal.tres
+msgid "Survive the Foundry counterattack"
+msgstr ""
+
+#: data/missions/blackout.tres
+msgid "Survive the blackout"
+msgstr ""
+
+#: data/missions/long_transfer.tres
+msgid "Survive the transfer"
+msgstr ""
+
+#: scripts/interface.gd:699 scripts/interface.gd:1344
+msgid "System"
+msgstr ""
+
+#: scripts/interface.gd:1060
+msgid "TECHNOLOGY"
+msgstr ""
+
+#: scripts/interface.gd:606
+msgid "THE WORLD WENT QUIET."
+msgstr ""
+
+#: scripts/interface.gd:1143
+msgid "TIME EXPIRED"
+msgstr ""
+
+#: scripts/interface.gd:1135
+msgid "TRANSMISSION COMPLETE"
+msgstr ""
+
+#: scripts/interface.gd:1135
+msgid "TRANSMISSION LOST"
+msgstr ""
+
+#: scripts/settings_service.gd:128
+msgid "Tab"
+msgstr ""
+
+#: scripts/interface.gd:697
+msgid "Tactical system"
+msgstr ""
+
+#: scripts/simulation.gd:610
+msgid "Target is outside your vision."
+msgstr ""
+
+#: scripts/interface.gd:670
+msgid "Technology tree"
+msgstr ""
+
+#: scripts/settings_service.gd:43 scripts/settings_service.gd:46
+msgid "That key is reserved for navigation, the command grid, or control groups."
+msgstr ""
+
+#: scripts/interface.gd:697 data/factions/foundry.tres data/missions/the_foundry.tres
+msgid "The Foundry"
+msgstr ""
+
+#: data/maps/foundry_fortress.tres
+msgid "The Foundry Fortress"
+msgstr ""
+
+#: data/missions/salvage_rights.tres
+msgid "The Foundry has claimed the nearest industrial reserve. Rebuild the economy, seize contested salvage, and break their outposts."
+msgstr ""
+
+#: data/missions/the_foundry.tres
+msgid "The Foundry holds. Our advance ends at the walls."
+msgstr ""
+
+#: data/missions/salvage_rights.tres
+msgid "The Foundry keeps the reserve. Our forges stay cold."
+msgstr ""
+
+#: data/missions/first_signal.tres
+msgid "The Foundry silences the relay."
+msgstr ""
+
+#: scripts/interface.gd:697 data/factions/lattice.tres
+msgid "The Lattice"
+msgstr ""
+
+#: data/missions/ghost_protocol.tres
+msgid "The Lattice is rewriting the old network. Capture its relays, hold the sites, and prevent a total takeover."
+msgstr ""
+
+#: data/missions/long_transfer.tres
+msgid "The Long Transfer"
+msgstr ""
+
+#: data/missions/first_signal.tres
+msgid "The Origin network has found a dormant relay beneath the ruins. Restore power, retrieve its archive, and hold the signal when the Foundry comes looking."
+msgstr ""
+
+#: data/maps/relay_road.tres
+msgid "The Relay Road"
+msgstr ""
+
+#: data/maps/silent_grid.tres
+msgid "The Silent Grid"
+msgstr ""
+
+#: scripts/interface.gd:984 scripts/simulation.gd:521
+msgid "The Singularity is the final age."
+msgstr ""
+
+#: data/missions/first_signal.tres
+msgid "The archive is ours. Hold this ground. They will come."
+msgstr ""
+
+#: data/missions/blackout.tres
+msgid "The basin goes dark. Lattice writes the last protocol."
+msgstr ""
+
+#: data/missions/salvage_rights.tres
+msgid "The basin is Origin ground again. The Foundry will have to mine elsewhere."
+msgstr ""
+
+#: data/missions/salvage_rights.tres
+msgid "The basin is marked Foundry. Take the metal anyway. Their outpost is the claim."
+msgstr ""
+
+#: data/missions/long_transfer.tres
+msgid "The convoy reaches the far archive. The transfer holds."
+msgstr ""
+
+#: data/missions/long_transfer.tres
+msgid "The corridor closes. The convoy never arrives."
+msgstr ""
+
+#: data/missions/the_foundry.tres
+msgid "The extraction intelligence has built a fortress around the archive core. Advance to Singularity and bring it down."
+msgstr ""
+
+#: data/missions/first_signal.tres
+msgid "The first signal crosses the ruins. The Origin Collective has a future."
+msgstr ""
+
+#: data/missions/the_foundry.tres
+msgid "The fortress falls. The archive core is no longer theirs."
+msgstr ""
+
+#: data/missions/broken_transmission.tres
+msgid "The fragments resolve into a map. Lattice cannot hide the next hop."
+msgstr ""
+
+#: scripts/interface.gd:1344
+msgid "The language of the interface and subtitles. Voices stay in English."
+msgstr ""
+
+#: data/missions/inheritance.tres
+msgid "The last archive opens. Origin chooses its own future."
+msgstr ""
+
+#: scripts/simulation.gd:458
+msgid "The match has ended."
+msgstr ""
+
+#: data/missions/broken_transmission.tres
+msgid "The old road still sings. Walk it. Recover every fragment."
+msgstr ""
+
+#: scripts/main.gd:248
+msgid "The rival Core is gone. The field is yours."
+msgstr ""
+
+#: data/missions/ghost_protocol.tres
+msgid "The web holds Origin colors. Lattice withdraws the rewrite."
+msgstr ""
+
+#: scripts/interface.gd:1345
+msgid "The window's size in Windowed mode."
+msgstr ""
+
+#: data/missions/the_foundry.tres
+msgid "They walled the archive. Reach Singularity, then tear the fortress down."
+msgstr ""
+
+#: scripts/interface.gd:1674
+msgid "This action is unavailable."
+msgstr ""
+
+#: scripts/settings_service.gd:99
+msgid "This binding cannot be changed."
+msgstr ""
+
+#: scripts/simulation.gd:496
+msgid "This building cannot produce that unit."
+msgstr ""
+
+#: scripts/simulation.gd:531
+msgid "This building cannot research."
+msgstr ""
+
+#: data/missions/inheritance.tres
+msgid "This is the last archive. Reach Singularity, then end their Core."
+msgstr ""
+
+#: scripts/text.gd:30
+msgid "This operation is limited to the {value} age."
+msgstr ""
+
+#: data/missions/salvage_rights.tres
+msgid "This reserve is scheduled. Leave the wreckage."
+msgstr ""
+
+#: scripts/main.gd:454
+msgid "This save belongs to a mission that is no longer available."
+msgstr ""
+
+#: scripts/save_game.gd:94
+msgid "This save is damaged and cannot be read."
+msgstr ""
+
+#: scripts/save_game.gd:96
+msgid "This save is from an unsupported version."
+msgstr ""
+
+#: scripts/save_game.gd:98
+msgid "This save is incomplete."
+msgstr ""
+
+#: scripts/save_game.gd:100
+msgid "This save is malformed."
+msgstr ""
+
+#: scripts/main.gd:447
+msgid "This skirmish save has no usable match setup."
+msgstr ""
+
+#: scripts/interface.gd:1411
+msgid "This slot holds a save this version cannot read. Saving here replaces it for good."
+msgstr ""
+
+#: scripts/interface.gd:1303
+msgid "This slot is empty."
+msgstr ""
+
+#: scripts/simulation.gd:630
+msgid "This unit is disabled."
+msgstr ""
+
+#: scripts/mission_controller.gd:44
+msgid "Time limit reached."
+msgstr ""
+
+#: scripts/interface.gd:1148
+msgid ""
+"Time {time} · Enemies destroyed {kills}\n"
+"Resources harvested {amount}"
+msgstr ""
+
+#: scripts/interface.gd:40
+msgid "Town Center"
+msgstr ""
+
+#: scripts/interface.gd:1380
+msgid "Train Workers and advance ages at your Core. Network unlocks Disruptors and Towers; Singularity unlocks Siege Walkers. Fabricators manufacture your army. Research Labs improve resources, buildings and the military, five levels each; every Lab runs one project at a time."
+msgstr ""
+
+#: data/maps/transfer_corridor.tres
+msgid "Transfer Corridor"
+msgstr ""
+
+#: data/missions/long_transfer.tres
+msgid "Transfer window open. Hold both ends of the road."
+msgstr ""
+
+#: scripts/interface.gd:1355
+msgid "Turn all sound on or off. {key} does the same in a match."
+msgstr ""
+
+#: scripts/interface.gd:1350
+msgid "UI scale"
+msgstr ""
+
+#: scripts/settings_service.gd:89
+msgid "Unable to commit preferences. Your previous settings are unchanged."
+msgstr ""
+
+#: scripts/save_game.gd:73
+msgid "Unable to commit the save safely."
+msgstr ""
+
+#: scripts/save_game.gd:57
+msgid "Unable to open the save location."
+msgstr ""
+
+#: scripts/save_game.gd:261
+msgid "Unable to save campaign progress."
+msgstr ""
+
+#: scripts/settings_service.gd:81
+msgid "Unable to save preferences. Your previous settings are unchanged."
+msgstr ""
+
+#: scripts/save_game.gd:65
+msgid "Unable to write the save. Check the free disk space."
+msgstr ""
+
+#: scripts/main.gd:264
+msgid "Under attack. Press {key} to look."
+msgstr ""
+
+#: scripts/interface.gd:867
+msgid "Unit"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Units are produced 10% faster per level."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Units deal 10% more damage per level."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Units see 8% further and fire 4% further per level."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Units take 5% less damage per level."
+msgstr ""
+
+#: scripts/simulation.gd:648
+msgid "Unknown ability."
+msgstr ""
+
+#: scripts/settings_service.gd:111
+msgid "Unknown preference category."
+msgstr ""
+
+#: scripts/simulation.gd:193
+msgid "Unknown research."
+msgstr ""
+
+#: scripts/simulation.gd:565
+msgid "Unknown stance."
+msgstr ""
+
+#: scripts/interface.gd:1298
+msgid "Unreadable save"
+msgstr ""
+
+#: scripts/interface.gd:1408
+msgid "Unsaved progress will be lost. You can save before continuing."
+msgstr ""
+
+#: scripts/settings_service.gd:128
+msgid "Up"
+msgstr ""
+
+#: scripts/interface.gd:40
+msgid "Utility Unit"
+msgstr ""
+
+#: scripts/interface.gd:1139
+msgid "VICTORY"
+msgstr ""
+
+#: scripts/interface.gd:1346
+msgid "VSync"
+msgstr ""
+
+#: scripts/interface.gd:1330
+msgid "Voice"
+msgstr ""
+
+#: scripts/interface.gd:958
+msgid "Walk back and forth to a point, engaging enemies on the way."
+msgstr ""
+
+#: data/missions/the_foundry.tres
+msgid "Walkers will break on this perimeter."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Warden"
+msgstr ""
+
+#: data/catalog.tres
+msgid "Weapons Systems"
+msgstr ""
+
+#: scripts/interface.gd:1179
+msgid "What both sides start with."
+msgstr ""
+
+#: scripts/interface.gd:1180
+msgid "Which of the map's two starts is yours."
+msgstr ""
+
+#: scripts/interface.gd:1343
+msgid "Window"
+msgstr ""
+
+#: scripts/interface.gd:699
+msgid "Windowed"
+msgstr ""
+
+#: scripts/interface.gd:1343
+msgid "Windowed, borderless across the screen, or fullscreen. {key} switches fullscreen."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Worker"
+msgstr ""
+
+#: scripts/simulation.gd:484
+msgid "Workers cannot reach this site."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Workers carry 4 more resources and move 5% faster per level."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Workers construct buildings 10% faster per level."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Workers extract metal 10% faster per level."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Workers retrieve data 10% faster per level."
+msgstr ""
+
+#: scripts/interface.gd:516
+msgid "X"
+msgstr ""
+
+#: scripts/interface.gd:1177
+msgid "YOUR FACTION"
+msgstr ""
+
+#: data/missions/ghost_protocol.tres
+msgid "You are already indexed. Resistance is latency."
+msgstr ""
+
+#: data/missions/inheritance.tres
+msgid "You were always a draft. We are the published version."
+msgstr ""
+
+#: scripts/simulation.gd:405
+msgid "Your civilization already has a Core."
+msgstr ""
+
+#: scripts/main.gd:249
+msgid "Your civilization has fallen."
+msgstr ""
+
+#: data/catalog.tres
+msgid "Your civilization's heart. Trains Workers and researches ages. Protect it."
+msgstr ""
+
+#: scripts/simulation.gd:407
+msgid "Your faction does not build this."
+msgstr ""
+
+#: scripts/simulation.gd:498
+msgid "Your faction does not field this unit."
+msgstr ""
+
+#: data/missions/broken_transmission.tres
+msgid "Your map is incomplete. Stay on your side of the grid."
+msgstr ""
+
+#: scripts/interface.gd:681
+msgid "{age} AGE"
+msgstr ""
+
+#: scripts/interface.gd:1067
+msgid "{age} age · {summary}"
+msgstr ""
+
+#: scripts/interface.gd:871
+msgid "{amount} remaining"
+msgstr ""
+
+#: scripts/interface.gd:378
+msgid "{amount}/min"
+msgstr ""
+
+#: scripts/interface.gd:904
+msgid "{count} UNITS SELECTED"
+msgstr ""
+
+#: scripts/interface.gd:1113
+msgid "{data} D"
+msgstr ""
+
+#: scripts/interface.gd:1172
+msgid "{deposits} deposits · {blocked} blocked cells"
+msgstr ""
+
+#: scripts/interface.gd:1113
+msgid "{metal} M · {energy} E"
+msgstr ""
+
+#: scripts/main.gd:915
+msgid "{mission} initiated."
+msgstr ""
+
+#: scripts/interface.gd:776
+msgid "{objective} (optional)"
+msgstr ""
+
+#: scripts/interface.gd:1347
+msgid "{rate} fps"
+msgstr ""
+
+#: scripts/interface.gd:711
+msgid "{seconds} s"
+msgstr ""
+
+#: scripts/main.gd:284
+msgid "{subject} complete."
+msgstr ""
+
+#: scripts/main.gd:273
+msgid "{subject} destroyed."
+msgstr ""
+
+#: scripts/main.gd:286
+msgid "{subject} ready."
+msgstr ""
+
+#: scripts/catalog.gd:55
+msgid "×{factor} vs {target}"
+msgstr ""

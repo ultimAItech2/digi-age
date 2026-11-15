@@ -370,12 +370,12 @@ static func thousands(value: float) -> String:
 	var digits = str(absi(int(value)))
 	var out = ""
 	for i in digits.length():
-		if i > 0 and (digits.length()-i) % 3 == 0: out += ","
+		if i > 0 and (digits.length()-i) % 3 == 0: out += DAText.grouping()
 		out += digits[i]
 	return ("-" if value < 0 else "")+out
 
 static func rate_text(value: float) -> String:
-	return ("+" if value >= 0 else "")+thousands(value)+"/min"
+	return DAText.t("{amount}/min",{"amount":("+" if value >= 0 else "")+thousands(value)})
 
 func wrapped(value: String, width: float, px: int) -> Array:
 	var key = value + "|" + str(width) + "|" + str(px)
@@ -401,11 +401,15 @@ func wrapped(value: String, width: float, px: int) -> Array:
 	return lines
 
 func text_height(value: String, width: float, px: int = 16) -> float:
+	value = DAText.t(value)
 	var font_size = roundi(px*ui_scale)
 	var step = ceilf(font.get_height(font_size)+2*ui_scale)
 	return wrapped(value,width*ui_scale,font_size).size()*step/ui_scale+.1
 
 func text(value: String, rect: Rect2, px: int = 16, color: Color = TEXT) -> void:
+	# Everything drawn is translated here; text that is already translated passes through.
+	value = DAText.t(value)
+	if DAText.pseudo: DAText.seen.append(value)
 	var actual = to_view(rect)
 	var font_size = roundi(px*ui_scale)
 	var step = ceilf(font.get_height(font_size)+2*ui_scale)
@@ -427,6 +431,7 @@ func text(value: String, rect: Rect2, px: int = 16, color: Color = TEXT) -> void
 
 func fitted_text(value: String, rect: Rect2, px: int, color: Color = TEXT) -> void:
 	# Single line that shrinks, then compacts large numbers, rather than abbreviating with an ellipsis.
+	value = DAText.t(value)
 	var line_text = value
 	var size = px
 	while size > 11 and font.get_string_size(line_text,HORIZONTAL_ALIGNMENT_LEFT,-1,roundi(size*ui_scale)).x > rect.size.x*ui_scale:
@@ -440,17 +445,18 @@ func fitted_text(value: String, rect: Rect2, px: int, color: Color = TEXT) -> vo
 
 static func compact(value: String) -> String:
 	# "99,999,999" -> "100.0M"; keeps any prefix/suffix such as "+" or "/min".
+	var separator: String = DAText.grouping()
 	var digits = ""
 	var prefix = ""
 	var suffix = ""
 	for i in value.length():
 		var c = value[i]
-		if c in "0123456789,":
+		if c in "0123456789" or c == separator:
 			if suffix == "": digits += c
 			else: suffix += c
 		elif digits == "": prefix += c
 		else: suffix += c
-	var number = float(digits.replace(",",""))
+	var number = float(digits.replace(separator,""))
 	var short = digits
 	if number >= 1000000: short = "%.1fM" % (number/1000000.0)
 	elif number >= 10000: short = "%.1fK" % (number/1000.0)
@@ -459,13 +465,19 @@ static func compact(value: String) -> String:
 func centered_text(value: String, rect: Rect2, px: int = 14, color: Color = TEXT) -> void:
 	# Single line, horizontally centred and truncated to the rect.
 	var font_size = roundi(px*ui_scale)
+	value = DAText.t(value)
 	var line_text = value
 	while line_text.length() > 1 and font.get_string_size(line_text,HORIZONTAL_ALIGNMENT_LEFT,-1,font_size).x > rect.size.x*ui_scale:
 		line_text = line_text.left(-1)
 	var width = font.get_string_size(line_text,HORIZONTAL_ALIGNMENT_LEFT,-1,font_size).x/ui_scale
+	var before: int = text_bounds.size()
 	text(line_text,Rect2(rect.position+Vector2(maxf(0,(rect.size.x-width)/2),0),Vector2(rect.size.x,rect.size.y)),px,color)
+	# A shortened label keeps its full text, for the tooltip and for the layout checks.
+	if line_text != value and text_bounds.size() > before: text_bounds[-1].source = value
 
 func title_text(value: String, x: float, y: float, px: int, color: Color = TEXT) -> float:
+	value = DAText.t(value)
+	if DAText.pseudo: DAText.seen.append(value)
 	var font_size = roundi(px*ui_scale)
 	var size = title_font.get_string_size(value,HORIZONTAL_ALIGNMENT_LEFT,-1,font_size)
 	var bounds = Rect2(Vector2(x,y)*ui_scale,Vector2(size.x,ceilf(title_font.get_height(font_size))))
@@ -474,7 +486,12 @@ func title_text(value: String, x: float, y: float, px: int, color: Color = TEXT)
 	text_bounds.append(entry)
 	return size.x/ui_scale
 
+## Width of a button label in the current language, in layout units.
+func label_width(value: String, px: int = 16) -> float:
+	return font.get_string_size(DAText.t(value),HORIZONTAL_ALIGNMENT_LEFT,-1,roundi(px*ui_scale)).x/ui_scale
+
 func title_width(value: String, px: int) -> float:
+	value = DAText.t(value)
 	return title_font.get_string_size(value,HORIZONTAL_ALIGNMENT_LEFT,-1,roundi(px*ui_scale)).x/ui_scale
 
 static func control_id(action: String, payload: Dictionary) -> String:
@@ -493,7 +510,12 @@ func button(rect: Rect2, title: String, action: String, payload: Dictionary = {}
 	var b = register(rect,title,action,payload,enabled,primary)
 	if b.is_empty(): return
 	text_control = b.id
-	text(title,Rect2(rect.position+Vector2(10,7),Vector2(rect.size.x-20,rect.size.y-14 if subtitle == "" else 27)),16,TEXT if enabled else MUTED)
+	# A longer translation is set smaller before it is ever cut short.
+	var title_area = Vector2(rect.size.x-20,rect.size.y-14 if subtitle == "" else 27)
+	var title_px: int = 16
+	while title_px > 12 and text_height(title,title_area.x,title_px) > maxf(title_area.y,text_height("X",title_area.x,title_px)):
+		title_px -= 1
+	text(title,Rect2(rect.position+Vector2(10,7+(16-title_px)*.5),title_area),title_px,TEXT if enabled else MUTED)
 	if subtitle != "":
 		text(subtitle,Rect2(rect.position+Vector2(10,35),Vector2(rect.size.x-20,rect.size.y-40)),14,MUTED)
 	text_control = ""
@@ -534,7 +556,7 @@ func prepare_layout(force: bool = false) -> void:
 	if size.x < 1 or size.y < 1: return
 	var fitted = clampf(minf(requested_scale, size.y/MIN_LAYOUT_HEIGHT), 1.0, 1.5)
 	if not is_equal_approx(fitted, ui_scale): ui_scale = fitted
-	var signature = str([game.ability_mode,game.settings.values.skirmish,game.game_kind,size,ui_scale,game.mode,manual,settings_open,tech_open,panel_open,saves_mode,confirmation,rebind_action,scroll_offset,game.selected,game.build_kind,game.attack_mode,game.rally_mode,game.patrol_mode,objectives_open,game.speed,game.campaign.selected_difficulty])
+	var signature = str([DAText.language,DAText.pseudo,game.ability_mode,game.settings.values.skirmish,game.game_kind,size,ui_scale,game.mode,manual,settings_open,tech_open,panel_open,saves_mode,confirmation,rebind_action,scroll_offset,game.selected,game.build_kind,game.attack_mode,game.rally_mode,game.patrol_mode,objectives_open,game.speed,game.campaign.selected_difficulty])
 	if not force and signature == layout_signature and layout_elapsed < .1: return
 	var started = Time.get_ticks_usec()
 	layout_signature = signature
@@ -580,7 +602,7 @@ func layout_menu() -> void:
 	panel(Rect2(0,0,w,h),Color(BG.r,BG.g,BG.b,.88),false)
 	var x = left+32
 	var column = (span-96)/2
-	text("D / A  ·  MACHINE CIVILIZATIONS  ·  v"+str(ProjectSettings.get_setting("application/config/version","")),Rect2(x,30,column,28),16,ACCENT)
+	text(DAText.t("D / A  ·  MACHINE CIVILIZATIONS")+"  ·  "+str(ProjectSettings.get_setting("application/config/version","")),Rect2(x,30,column,28),16,ACCENT)
 	text("THE WORLD WENT QUIET.",Rect2(x,95,column,32),16,GOLD)
 	text("DIGITAL\nAGE",Rect2(x,139,column,160),58,TEXT)
 	# Short windows drop the tagline so the briefing keeps its room above the buttons.
@@ -588,16 +610,20 @@ func layout_menu() -> void:
 	if h >= 660: text("Harvest. Evolve. Command the next civilization.",Rect2(x,305,column,64),18,MUTED)
 	if message_left <= 0: text(game.mission_catalog.get_definition(game.pending_mission_id).briefing,Rect2(x,menu_text_y,column,maxf(30,h-204-menu_text_y)),16,TEXT)
 	var hw = (column-8)/2
-	button(Rect2(x,h-194,hw,46),"DIFFICULTY · "+str(game.campaign.selected_difficulty).to_upper(),"difficulty",{"tooltip":"How quickly the rival expands and attacks. Applies to the next mission you launch."})
+	button(Rect2(x,h-194,hw,46),DAText.t("DIFFICULTY · {level}",{"level":DAText.upper(str(game.campaign.selected_difficulty).capitalize())}),"difficulty",{"tooltip":"How quickly the rival expands and attacks. Applies to the next mission you launch."})
 	button(Rect2(x+hw+8,h-194,hw,46),"LOAD GAME","saves",{"id":"load"})
 	var lw = roundf(column*.6)
 	button(Rect2(x,h-138,lw,52),"LAUNCH CAMPAIGN  →","start",{},"",true,true)
 	button(Rect2(x+lw+8,h-138,column-lw-8,52),"SKIRMISH","skirmish",{"tooltip":"A free match on any map, against the faction and difficulty you choose."})
-	var bw = (column-24)/4
-	button(Rect2(x,h-74,bw,42),"MANUAL","help")
-	button(Rect2(x+bw+8,h-74,bw,42),"SETTINGS","settings")
-	button(Rect2(x+2*(bw+8),h-74,bw,42),"CREDITS","credits")
-	button(Rect2(x+3*(bw+8),h-74,bw,42),"QUIT","quit")
+	# The four share the row in proportion to their labels, so a long word in one language still fits.
+	var row = [["MANUAL","help"],["SETTINGS","settings"],["CREDITS","credits"],["QUIT","quit"]]
+	var natural: Array = row.map(func(entry): return label_width(entry[0])+28)
+	var total: float = natural.reduce(func(sum, value): return sum+value, 0.0)
+	var bx = x
+	for i in row.size():
+		var bw = (column-24)*natural[i]/total
+		button(Rect2(bx,h-74,bw,42),row[i][0],row[i][1])
+		bx += bw+8
 	var rx = x+column+32
 	panel(Rect2(rx,28,column,h-60),Color(PANEL.r,PANEL.g,PANEL.b,PANEL_ALPHA))
 	text("CAMPAIGN OPERATIONS",Rect2(rx+20,46,column-40,30),20,ACCENT)
@@ -607,7 +633,7 @@ func layout_menu() -> void:
 		var unlocked: bool = game.campaign.unlocked_missions.has(definition.mission_id)
 		var complete: bool = game.campaign.completed_missions.has(definition.mission_id)
 		var marker = "DONE" if complete else ("OPEN" if unlocked else "LOCKED")
-		button(Rect2(rx+16,y,column-32,44),marker+" · "+definition.title,"select_mission",{"id":definition.mission_id,"title":definition.title,"tooltip":definition.briefing,"reason":"Complete the preceding operation to unlock this mission."},"",unlocked,definition.mission_id == game.pending_mission_id)
+		button(Rect2(rx+16,y,column-32,44),DAText.t(marker)+" · "+DAText.t(definition.title),"select_mission",{"id":definition.mission_id,"title":definition.title,"tooltip":definition.briefing,"reason":"Complete the preceding operation to unlock this mission."},"",unlocked,definition.mission_id == game.pending_mission_id)
 		y += 52
 
 func layout_hud() -> void:
@@ -639,20 +665,20 @@ func layout_top_bar() -> void:
 	var resources_end = x+groups.size()*group_w
 	var idle: int = idle_workers().size()
 	var nav = [
-		["idle","Idle Workers: "+str(idle)+". Select the next one.","idle_worker",str(idle) if idle > 0 else ""],
+		["idle",DAText.t("Idle Workers: {count}. Select the next one.",{"count":idle}),"idle_worker",str(idle) if idle > 0 else ""],
 		["units","Select every combat unit","army",""],
 		["tech","Technology tree","tech",""],
 		["objectives","Objectives","objectives",""],
-		["home","Focus Core · "+game.settings.prompt("home"),"home",""],
-		["speed","Game speed · "+game.settings.prompt("speed"),"speed","×"+str(game.speed)],
-		["menu","Pause menu · "+game.settings.prompt("pause"),"pause",""]]
+		["home",DAText.t("Focus Core")+" · "+game.settings.prompt("home"),"home",""],
+		["speed",DAText.t("Game speed")+" · "+game.settings.prompt("speed"),"speed","×"+str(game.speed)],
+		["menu",DAText.t("Pause menu")+" · "+game.settings.prompt("pause"),"pause",""]]
 	var s = 38.0
 	var nav_w = nav.size()*s+(nav.size()-1)*6
 	var nav_x = left+span-EDGE-nav_w
 	for i in nav.size():
 		icon_button(Rect2(nav_x+i*(s+6),(TOP_H-s)/2,s,s),nav[i][0],nav[i][1],nav[i][2],{},true,false,nav[i][3])
 	# Centre: the current age as the bar's emblem, with the mission clock under it.
-	var age_name: String = game.sim.catalog.ages[game.sim.ages[0]]+" AGE"
+	var age_name: String = DAText.t("{age} AGE",{"age":age_label(game.sim.ages[0]).to_upper()})
 	var clock = time_text(game.sim.elapsed)
 	var tw = title_width(age_name,17)
 	var gap_left = resources_end+16
@@ -664,6 +690,38 @@ func layout_top_bar() -> void:
 		centered_text(clock,Rect2(cx-40,28,80,16),12,MUTED)
 	elif gap_right-gap_left >= 60:
 		centered_text(clock,Rect2(gap_left,15,gap_right-gap_left,18),14,MUTED)
+
+## Names for values that are stored as identifiers.
+const ORDER_NAMES = {"idle":"Idle","move":"Moving","attack_move":"Attack-moving","attack":"Attacking","gather":"Gathering","deposit":"Returning cargo","build":"Building","repair":"Repairing","hold":"Holding position","patrol":"Patrolling","stop":"Idle"}
+const BINDING_NAMES = {"pause":"Pause","manual":"Manual","save":"Quick save","load":"Quick load","attack":"Attack-move","stop":"Stop","speed":"Game speed","events":"Sound","home":"Focus Core","fullscreen":"Fullscreen","alert":"Jump to alert"}
+const SPEAKERS = {"archivist":"Archivist","system":"Tactical system","foundry":"The Foundry","lattice":"The Lattice"}
+const ARMOR_LABELS = {"light":"Light","infantry":"Infantry","armored":"Armoured","heavy":"Heavy"}
+const VALUE_NAMES = ["Easy","Normal","Hard","Low","Standard","High","Left","Right","Random","Windowed","Borderless","Fullscreen","Awakening","Network","Singularity","Resources","Buildings","Military","System"]
+
+func age_label(index: int) -> String:
+	return DAText.t(str(game.sim.catalog.ages[clampi(index,0,game.sim.catalog.ages.size()-1)]).capitalize())
+
+func armor_label(id: String) -> String:
+	return DAText.t(str(ARMOR_LABELS.get(id,id.capitalize())))
+
+func speaker_label(id: String) -> String:
+	return DAText.t(str(SPEAKERS.get(id,id)))
+
+func seconds_text(value: float) -> String:
+	return DAText.t("{seconds} s",{"seconds":ceili(value)})
+
+## A mission's title; a skirmish is named after its map.
+func mission_title(definition: DAMissionDefinition) -> String:
+	if definition == null: return DAText.t("Skirmish")
+	if definition.mission_id == "skirmish":
+		var map = map_definition(definition.map_id)
+		return DAText.t("Skirmish · {map}",{"map":DAText.t(map.display_name) if map else definition.map_id})
+	return DAText.t(definition.title)
+
+func saved_skirmish_title(info: Dictionary) -> String:
+	var map_id: String = str(info.get("metadata",{}).get("skirmish",{}).get("map",""))
+	var map = map_definition(map_id) if map_id in DASettingsService.SKIRMISH_MAPS else null
+	return DAText.t("Skirmish · {map}",{"map":DAText.t(map.display_name)}) if map else DAText.t("Skirmish")
 
 func idle_workers() -> Array:
 	return game.sim.entities.values().filter(func(e): return e.owner == 0 and e.kind == "worker" and e.order == "idle").map(func(e): return e.id)
@@ -703,7 +761,7 @@ func layout_objectives() -> void:
 	panel(r,Color(PANEL.r,PANEL.g,PANEL.b,PANEL_ALPHA))
 	blocked_regions.append(to_view(r))
 	reserved_regions.objectives = to_view(r)
-	text((game.mission_definition.title if game.mission_definition else "Skirmish").to_upper(),Rect2(r.position+Vector2(14,9),Vector2(ow-28,24)),15,ACCENT)
+	text(mission_title(game.mission_definition).to_upper(),Rect2(r.position+Vector2(14,9),Vector2(ow-28,24)),15,ACCENT)
 	if items.is_empty():
 		text("Destroy the rival Core",Rect2(r.position+Vector2(36,40),Vector2(ow-50,24)),14)
 		icon("objectives",Rect2(r.position+Vector2(14,43),Vector2(16,16)),MUTED)
@@ -713,9 +771,10 @@ func layout_objectives() -> void:
 		var suffix = ""
 		if not complete and item.get("kind","") in ["survive","gather"] and game.mission:
 			suffix = " · %s / %s" % [thousands(game.mission.progress_for(item)),thousands(item.get("required",1))]
-		if item.get("optional",false): suffix += " (optional)"
 		icon("check" if complete else "objectives",Rect2(r.position+Vector2(14,43+i*26),Vector2(16,16)),GREEN if complete else MUTED)
-		text(str(item.get("title","Await orders"))+suffix,Rect2(r.position+Vector2(36,40+i*26),Vector2(ow-50,24)),14,MUTED if complete else TEXT)
+		var objective_text: String = DAText.t(str(item.get("title","Await orders")))+suffix
+		if item.get("optional",false): objective_text = DAText.t("{objective} (optional)",{"objective":objective_text})
+		text(objective_text,Rect2(r.position+Vector2(36,40+i*26),Vector2(ow-50,24)),14,MUTED if complete else TEXT)
 
 func layout_strips() -> void:
 	var strip_w = minf(760,span-2*EDGE)
@@ -727,7 +786,7 @@ func layout_strips() -> void:
 		var sr = Rect2(strip_x,bottom-68-sh,strip_w,sh)
 		reserved_regions.subtitle = to_view(sr)
 		panel(sr,Color(BG.r,BG.g,BG.b,.92))
-		text(subtitle_speaker.to_upper(),Rect2(sr.position+Vector2(14,8),Vector2(strip_w-28,24)),14,GOLD)
+		text(speaker_label(subtitle_speaker).to_upper(),Rect2(sr.position+Vector2(14,8),Vector2(strip_w-28,24)),14,GOLD)
 		text(subtitle_text,Rect2(sr.position+Vector2(14,34),Vector2(strip_w-28,sh-38)),16)
 	if game.build_kind != "" or game.attack_mode or game.rally_mode or game.patrol_mode or game.ability_mode:
 		var value = "ATTACK-MOVE · Click a destination. Right-click or Esc to cancel."
@@ -737,25 +796,25 @@ func layout_strips() -> void:
 		if game.rally_mode: value = "RALLY POINT · Click where new units should gather. Right-click or Esc to cancel."
 		if game.build_kind != "":
 			var error: String = game.sim.placement_error(0,game.build_kind,game.field.ground_at(mouse))
-			value = "PLACE "+game.sim.catalog.buildings[game.build_kind].name+" · Click to build. Esc to cancel."
+			value = DAText.t("PLACE {building} · Click to build. Esc to cancel.",{"building":DAText.upper(game.sim.catalog.buildings[game.build_kind].name)})
 			if error != "":
-				value = "CANNOT BUILD · "+error
+				value = DAText.t("CANNOT BUILD · {reason}",{"reason":DAText.t(error)})
 				color = GOLD
 		panel(notice_rect,Color(BG.r,BG.g,BG.b,.92))
 		text(value,Rect2(notice_rect.position+Vector2(12,4),notice_rect.size-Vector2(24,8)),14,color)
 		blocked_regions.append(to_view(notice_rect))
 
 func research_name(side: int, id: String) -> String:
-	if id == "age": return "Advancing to "+game.sim.catalog.ages[mini(2,game.sim.ages[side]+1)].capitalize()
-	return str(game.sim.catalog.tech.get(id,{}).get("name",id.capitalize()))+" "+str(game.sim.tech_level(side,id)+1)
+	if id == "age": return DAText.t("Advancing to {age}",{"age":age_label(mini(2,game.sim.ages[side]+1))})
+	return DAText.t(str(game.sim.catalog.tech.get(id,{}).get("name",id.capitalize())))+" "+str(game.sim.tech_level(side,id)+1)
 
 func selection_status(e: Dictionary, d: Dictionary) -> String:
 	if e.owner < 0: return "Send Workers to harvest this deposit."
 	if e.owner != 0: return "Hostile"
-	if not e.complete: return "Constructing %d%%" % int(100*(1-e.build_left/d.time))
-	if e.research != "": return research_name(0,e.research)+" · "+str(ceili(e.research_left))+"s"
-	if not e.queue.is_empty(): return "Producing "+game.sim.catalog.units[e.queue[0].kind].name+" · "+str(ceili(e.queue[0].left))+"s · Queue "+str(e.queue.size())+"/5"
-	return "Operational" if e.building else e.order.capitalize().replace("_"," ")
+	if not e.complete: return DAText.t("Constructing {percent}%",{"percent":int(100*(1-e.build_left/d.time))})
+	if e.research != "": return research_name(0,e.research)+" · "+seconds_text(e.research_left)
+	if not e.queue.is_empty(): return DAText.t("Producing {unit} · {time} · Queue {count}/5",{"unit":DAText.t(game.sim.catalog.units[e.queue[0].kind].name),"time":seconds_text(e.queue[0].left),"count":e.queue.size()})
+	return DAText.t("Operational") if e.building else DAText.t(str(ORDER_NAMES.get(e.order,e.order.capitalize().replace("_"," "))))
 
 func active_job(e: Dictionary, d: Dictionary) -> Dictionary:
 	if e.owner != 0: return {}
@@ -777,14 +836,14 @@ func stat_line(e: Dictionary, d: Dictionary) -> String:
 	var parts: Array = []
 	if float(d.get("damage",0.0)) > 0:
 		var bonus: float = game.sim.tech_modifier(e.owner,"tower_damage" if e.building else "unit_damage")
-		parts.append("ATK %d" % roundi(float(d.damage)*(1.0+bonus)))
-		parts.append("RNG %.1f" % game.sim.attack_range(e))
-	if not e.building and d.has("speed"): parts.append("SPD %.1f" % float(d.speed))
-	if d.has("vision"): parts.append("SIGHT %d" % roundi(game.sim.vision_radius(e)))
-	if d.has("armor"): parts.append(str(d.armor).to_upper())
-	if game.sim.on_high_ground(e): parts.append("HIGH GROUND")
-	if game.sim.stunned(e): parts.append("DISABLED")
-	if float(e.get("cargo",0.0)) > 0: parts.append("CARGO %d" % int(e.cargo))
+		parts.append(DAText.t("ATK {value}",{"value":roundi(float(d.damage)*(1.0+bonus))}))
+		parts.append(DAText.t("RNG {value}",{"value":"%.1f" % game.sim.attack_range(e)}))
+	if not e.building and d.has("speed"): parts.append(DAText.t("SPD {value}",{"value":"%.1f" % float(d.speed)}))
+	if d.has("vision"): parts.append(DAText.t("SIGHT {value}",{"value":roundi(game.sim.vision_radius(e))}))
+	if d.has("armor"): parts.append(armor_label(str(d.armor)).to_upper())
+	if game.sim.on_high_ground(e): parts.append(DAText.t("HIGH GROUND"))
+	if game.sim.stunned(e): parts.append(DAText.t("DISABLED"))
+	if float(e.get("cargo",0.0)) > 0: parts.append(DAText.t("CARGO {value}",{"value":int(e.cargo)}))
 	return "  ·  ".join(parts)
 
 func layout_selection(rect: Rect2, selected: Array) -> void:
@@ -795,8 +854,9 @@ func layout_selection(rect: Rect2, selected: Array) -> void:
 	if selected.is_empty():
 		text("AWAITING YOUR COMMAND",Rect2(x,y+2,iw,30),22)
 		text("Select Workers to gather resources and construct your base.",Rect2(x,y+36,iw,40),15,MUTED)
-		button(Rect2(x,rect.end.y-42,180,42),"SELECT WORKERS","workers",{"id":"panel"})
-		button(Rect2(x+192,rect.end.y-42,160,42),"FOCUS CORE","home",{"id":"panel"})
+		var first_w = minf(maxf(180,label_width("SELECT WORKERS")+24),iw*.55)
+		button(Rect2(x,rect.end.y-42,first_w,42),"SELECT WORKERS","workers",{"id":"panel"})
+		button(Rect2(x+first_w+12,rect.end.y-42,minf(maxf(160,label_width("FOCUS CORE")+24),iw-first_w-12),42),"FOCUS CORE","home",{"id":"panel"})
 		return
 	if selected.size() > 1:
 		layout_group(rect,selected)
@@ -804,11 +864,11 @@ func layout_selection(rect: Rect2, selected: Array) -> void:
 	var e: Dictionary = game.sim.entities[selected[0]]
 	var d: Dictionary = game.sim.catalog.definition(e.kind)
 	var title: String = d.get("name","Salvage pile" if e.kind == "metal" else "Data archive")
-	var role: String = ROLES.get(e.kind,"Structure" if e.building else "Unit")
-	if e.owner == 1: role = "Enemy "+role
+	var role: String = DAText.t(str(ROLES.get(e.kind,"Structure" if e.building else "Unit")))
+	if e.owner == 1: role = DAText.t("Enemy {role}",{"role":role})
 	var portrait_w = minf(ih-34,120.0)
 	var health = clampf(float(e.hp)/maxf(1,e.max_hp),0,1) if e.owner >= 0 else 1.0
-	var health_text = "%s / %s" % [thousands(e.hp),thousands(e.max_hp)] if e.owner >= 0 else thousands(e.amount)+" remaining"
+	var health_text = "%s / %s" % [thousands(e.hp),thousands(e.max_hp)] if e.owner >= 0 else DAText.t("{amount} remaining",{"amount":thousands(e.amount)})
 	var health_color = GREEN if health > .5 else (GOLD if health > .25 else ERROR)
 	if e.owner < 0: health_color = GOLD if e.kind == "metal" else VIOLET
 	var pr = Rect2(x,y,portrait_w,portrait_w)
@@ -841,7 +901,7 @@ func layout_selection(rect: Rect2, selected: Array) -> void:
 func layout_group(rect: Rect2, selected: Array) -> void:
 	var x = rect.position.x
 	var y = rect.position.y
-	text(str(selected.size())+" UNITS SELECTED",Rect2(x,y-2,rect.size.x,24),18)
+	text(DAText.t("{count} UNITS SELECTED",{"count":selected.size()}),Rect2(x,y-2,rect.size.x,24),18)
 	var cell = 42.0
 	var step = cell+4
 	var cols = maxi(1,floori((rect.size.x+4)/step))
@@ -854,7 +914,7 @@ func layout_group(rect: Rect2, selected: Array) -> void:
 			centered_text("+"+str(selected.size()-capacity+1),Rect2(r.position+Vector2(0,12),Vector2(cell,18)),14,MUTED)
 			break
 		var e: Dictionary = game.sim.entities[selected[i]]
-		var name: String = game.sim.catalog.definition(e.kind).get("name",e.kind.capitalize())
+		var name: String = DAText.t(str(game.sim.catalog.definition(e.kind).get("name",e.kind.capitalize())))
 		var b = register(r,name,"select_one",{"id":e.id,"tooltip":name+" · "+thousands(e.hp)+" / "+thousands(e.max_hp)},true,false)
 		if b.is_empty(): continue
 		thumb(e.kind,r.grow(-4))
@@ -874,7 +934,7 @@ func layout_job(rect: Rect2, e: Dictionary, d: Dictionary) -> void:
 		return
 	thumb(job.kind,Rect2(x+(rect.size.x-tw)/2,y+5,tw,tw))
 	bar(Rect2(x+8,y+tw+10,rect.size.x-16,6),job.progress,ACCENT)
-	centered_text(str(job.name)+" · "+str(ceili(job.left))+"s",Rect2(x+4,y+tw+19,rect.size.x-8,18),12)
+	centered_text(DAText.t(str(job.name))+" · "+seconds_text(job.left),Rect2(x+4,y+tw+19,rect.size.x-8,18),12)
 	var waiting: Array = e.get("queue",[]).slice(1)
 	var q = 22.0
 	var qy = y+tw+40
@@ -898,12 +958,12 @@ func grid_items(e: Dictionary) -> Array:
 		items[8] = {"icon":"patrol","title":"Patrol\nWalk back and forth to a point, engaging enemies on the way.","action":"patrol_mode","primary":game.patrol_mode or e.order == "patrol"}
 		if e.kind != "worker":
 			var aggressive: bool = e.get("stance","defensive") == "aggressive"
-			items[9] = {"icon":"attack" if aggressive else "fortify","title":("Stance: aggressive" if aggressive else "Stance: defensive")+"\nDefensive units fire from where they stand. Aggressive units chase what they see, up to 12 cells, then return.","action":"stance","primary":aggressive}
+			items[9] = {"icon":"attack" if aggressive else "fortify","title":DAText.t("Stance: aggressive" if aggressive else "Stance: defensive")+"\n"+DAText.t("Defensive units fire from where they stand. Aggressive units chase what they see, up to 12 cells, then return."),"action":"stance","primary":aggressive}
 		var ability: Dictionary = catalog.abilities.get(e.kind,{})
 		if not ability.is_empty():
 			var wait: float = float(e.get("ability_ready",0.0))-game.sim.elapsed
 			var active: bool = e.get("braced",false) or float(e.get("overdrive_until",0.0)) > game.sim.elapsed
-			items[0] = {"icon":str(ability.get("icon","tech")),"kind":e.kind,"title":str(ability.name)+"\n"+str(ability.description)+"\nRecharge: "+str(int(ability.cooldown))+" s","action":"ability","primary":active or game.ability_mode,"reason":"Recharging · "+str(ceili(wait))+" s" if wait > 0 else "","count":str(ceili(wait)) if wait > 0 else ""}
+			items[0] = {"icon":str(ability.get("icon","tech")),"kind":e.kind,"title":DAText.t(str(ability.name))+"\n"+DAText.t(str(ability.description))+"\n"+DAText.t("Recharge: {seconds} s",{"seconds":int(ability.cooldown)}),"action":"ability","primary":active or game.ability_mode,"reason":DAText.t("Recharging · {seconds} s",{"seconds":ceili(wait)}) if wait > 0 else "","count":str(ceili(wait)) if wait > 0 else ""}
 		if e.kind == "worker":
 			for i in BUILD_ORDER.size():
 				items[i if i < GRID_COLS else 2*GRID_COLS+i-GRID_COLS] = {"kind":BUILD_ORDER[i],"action":"build","d":catalog.buildings[BUILD_ORDER[i]]}
@@ -920,7 +980,7 @@ func grid_items(e: Dictionary) -> Array:
 		items[2*GRID_COLS] = {"icon":"rally","title":"Set rally point","action":"rally","primary":game.rally_mode}
 	if e.kind == "core":
 		var age: int = game.sim.ages[0]
-		if age < 2: items[1] = {"icon":"age","kind":"age","action":"research","d":{"name":"Advance to "+catalog.ages[age+1].capitalize(),"cost":catalog.age_costs[age],"age":0,"description":"Advance to the next technological age."}}
+		if age < 2: items[1] = {"icon":"age","kind":"age","action":"research","d":{"name":DAText.t("Advance to {age}",{"age":age_label(age+1)}),"cost":catalog.age_costs[age],"age":0,"description":"Advance to the next technological age."}}
 		else: items[1] = {"icon":"age","kind":"age","action":"research","title":"Final age reached","reason":"The Singularity is the final age."}
 	if e.kind == "lab":
 		for row in mini(GRID_ROWS,catalog.tech_branches.size()):
@@ -935,7 +995,7 @@ func tech_item(id: String) -> Dictionary:
 	var level: int = game.sim.tech_level(0,id)
 	var next = mini(level+1,DACatalog.TECH_MAX_LEVEL)
 	return {"icon":str(entry.get("icon","tech")),"kind":id,"action":"research","tech":true,"level":level,
-		"d":{"name":str(entry.name)+" "+str(next),"cost":catalog.tech_cost(id,next),"age":DACatalog.tech_age_for_level(next),"description":str(entry.description)}}
+		"d":{"name":DAText.t(str(entry.name))+" "+str(next),"cost":catalog.tech_cost(id,next),"age":DACatalog.tech_age_for_level(next),"description":str(entry.description)}}
 
 func layout_grid(rect: Rect2, slot: float, gap: float, selected: Array) -> void:
 	var items: Array = []
@@ -954,17 +1014,17 @@ func layout_grid(rect: Rect2, slot: float, gap: float, selected: Array) -> void:
 		var item: Dictionary = items[i]
 		var reason: String = str(item.get("reason",""))
 		var title: String = str(item.get("title",""))
-		var tooltip = title
+		var tooltip = DAText.lines(title)
 		if item.has("d"):
 			title = item.d.name
 			if item.get("tech",false): reason = game.sim.tech_error(0,item.kind)
 			if reason == "" or reason == "Insufficient resources.": reason = availability(item,e)
-			tooltip = title+" · "+cost_text(item.d.cost)+"\n"+item.d.description
+			tooltip = DAText.t(title)+" · "+cost_text(item.d.cost)+"\n"+DAText.t(str(item.d.description))
 			if item.action == "train":
 				var strong: String = game.sim.catalog.counter_text(item.kind)
-				tooltip += "\nArmour: "+str(item.d.get("armor","light"))+(" · Strong: "+strong if strong != "" else "")
+				tooltip += "\n"+DAText.t("Armour: {class}",{"class":armor_label(str(item.d.get("armor","light")))})+(" · "+DAText.t("Strong: {targets}",{"targets":strong}) if strong != "" else "")
 		var hotkey: String = str(item.get("hotkey",DASettingsService.key_label(GRID_KEYS[i])))
-		var payload = {"tooltip":tooltip+"\nHotkey: "+hotkey,"reason":reason}
+		var payload = {"tooltip":tooltip+"\n"+DAText.t("Hotkey: {key}",{"key":hotkey}),"reason":reason}
 		if item.has("kind"): payload.kind = item.kind
 		if not item.get("bound",false): payload.grid = GRID_KEYS[i]
 		var b = register(cell,title,item.action,payload,reason == "",item.get("primary",false))
@@ -1003,8 +1063,8 @@ func layout_tech() -> void:
 	var catalog: DACatalog = game.sim.catalog
 	var labs: Array = game.sim.entities.values().filter(func(e): return e.owner == 0 and e.kind == "lab" and e.complete)
 	var idle: int = labs.filter(func(e): return e.research == "").size()
-	var summary = "No Research Lab yet. Workers can build one." if labs.is_empty() else "Research Labs: %d · idle: %d" % [labs.size(),idle]
-	text(catalog.ages[game.sim.ages[0]].capitalize()+" age · "+summary,Rect2(x,rect.position.y+58,cw,22),14,MUTED)
+	var summary = DAText.t("No Research Lab yet. Workers can build one.") if labs.is_empty() else DAText.t("Research Labs: {count} · idle: {idle}",{"count":labs.size(),"idle":idle})
+	text(DAText.t("{age} age · {summary}",{"age":age_label(game.sim.ages[0]),"summary":summary}),Rect2(x,rect.position.y+58,cw,22),14,MUTED)
 	var top = rect.position.y+90
 	var branches: Array = catalog.tech_branches
 	var col_gap = 14.0
@@ -1012,7 +1072,7 @@ func layout_tech() -> void:
 	var avail = rect.end.y-66-top-28
 	for column in branches.size():
 		var bx = x+column*(col_w+col_gap)
-		text(str(branches[column]).to_upper(),Rect2(bx,top,col_w,22),16,GOLD)
+		text(DAText.upper(str(branches[column]).capitalize()),Rect2(bx,top,col_w,22),16,GOLD)
 		var ids: Array = catalog.tech_ids(branches[column])
 		var row_h = minf(96,avail/maxi(1,ids.size()))
 		for i in ids.size():
@@ -1031,7 +1091,7 @@ func layout_tech() -> void:
 			var tx = r.position.x+46
 			var tw = r.size.x-56
 			fitted_text(str(entry.name),Rect2(tx,r.position.y+3,tw-74,20),15,TEXT)
-			var status = "Researching…" if busy else ("Complete" if level >= DACatalog.TECH_MAX_LEVEL else "Level %d · %s" % [level+1,cost_text(catalog.tech_cost(id,level+1))])
+			var status = "Researching…" if busy else ("Complete" if level >= DACatalog.TECH_MAX_LEVEL else DAText.t("Level {level} · {cost}",{"level":level+1,"cost":cost_text(catalog.tech_cost(id,level+1))}))
 			if not busy and level < DACatalog.TECH_MAX_LEVEL and reason != "" and reason != "Insufficient resources.": status = reason
 			fitted_text(status,Rect2(tx,r.position.y+r.size.y-22,tw,18),12,GOLD if busy else (MUTED if reason != "" else ACCENT))
 			text_control = ""
@@ -1040,16 +1100,17 @@ func layout_tech() -> void:
 	button(Rect2(x,rect.end.y-58,cw,44),"RETURN","tech",{"id":"close"},"",true,true)
 
 func availability(item: Dictionary, e: Dictionary) -> String:
-	if game.sim.ages[0] < item.d.age: return "Requires "+game.sim.catalog.ages[item.d.age].capitalize()+" age."
+	if game.sim.ages[0] < item.d.age: return DAText.t("Requires {age} age.",{"age":age_label(item.d.age)})
 	if item.action == "research" and e.research != "": return "Research is already underway."
 	if item.action == "train":
 		if e.queue.size() >= 5: return "Production queue is full."
 		if game.sim.population(0,true) >= game.sim.capacity(0): return "Compute limit reached. Build a Data Center."
-	if not game.sim.can_pay(0,item.d.cost): return "Insufficient resources. Cost: "+cost_text(item.d.cost)
+	if not game.sim.can_pay(0,item.d.cost): return DAText.t("Insufficient resources. Cost: {cost}",{"cost":cost_text(item.d.cost)})
 	return ""
 
 func cost_text(cost: Vector3) -> String:
-	return "%d M · %d E" % [cost.x,cost.y]+(" · %d D" % cost.z if cost.z > 0 else "")
+	# M, E and D are the initials of metal, energy and data.
+	return DAText.t("{metal} M · {energy} E",{"metal":int(cost.x),"energy":int(cost.y)})+(" · "+DAText.t("{data} D",{"data":int(cost.z)}) if cost.z > 0 else "")
 
 func modal_shell(title: String, width: float = 720) -> Rect2:
 	panel(Rect2(0,0,w,h),Color("07121bf5"),false)
@@ -1063,10 +1124,10 @@ func layout_pause() -> void:
 	var x = rect.position.x+24
 	var cw = rect.size.x-48
 	var y = rect.position.y+82
-	var entries = [["RESUME","resume",{}],["SPEED "+str(game.speed)+"×","speed",{}],["SAVE GAME","saves",{"id":"save"}],["LOAD GAME","saves",{"id":"load"}],["FIELD MANUAL","help",{}],["SETTINGS","settings",{}],["RESTART MISSION","restart",{}],["MAIN MENU","menu",{}]]
+	var entries = [["RESUME","resume",{}],[DAText.t("SPEED {speed}×",{"speed":game.speed}),"speed",{}],["SAVE GAME","saves",{"id":"save"}],["LOAD GAME","saves",{"id":"load"}],["FIELD MANUAL","help",{}],["SETTINGS","settings",{}],["RESTART MISSION","restart",{}],["MAIN MENU","menu",{}]]
 	for i in entries.size():
 		button(Rect2(x+(i%2)*(cw/2+4),y+floori(i/2.0)*70,cw/2-4,52),entries[i][0],entries[i][1],entries[i][2],"",true,i==0)
-	text("Quick save "+game.settings.prompt("save")+" · quick load "+game.settings.prompt("load")+" use the first manual slot.",Rect2(x,y+4*70+4,cw,24),14,MUTED)
+	text(DAText.t("Quick save {save} · quick load {load} use the first manual slot.",{"save":game.settings.prompt("save"),"load":game.settings.prompt("load")}),Rect2(x,y+4*70+4,cw,24),14,MUTED)
 	text("Esc resumes · Tab changes focus · Enter selects",Rect2(x,rect.end.y-78,cw,50),14,MUTED)
 
 func layout_result() -> void:
@@ -1081,13 +1142,13 @@ func layout_result() -> void:
 		var reason: String = game.fail_reason
 		headline = "CORE LOST" if game.sim.winner == 1 or reason == "core" else ("TIME EXPIRED" if reason.begins_with("Time limit") else "MISSION FAILED")
 		detail = game.mission_definition.defeat_text
-		if reason not in ["", "core", detail]: detail = reason+" "+detail
+		if reason not in ["", "core", detail]: detail = DAText.t(reason)+" "+DAText.t(detail)
 	text(headline,Rect2(x,rect.position.y+86,cw,72),48,ACCENT if won else ERROR)
 	text(detail,Rect2(x,rect.position.y+166,cw,84),18)
-	text("Time "+time_text(game.sim.elapsed)+" · Enemies destroyed "+str(game.sim.stats[0].kills)+"\nResources harvested "+str(int(game.sim.stats[0].gathered)),Rect2(x,rect.position.y+256,cw,52),16,MUTED)
+	text(DAText.t("Time {time} · Enemies destroyed {kills}\nResources harvested {amount}",{"time":time_text(game.sim.elapsed),"kills":game.sim.stats[0].kills,"amount":thousands(game.sim.stats[0].gathered)}),Rect2(x,rect.position.y+256,cw,52),16,MUTED)
 	var next_id: String = game.next_mission_id() if won else ""
 	if next_id != "":
-		button(Rect2(x,rect.end.y-146,cw,52),"NEXT MISSION · "+str(game.mission_catalog.get_definition(next_id).title).to_upper()+"  →","next_mission",{},"",true,true)
+		button(Rect2(x,rect.end.y-146,cw,52),DAText.t("NEXT MISSION · {title}  →",{"title":DAText.upper(str(game.mission_catalog.get_definition(next_id).title))}),"next_mission",{},"",true,true)
 	if game.game_kind == "skirmish":
 		var third = (cw-16)/3
 		button(Rect2(x,rect.end.y-84,third,52),"PLAY AGAIN","restart",{},"",true,true)
@@ -1108,15 +1169,15 @@ func layout_skirmish() -> void:
 	var pr = Rect2(x,rect.position.y+74,side,side)
 	operations.append({"type":"preview","rect":to_view(pr),"map":map,"side":str(setup.side),"player":str(setup.player),"enemy":str(setup.enemy)})
 	if map:
-		text("%d deposits · %d blocked cells" % [map.resource_nodes.size(),map.obstacle_cells.size()],Rect2(x,pr.end.y+8,side,20),13,MUTED)
+		text(DAText.t("{deposits} deposits · {blocked} blocked cells",{"deposits":map.resource_nodes.size(),"blocked":map.obstacle_cells.size()}),Rect2(x,pr.end.y+8,side,20),13,MUTED)
 	var ox = x+side+20
 	var ow = cw-side-20
 	var rows = [
-		["MAP",map.display_name if map else str(setup.map),"map",""],
+		["MAP",DAText.t(map.display_name) if map else str(setup.map),"map",""],
 		["YOUR FACTION",faction_name(str(setup.player)),"player",faction_note(str(setup.player))],
 		["RIVAL FACTION",faction_name(str(setup.enemy)),"enemy",faction_note(str(setup.enemy))],
-		["RESOURCES",str(setup.resources).capitalize(),"resources","What both sides start with."],
-		["START POSITION",str(setup.side).capitalize(),"side","Which of the map's two starts is yours."]]
+		["RESOURCES",DAText.t(str(setup.resources).capitalize()),"resources","What both sides start with."],
+		["START POSITION",DAText.t(str(setup.side).capitalize()),"side","Which of the map's two starts is yours."]]
 	var row_h = clampf((rect.end.y-78-pr.position.y)/(rows.size()+1),40,54)
 	for i in rows.size():
 		var y = pr.position.y+i*row_h
@@ -1126,7 +1187,7 @@ func layout_skirmish() -> void:
 		button(Rect2(ox+ow-48,y,44,row_h-6),"›","skirmish_option",{"key":rows[i][2],"delta":1,"tooltip":rows[i][3]})
 	var dy = pr.position.y+rows.size()*row_h
 	text("DIFFICULTY",Rect2(ox,dy,ow-164,16),12,MUTED)
-	fitted_text(str(game.campaign.selected_difficulty).capitalize(),Rect2(ox,dy+15,ow-164,24),18,TEXT)
+	fitted_text(DAText.t(str(game.campaign.selected_difficulty).capitalize()),Rect2(ox,dy+15,ow-164,24),18,TEXT)
 	button(Rect2(ox+ow-156,dy,152,row_h-6),"CHANGE","difficulty",{"id":"skirmish","tooltip":"How quickly the rival expands and attacks."})
 	button(Rect2(x,rect.end.y-66,cw*.62,44),"START SKIRMISH  →","start_skirmish",{},"",true,true)
 	button(Rect2(x+cw*.62+8,rect.end.y-66,cw*.38-8,44),"RETURN","skirmish",{"id":"close"})
@@ -1230,14 +1291,14 @@ func layout_saves() -> void:
 	for i in slots.size():
 		var slot: String = slots[i]
 		var info: Dictionary = slot_info.get(slot,{})
-		var label = ("MANUAL " if slot.begins_with("manual") else "CHECKPOINT ")+str(int(slot.get_slice("_",1))+(0 if slot.begins_with("manual") else 1))
-		var subtitle = "Empty"
+		var label = DAText.t("MANUAL {number}" if slot.begins_with("manual") else "CHECKPOINT {number}",{"number":int(slot.get_slice("_",1))+(0 if slot.begins_with("manual") else 1)})
+		var subtitle = DAText.t("Empty")
 		var readable: bool = not info.is_empty() and not info.has("error")
 		if info.has("error"):
-			subtitle = "Unreadable save"
+			subtitle = DAText.t("Unreadable save")
 		elif readable:
 			var definition = game.mission_catalog.get_definition(str(info.mission_id))
-			var title: String = definition.title if definition else str(info.get("metadata",{}).get("title","Skirmish"))
+			var title: String = DAText.t(definition.title) if definition else saved_skirmish_title(info)
 			subtitle = title+" · "+time_text(float(info.elapsed))+" · "+str(info.saved_at).replace("T"," ")
 		button(Rect2(x,rect.position.y+96+i*row,cw,row-6),label+" · "+subtitle,"save_slot" if saving else "load_slot",{"id":slot,"slot":slot,"reason":str(info.get("error","This slot is empty."))},"",saving or readable,i == 0 and (saving or readable))
 	button(Rect2(x,rect.end.y-66,cw,44),"RETURN","saves",{"id":"close"},"",true,false)
@@ -1267,7 +1328,7 @@ func layout_settings() -> void:
 	text("AUDIO",Rect2(x,y,cw,28),18,ACCENT)
 	y += 36
 	for entry in [["Master","master_volume"],["Music","music_volume"],["Effects","effects_volume"],["Voice","voice_volume"],["Interface","ui_volume"]]:
-		text(entry[0]+" · "+str(roundi(game.settings.values[entry[1]]*100))+"%",Rect2(x,y+8,cw-160,30),16)
+		text(DAText.t(entry[0])+" · "+str(roundi(game.settings.values[entry[1]]*100))+"%",Rect2(x,y+8,cw-160,30),16)
 		button(Rect2(x+cw-150,y,66,40),"−","volume",{"key":entry[1],"delta":-.1})
 		button(Rect2(x+cw-76,y,66,40),"+","volume",{"key":entry[1],"delta":.1})
 		y += 50
@@ -1276,21 +1337,22 @@ func layout_settings() -> void:
 	text("DISPLAY & CAPTIONS",Rect2(x,y,cw,28),18,ACCENT)
 	y += 38
 	var v: Dictionary = game.settings.values
-	var on = func(value: bool) -> String: return "On" if value else "Off"
-	var scale_note = "" if is_equal_approx(ui_scale,float(v.ui_scale)) else " (window fits %d%%)" % roundi(ui_scale*100)
+	var on = func(value: bool) -> String: return DAText.t("On" if value else "Off")
+	var scale_note = "" if is_equal_approx(ui_scale,float(v.ui_scale)) else " "+DAText.t("(window fits {percent}%)",{"percent":roundi(ui_scale*100)})
 	var options = [
-		["Window · "+str(v.window_mode).capitalize(),"window_mode","Windowed, borderless across the screen, or fullscreen. "+game.settings.prompt("fullscreen")+" switches fullscreen."],
-		["Resolution · "+str(v.resolution).replace("x"," × "),"resolution","The window's size in Windowed mode."],
-		["VSync · "+on.call(v.vsync),"vsync","Match frames to the display to stop tearing."],
-		["Frame cap · "+("Off" if v.frame_cap == 0 else str(v.frame_cap)+" fps"),"frame_cap","Limit the frame rate to save power and heat."],
-		["Profile · "+str(v.profile),"profile","Low reduces shadows, effects and draw distance for slower graphics cards."],
-		["Shadows · "+on.call(v.shadows),"shadows","Cast shadows from the sun on terrain, buildings and units."],
-		["UI scale · "+str(roundi(float(v.ui_scale)*100))+"%"+scale_note,"ui_scale","Size of the interface. 150% needs a window at least 864 pixels high."],
-		["Reduced effects · "+on.call(v.reduced_effects),"effects","Fewer particles and flashes."],
-		["Subtitles · "+on.call(subtitles_enabled),"subtitles","Show spoken lines as text."],
-		["Colour-blind sides · "+on.call(v.colorblind),"colorblind","Draw your side in blue and the rival in orange."],
-		["Pause in background · "+on.call(v.pause_unfocused),"pause_unfocused","Pause the match when you switch to another window."],
-		["Sound · "+on.call(not v.muted),"sound","Turn all sound on or off. "+game.settings.prompt("events")+" does the same in a match."]]
+		[DAText.t("Window")+" · "+DAText.t(str(v.window_mode).capitalize()),"window_mode",DAText.t("Windowed, borderless across the screen, or fullscreen. {key} switches fullscreen.",{"key":game.settings.prompt("fullscreen")})],
+		[DAText.t("Language")+" · "+(DAText.t("System") if str(v.language) == "auto" else str(DAText.NAMES.get(str(v.language),v.language))),"language","The language of the interface and subtitles. Voices stay in English."],
+		[DAText.t("Resolution")+" · "+str(v.resolution).replace("x"," × "),"resolution","The window's size in Windowed mode."],
+		[DAText.t("VSync")+" · "+on.call(v.vsync),"vsync","Match frames to the display to stop tearing."],
+		[DAText.t("Frame cap")+" · "+(DAText.t("Off") if v.frame_cap == 0 else DAText.t("{rate} fps",{"rate":v.frame_cap})),"frame_cap","Limit the frame rate to save power and heat."],
+		[DAText.t("Profile")+" · "+DAText.t(str(v.profile).capitalize()),"profile","Low reduces shadows, effects and draw distance for slower graphics cards."],
+		[DAText.t("Shadows")+" · "+on.call(v.shadows),"shadows","Cast shadows from the sun on terrain, buildings and units."],
+		[DAText.t("UI scale")+" · "+str(roundi(float(v.ui_scale)*100))+"%"+scale_note,"ui_scale","Size of the interface. 150% needs a window at least 864 pixels high."],
+		[DAText.t("Reduced effects")+" · "+on.call(v.reduced_effects),"effects","Fewer particles and flashes."],
+		[DAText.t("Subtitles")+" · "+on.call(subtitles_enabled),"subtitles","Show spoken lines as text."],
+		[DAText.t("Colour-blind sides")+" · "+on.call(v.colorblind),"colorblind","Draw your side in blue and the rival in orange."],
+		[DAText.t("Pause in background")+" · "+on.call(v.pause_unfocused),"pause_unfocused","Pause the match when you switch to another window."],
+		[DAText.t("Sound")+" · "+on.call(not v.muted),"sound",DAText.t("Turn all sound on or off. {key} does the same in a match.",{"key":game.settings.prompt("events")})]]
 	for i in options.size():
 		button(Rect2(x+(i%2)*(cw/2+4),y+floori(i/2.0)*54,cw/2-4,44),options[i][0],options[i][1],{"tooltip":options[i][2]})
 	y += ceili(options.size()/2.0)*54+4
@@ -1301,7 +1363,7 @@ func layout_settings() -> void:
 	var actions = ["pause","manual","save","load","attack","stop","speed","events","home","fullscreen","alert"]
 	for i in actions.size():
 		var action: String = actions[i]
-		button(Rect2(x+(i%2)*(cw/2+4),y+floori(i/2.0)*52,cw/2-4,44),action.capitalize()+" · "+("Press key… (Esc cancels)" if rebind_action == action else game.settings.prompt(action)),"rebind",{"action":action},"",true,rebind_action==action)
+		button(Rect2(x+(i%2)*(cw/2+4),y+floori(i/2.0)*52,cw/2-4,44),DAText.t(str(BINDING_NAMES.get(action,action.capitalize())))+" · "+(DAText.t("Press key… (Esc cancels)") if rebind_action == action else game.settings.prompt(action)),"rebind",{"action":action},"",true,rebind_action==action)
 	y += 322
 	button(Rect2(x,y,220,42),"RESET BINDINGS","reset_category",{"category":"bindings"})
 	end_scroll()
@@ -1318,9 +1380,12 @@ func layout_manual() -> void:
 		["03 / EVOLVE","Train Workers and advance ages at your Core. Network unlocks Disruptors and Towers; Singularity unlocks Siege Walkers. Fabricators manufacture your army. Research Labs improve resources, buildings and the military, five levels each; every Lab runs one project at a time."],
 		["04 / CONQUER","Sentinels counter armoured units such as Disruptors. Disruptors counter heavy units such as Walkers. Walkers destroy buildings. Disruptor and Walker shells travel and splash. Every combat unit has one ability on the first grid slot: the Scout's sweep reveals an area, the Sentinel fires faster, the Disruptor's EMP stuns, the Walker braces for range. Scout first: enemies outside your vision cannot be targeted, though buildings you have seen stay marked."],
 		["05 / GROUND AND FACTIONS","Roads carry units a quarter faster. Rough ground around ruins slows everything that does not hover. Units on high ground see two cells farther and shoot one cell farther. Each faction fields one unit of its own from the Network age: Origin's Warden shields nearby units, the Foundry's Mortar shells from long range, the Lattice's Phantom stays unseen until an enemy comes close."],
-		["06 / COMMAND","Click or drag to select; Shift adds units; double-click selects every unit of that type in view. The command grid uses the keys Q to T, A to G and Z to B in the order shown on each slot. Right-click moves, gathers, attacks, repairs, or sets a rally point. "+game.settings.prompt("attack")+": attack-move. "+game.settings.prompt("stop")+": stop. Hold position keeps units where they stand; Patrol walks them back and forth, engaging on the way. Cancel on a building's command grid removes its last queued item, or stops its research, and refunds the cost. Ctrl+1–9 saves groups; 1–9 recalls them."],
-		["07 / NAVIGATE","Arrows, screen edges, or middle drag pan; the wheel zooms. Minimap left-click moves the camera; right-click issues orders. "+game.settings.prompt("pause")+": pause. "+game.settings.prompt("manual")+": manual. "+game.settings.prompt("fullscreen")+": fullscreen. "+game.settings.prompt("alert")+": jump to the last alert, which also pings the minimap."]
+		["06 / COMMAND","Click or drag to select; Shift adds units; double-click selects every unit of that type in view. The command grid uses the keys Q to T, A to G and Z to B in the order shown on each slot. Right-click moves, gathers, attacks, repairs, or sets a rally point. {attack}: attack-move. {stop}: stop. Hold position keeps units where they stand; Patrol walks them back and forth, engaging on the way. Cancel on a building's command grid removes its last queued item, or stops its research, and refunds the cost. Ctrl+1–9 saves groups; 1–9 recalls them."],
+		["07 / NAVIGATE","Arrows, screen edges, or middle drag pan; the wheel zooms. Minimap left-click moves the camera; right-click issues orders. {pause}: pause. {manual}: manual. {fullscreen}: fullscreen. {alert}: jump to the last alert, which also pings the minimap."]
 	]
+	var keys: Dictionary = {}
+	for action in ["attack","stop","pause","manual","fullscreen","alert"]: keys[action] = game.settings.prompt(action)
+	for section in sections: section[1] = DAText.t(section[1],keys)
 	var total = 0.0
 	for section in sections:
 		total += 54+text_height(section[1],cw)
@@ -1361,7 +1426,7 @@ func layout_notification() -> void:
 		r.position.y = reserved_regions.subtitle.position.y/ui_scale-r.size.y-8
 	panel(r,BG)
 	var prefix = {"error":"ERROR · ","success":"COMPLETE · ","alert":"ALERT · "}.get(severity,"NOTICE · ")
-	text(prefix+message,Rect2(r.position+Vector2(12,6),r.size-Vector2(24,12)),14,{"error":ERROR,"success":ACCENT,"alert":GOLD}.get(severity,TEXT))
+	text(DAText.t(prefix)+DAText.t(message),Rect2(r.position+Vector2(12,6),r.size-Vector2(24,12)),14,{"error":ERROR,"success":ACCENT,"alert":GOLD}.get(severity,TEXT))
 	reserved_regions.message = to_view(r)
 	blocked_regions.append(to_view(r))
 
@@ -1370,8 +1435,8 @@ func layout_tooltip() -> void:
 	var anchor = Rect2()
 	for b in buttons:
 		if b.rect.has_point(mouse) or (b.id == focused and focus_keyboard):
-			value = str(b.payload.get("reason","")) if not b.enabled else ""
-			var details = str(b.payload.get("tooltip",""))
+			value = DAText.t(str(b.payload.get("reason",""))) if not b.enabled else ""
+			var details = DAText.lines(str(b.payload.get("tooltip","")))
 			if details != "": value += ("\n" if value != "" else "")+details
 			anchor = b.rect
 			break
@@ -1649,7 +1714,7 @@ func mission_directive() -> String:
 			var suffix = ""
 			if item.get("kind","") in ["survive","gather"]:
 				suffix = " · %d / %d" % [game.mission.progress_for(item),item.get("required",1)]
-			return str(item.get("title","Await orders"))+suffix
+			return DAText.t(str(item.get("title","Await orders")))+suffix
 	return "All objectives complete"
 
 static func time_text(seconds: float) -> String:

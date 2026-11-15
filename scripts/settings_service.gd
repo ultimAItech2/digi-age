@@ -2,8 +2,8 @@ class_name DASettingsService
 extends RefCounted
 ## Validated preferences, independent from campaign data. Commit before applying.
 const PATH = "user://settings.cfg"
-const DEFAULTS = {"profile": "normal", "ui_scale": 1.0, "reduced_effects": false, "subtitles": true, "window_mode": "windowed", "resolution": "1600x900", "vsync": true, "frame_cap": 0, "shadows": true, "colorblind": false, "pause_unfocused": true, "muted": false, "master_volume": 1.0, "ui_volume": 1.0, "voice_volume": 1.0, "effects_volume": 1.0, "music_volume": 0.7, "skirmish": {"map": "silent_grid", "player": "origin", "enemy": "foundry", "resources": "standard", "side": "left"}, "bindings": {"fullscreen": KEY_F11, "manual": KEY_F1, "cancel": KEY_ESCAPE, "pause": KEY_SPACE, "speed": KEY_F2, "events": KEY_M, "save": KEY_F5, "load": KEY_F9, "attack": KEY_A, "stop": KEY_S, "home": KEY_HOME, "alert": KEY_N}}
-const CATEGORIES = {"audio": ["master_volume", "music_volume", "effects_volume", "voice_volume", "ui_volume"], "display": ["profile", "ui_scale", "reduced_effects", "subtitles", "window_mode", "resolution", "vsync", "frame_cap", "shadows", "colorblind", "pause_unfocused"], "bindings": ["bindings"]}
+const DEFAULTS = {"profile": "normal", "ui_scale": 1.0, "reduced_effects": false, "subtitles": true, "window_mode": "windowed", "resolution": "1600x900", "vsync": true, "frame_cap": 0, "shadows": true, "colorblind": false, "pause_unfocused": true, "language": "auto", "muted": false, "master_volume": 1.0, "ui_volume": 1.0, "voice_volume": 1.0, "effects_volume": 1.0, "music_volume": 0.7, "skirmish": {"map": "silent_grid", "player": "origin", "enemy": "foundry", "resources": "standard", "side": "left"}, "bindings": {"fullscreen": KEY_F11, "manual": KEY_F1, "cancel": KEY_ESCAPE, "pause": KEY_SPACE, "speed": KEY_F2, "events": KEY_M, "save": KEY_F5, "load": KEY_F9, "attack": KEY_A, "stop": KEY_S, "home": KEY_HOME, "alert": KEY_N}}
+const CATEGORIES = {"audio": ["master_volume", "music_volume", "effects_volume", "voice_volume", "ui_volume"], "display": ["profile", "ui_scale", "reduced_effects", "subtitles", "window_mode", "resolution", "vsync", "frame_cap", "shadows", "colorblind", "pause_unfocused", "language"], "bindings": ["bindings"]}
 const SCALES = [1.0, 1.15, 1.25, 1.5]
 const WINDOW_MODES = ["windowed", "borderless", "fullscreen"]
 const RESOLUTIONS = ["1280x720", "1600x900", "1920x1080", "2560x1440"]
@@ -25,6 +25,7 @@ func valid_value(key: String, value: Variant) -> bool:
 	if key == "ui_scale": return (value is float or value is int) and value in SCALES
 	if key in ["reduced_effects", "subtitles", "vsync", "shadows", "colorblind", "pause_unfocused", "muted"]: return value is bool
 	if key == "window_mode": return value is String and value in WINDOW_MODES
+	if key == "language": return value is String and (value == "auto" or value in DAText.LANGUAGES)
 	if key == "resolution": return value is String and value in RESOLUTIONS
 	if key == "frame_cap": return value is int and value in FRAME_CAPS
 	if key.ends_with("_volume"):
@@ -44,7 +45,7 @@ func binding_error(bindings: Dictionary) -> String:
 			# A and S are command-grid slots; only the orders that sit there may keep them.
 			return "That key is reserved for navigation, the command grid, or control groups."
 		if OS.get_keycode_string(code) == "": return "Choose a supported keyboard key."
-		if used.has(code): return "Already assigned to %s. Choose another key." % str(used[code]).capitalize()
+		if used.has(code): return DAText.t("Already assigned to {action}. Choose another key.", {"action": DAText.t(str(DAInterface.BINDING_NAMES.get(used[code], str(used[code]).capitalize())))})
 		used[code] = action
 	return ""
 
@@ -121,7 +122,10 @@ func binding(action: String, fallback: int) -> int:
 	return int(values.bindings.get(action, fallback))
 
 func prompt(action: String) -> String:
-	return key_label(binding(action, KEY_NONE))
+	return DAText.t(key_label(binding(action, KEY_NONE)))
+
+## Key names that are words, so they can be translated.
+const KEY_WORDS = ["Space", "Escape", "Home", "End", "Enter", "Tab", "Shift", "Ctrl", "Alt", "Insert", "Delete", "Backspace", "Page Up", "Page Down", "Left", "Right", "Up", "Down"]
 
 ## The name printed on the key at this physical position in the player's keyboard layout.
 static func key_label(physical: int) -> String:

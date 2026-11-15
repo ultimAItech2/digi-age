@@ -53,6 +53,32 @@ func activate(action: String, kind: String = ""):
 	expect(not b.is_empty(),"control exists: "+action)
 	if not b.is_empty(): click(b.rect.get_center())
 
+## Text left over once the translated parts are removed must not contain words:
+## that is a string a player would read in English whatever their language.
+const ALLOWED_UNTRANSLATED = [
+	# Text this test puts on screen itself.
+	"Restore the industrial network. Our Workers can gather metal from salvage piles and retrieve data from archives to power the next age.",
+	"Insufficient resources. Gather additional metal and energy before constructing a Fabricator.",
+	"ORIGIN ARCHIVIST", "Under attack. Press N to look.",
+	# The game's name.
+	"DIGITAL", "AGE"]
+var untranslated: Dictionary = {}
+
+func check_translated(state: String):
+	var word = RegEx.new()
+	word.compile("[A-Za-zÀ-ÿ]{2,}")
+	# Tooltips and the reasons on disabled controls are drawn only under the pointer: check them all.
+	var values: Array = DAText.seen.duplicate()
+	for b in game.hud.focus_controls:
+		values.append(DAText.lines(str(b.payload.get("tooltip",""))))
+		values.append(DAText.t(str(b.payload.get("reason",""))))
+	for value in values:
+		var rest: String = DAText.unmarked(value)
+		for allowed in ALLOWED_UNTRANSLATED + [str(ProjectSettings.get_setting("application/config/version",""))]: rest = rest.replace(allowed,"")
+		if word.search(rest) and not untranslated.has(value):
+			untranslated[value] = state
+	DAText.seen.clear()
+
 func check_layout():
 	game.hud.prepare_layout(true)
 	var viewport = Rect2(Vector2.ZERO,game.hud.size)
@@ -67,8 +93,11 @@ func check_layout():
 			expect(not game.hud.buttons[i].rect.intersects(game.hud.buttons[j].rect),"interactive controls do not overlap")
 	for entry in game.hud.text_bounds:
 		expect(viewport.grow(1).encloses(entry.rect),"text within viewport: "+entry.text)
-		if label.ends_with("manual") or label.ends_with("subtitle"):
+		var caption: bool = label.ends_with("subtitle") and game.hud.reserved_regions.has("subtitle") and game.hud.reserved_regions.subtitle.encloses(entry.rect)
+		if label.ends_with("manual") or caption:
 			expect(entry.source == "","manual and captions are never abbreviated: "+entry.text)
+		# A label on a control must be readable in full, in every language.
+		if entry.control != "" and entry.source != "" and not DAText.pseudo: expect(false,"control label is abbreviated: "+entry.source.replace("\n"," / ")+" -> "+entry.text)
 		if entry.clip.has_area(): expect(entry.clip.grow(1).encloses(entry.rect),"text obeys scroll clipping")
 		for b in game.hud.buttons:
 			if entry.control != b.id:
@@ -294,7 +323,7 @@ func run():
 	game.sim.ages[0] = 2
 	var states = ["menu","worker","core","fabricator","generator","data_center","tower","depot","lab","scout","sentinel","disruptor","walker","metal","data","group","tech","placement","subtitle","error","pause","settings","bindings","manual","victory","defeat","confirmation","menu_error","disabled","queue","objectives","empty","credits","skirmish","saves_load","saves_save","patrol","alert","ability","warden","mortar","phantom"]
 	DirAccess.make_dir_recursive_absolute("res://builds/ui")
-	for resolution in RESOLUTIONS:
+	for resolution in ([] if "--locales-only" in OS.get_cmdline_user_args() else RESOLUTIONS):
 		root.size = resolution
 		await process_frame
 		for scale_value in DASettingsService.SCALES:
@@ -332,6 +361,37 @@ func run():
 			game.sim.command(0,"stop",game.selected)
 			game.field.focus = previous_focus
 			game.field.update_camera()
+	# Other languages: longer text must still fit, and nothing may stay in English.
+	# "pseudo" marks every translated string and pads it by a third.
+	DAText.load_tables()
+	for language in ["pseudo","de","fr","it","es"]:
+		DAText.pseudo = language == "pseudo"
+		DAText.language = "en" if language == "pseudo" else language
+		game.hud.wrap_cache.clear()
+		for resolution in [Vector2i(1280,720),Vector2i(1280,800),Vector2i(3840,2160)]:
+			root.size = resolution
+			await process_frame
+			for scale_value in [1.0,1.5]:
+				game.hud.apply_scale(scale_value)
+				for state in states:
+					label = "%s-%dx%d-%d-%s" % [language,resolution.x,resolution.y,roundi(scale_value*100),state]
+					DAText.seen.clear()
+					scenario(state)
+					check_layout()
+					if language == "pseudo" and state != "credits": check_translated(state)
+					if captures and language == "de" and scale_value == 1.0 and resolution.x == 1280 and resolution.y == 720:
+						game.hud.queue_redraw()
+						await process_frame
+						await RenderingServer.frame_post_draw
+						root.get_texture().get_image().save_png("res://builds/ui/"+label+".png")
+	DAText.pseudo = false
+	DAText.language = "en"
+	DAText.seen.clear()
+	game.hud.wrap_cache.clear()
+	root.size = RESOLUTIONS[0]
+	await process_frame
+	for value in untranslated:
+		expect(false,"untranslated text in '%s': %s" % [untranslated[value],value.replace("\n"," / ")])
 	if captures:
 		label = "fullscreen-transition"
 		root.mode = Window.MODE_FULLSCREEN

@@ -316,7 +316,7 @@ func phase_four() -> void:
 	var fabricator: int = game.sim.spawn("fabricator",0,base+Vector2(8,6))
 	game.selected = [fabricator]
 	expect(has_button("train") and tooltip_of("train","kind","phantom").contains("Phantom") and tooltip_of("train","kind","warden") == "","the Lattice Fabricator offers the Phantom and not another faction's unit")
-	expect(tooltip_of("train","kind","sentinel").contains("Armour: infantry") and tooltip_of("train","kind","sentinel").contains("armoured"),"training tooltips state armour and what the unit is strong against")
+	expect(tooltip_of("train","kind","sentinel").contains("Armour: Infantry") and tooltip_of("train","kind","sentinel").contains("armoured"),"training tooltips state armour and what the unit is strong against")
 	expect(await button("train","kind","phantom") and game.sim.entities[fabricator].queue.size() == 1,"the faction unit trains from the grid")
 	ticks(260)
 	var phantoms = own("phantom")

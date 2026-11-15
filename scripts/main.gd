@@ -150,6 +150,10 @@ func launch_smoke() -> void:
 	var sprites_ok = DASprites.has_sprite("worker") and not worker_cards.is_empty() and hud.portrait("worker") == DASprites.portrait("worker")
 	print("UI_EXPORT_SMOKE sprites: ", "PASS" if sprites_ok else "FAIL")
 	passed = passed and sprites_ok
+	# The language files are plain text beside the scripts; an export must carry them.
+	var languages_ok = DAText.LANGUAGES.all(func(code): return code == "en" or DAText.tables.get(code, {}).size() > 100)
+	print("UI_EXPORT_SMOKE languages: ", "PASS" if languages_ok else "FAIL")
+	passed = passed and languages_ok
 	print("UI_EXPORT_SMOKE: ", "PASS" if passed else "FAIL")
 	get_tree().quit(0 if passed else 1)
 
@@ -180,9 +184,7 @@ func new_world(mission_id: String = "") -> void:
 	field.vignette = vignette
 	field.setup(sim)
 	field.apply_settings(settings.values)
-	sim.notice.connect(func(text):
-		if hud:
-			hud.toast(text, "success"))
+	# sim.notice carries English text for logs and tests; the player's toasts come from _on_alert.
 	sim.alert.connect(_on_alert)
 	sim.shot.connect(func(from, to, _owner, _kind):
 		if sim.seen(0, from) or sim.seen(0, to):
@@ -232,6 +234,7 @@ func skirmish_definition() -> DAMissionDefinition:
 	var definition = DAMissionDefinition.new()
 	var map = load("res://data/maps/" + str(setup.map) + ".tres") as DAMapDefinition
 	definition.mission_id = "skirmish"
+	# Shown through DAInterface.mission_title, which names the map in the player's language.
 	definition.title = "Skirmish · " + (map.display_name if map else str(setup.map))
 	definition.briefing = "A free match. Build, scout and destroy the rival Core."
 	definition.map_id = str(setup.map)
@@ -250,7 +253,7 @@ func skirmish_definition() -> DAMissionDefinition:
 func _on_alert(kind: String, pos: Vector2, side: int, detail: String) -> void:
 	if side != 0:
 		return
-	var subject: String = str(sim.catalog.definition(detail).get("name", detail.capitalize()))
+	var subject: String = DAText.t(str(sim.catalog.definition(detail).get("name", detail.capitalize())))
 	match kind:
 		"under_attack":
 			last_alert_pos = pos
@@ -258,7 +261,7 @@ func _on_alert(kind: String, pos: Vector2, side: int, detail: String) -> void:
 			audio.announce("alert.under_attack", true)
 			if hud:
 				hud.ping(pos, "danger")
-				hud.toast("Under attack. Press " + settings.prompt("alert") + " to look.", "alert")
+				hud.toast(DAText.t("Under attack. Press {key} to look.", {"key": settings.prompt("alert")}), "alert")
 		"unit_lost":
 			audio.announce("alert.unit_lost")
 			if hud: hud.ping(pos, "danger")
@@ -267,7 +270,7 @@ func _on_alert(kind: String, pos: Vector2, side: int, detail: String) -> void:
 			audio.announce("alert.structure_lost")
 			if hud:
 				hud.ping(pos, "danger")
-				hud.toast(subject + " destroyed.", "alert")
+				hud.toast(DAText.t("{subject} destroyed.", {"subject": subject}), "alert")
 		"core_lost":
 			last_alert_pos = pos
 			audio.play("alert")
@@ -278,31 +281,38 @@ func _on_alert(kind: String, pos: Vector2, side: int, detail: String) -> void:
 			audio.announce("alert.construction_complete")
 			if hud:
 				hud.ping(pos, "info")
-				hud.toast(subject + " complete.", "success")
+				hud.toast(DAText.t("{subject} complete.", {"subject": subject}), "success")
 		"unit_ready":
-			if hud and hud.message_left <= 0: hud.toast(subject + " ready.")
+			if hud and hud.message_left <= 0: hud.toast(DAText.t("{subject} ready.", {"subject": subject}))
 		"research_started":
 			audio.play("research")
 		"research_complete", "age_advanced":
 			audio.play("research")
 			audio.announce("alert.research_complete")
+			if hud and kind == "age_advanced":
+				hud.toast(DAText.t("AGE ADVANCED  /  {age}", {"age": DAText.upper(detail.capitalize())}), "success")
+			elif hud and sim.catalog.tech.has(detail):
+				hud.toast(DAText.t("RESEARCH COMPLETE  /  {name} {level}", {"name": DAText.upper(str(sim.catalog.tech[detail].name)), "level": sim.tech_level(0, detail)}), "success")
 		"population_cap":
 			audio.announce("alert.population")
 			if hud: hud.toast("Compute limit reached. Build a Data Center.", "alert")
 		"deposit_exhausted":
 			if hud:
 				hud.ping(pos, "info")
-				hud.toast(("Salvage" if detail == "metal" else "Data") + " deposit exhausted.")
+				hud.toast("Salvage deposit exhausted." if detail == "metal" else "Data deposit exhausted.")
 
 func _on_objective_completed(objective_id: String) -> void:
 	audio.play("objective_updated", {"id": objective_id})
 	audio.announce("alert.objective")
 	if hud:
-		hud.toast(objective_id.replace("_", " ").capitalize(), "success")
+		var title: String = objective_id.replace("_", " ").capitalize()
+		for objective in mission_definition.objectives:
+			if objective.get("id", "") == objective_id: title = str(objective.get("title", title))
+		hud.toast(title, "success")
 
 func _on_dialogue_requested(entry_id: String) -> void:
 	var entry = mission_definition.dialogue_entry(entry_id) if mission_definition else {}
-	var text = str(entry.get("text", ""))
+	var text = DAText.t(str(entry.get("text", "")))
 	var speaker = str(entry.get("speaker", "archivist"))
 	audio.speak(mission_definition.mission_id + "." + entry_id, text, speaker)
 
@@ -310,6 +320,7 @@ func _on_dialogue_requested(entry_id: String) -> void:
 const COLORBLIND_COLORS: Array[Color] = [Color("4a90ff"), Color("ff9d2e")]
 
 func apply_runtime_settings() -> void:
+	DAText.set_language(DAText.resolve(str(settings.values.get("language", "auto"))))
 	audio.enabled = not bool(settings.values.get("muted", false))
 	audio.apply_settings(settings.values)
 	apply_window_settings()
@@ -737,7 +748,7 @@ func key_input(event: InputEventKey) -> void:
 		var group = key-KEY_0
 		if event.ctrl_pressed:
 			groups[group] = selected.duplicate()
-			hud.toast("Control group " + str(group) + " saved.")
+			hud.toast(DAText.t("Control group {number} saved.", {"number": group}))
 		elif groups.has(group):
 			selected = groups[group].filter(func(id): return sim.entities.has(id) and sim.entities[id].owner == 0)
 
@@ -901,7 +912,7 @@ func ui_action(action: String, payload: Dictionary = {}) -> void:
 			mode = "playing"
 			hud.objectives_open = true
 			audio.set_music("ambient")
-			hud.toast(mission_definition.title + " initiated.")
+			hud.toast(DAText.t("{mission} initiated.", {"mission": hud.mission_title(mission_definition)}))
 			if not skirmish:
 				audio.speak(mission_definition.mission_id + ".briefing", mission_definition.briefing, "archivist")
 		"skirmish":
@@ -922,7 +933,7 @@ func ui_action(action: String, payload: Dictionary = {}) -> void:
 				commit_preferences(settings.set_value("skirmish", setup))
 		"select_mission":
 			pending_mission_id = str(payload.get("id", "first_signal"))
-			hud.toast("Selected mission: " + str(payload.get("title", pending_mission_id)))
+			hud.toast(DAText.t("Selected mission: {mission}", {"mission": DAText.t(str(payload.get("title", pending_mission_id)))}))
 		"pause":
 			mode = "paused"
 			hud.cancel_pointer()
@@ -954,6 +965,8 @@ func ui_action(action: String, payload: Dictionary = {}) -> void:
 			commit_preferences(settings.toggle("colorblind"))
 		"pause_unfocused":
 			commit_preferences(settings.toggle("pause_unfocused"))
+		"language":
+			commit_preferences(settings.cycle("language", ["auto"] + DAText.LANGUAGES))
 		"credits":
 			if hud.panel_open == "credits": hud.close_overlay()
 			else: hud.open_overlay("credits")
@@ -1021,7 +1034,7 @@ func ui_action(action: String, payload: Dictionary = {}) -> void:
 			var units = selected.filter(func(id): return sim.entities.has(id) and not sim.entities[id].building)
 			var aggressive: bool = not units.is_empty() and sim.entities[units[0]].get("stance", "defensive") == "aggressive"
 			if issue("stance", {"stance": "defensive" if aggressive else "aggressive"}) == "":
-				hud.toast("Stance: " + ("defensive. Units fire from where they stand." if aggressive else "aggressive. Units chase what they see, then return."))
+				hud.toast("Stance: defensive. Units fire from where they stand." if aggressive else "Stance: aggressive. Units chase what they see, then return.")
 		"ability":
 			var spec: Dictionary = sim.catalog.abilities.get(str(payload.get("kind", "")), {})
 			if spec.get("targeted", false):

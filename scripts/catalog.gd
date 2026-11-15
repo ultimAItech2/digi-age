@@ -51,8 +51,8 @@ func damage_bonus(attacker: String, target: String, target_building: bool) -> fl
 func counter_text(attacker: String) -> String:
 	var parts: Array = []
 	for target in counters.get(attacker, {}):
-		var label: String = str(ARMOR_NAMES.get(target, definition(target).get("name", str(target).capitalize())))
-		parts.append("×%s vs %s" % [str(counters[attacker][target]).trim_suffix(".0"), label])
+		var label: String = DAText.t(str(ARMOR_NAMES.get(target, definition(target).get("name", str(target).capitalize()))))
+		parts.append(DAText.t("×{factor} vs {target}", {"factor": str(counters[attacker][target]).trim_suffix(".0"), "target": label}))
 	return ", ".join(parts)
 
 ## Age required to research a level: 1-2 Awakening, 3-4 Network, 5 Singularity.
