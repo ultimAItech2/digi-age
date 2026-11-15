@@ -1,5 +1,5 @@
 extends SceneTree
-const RESOLUTIONS = [Vector2i(1280,720),Vector2i(1600,900),Vector2i(1920,1080),Vector2i(2560,1080),Vector2i(3440,1440),Vector2i(3840,2160)]
+const RESOLUTIONS = [Vector2i(1280,720),Vector2i(1280,800),Vector2i(1600,900),Vector2i(1920,1080),Vector2i(2560,1080),Vector2i(3440,1440),Vector2i(3840,2160)]
 var game
 var failures = 0
 var checks = 0
@@ -60,8 +60,8 @@ const ALLOWED_UNTRANSLATED = [
 	"Restore the industrial network. Our Workers can gather metal from salvage piles and retrieve data from archives to power the next age.",
 	"Insufficient resources. Gather additional metal and energy before constructing a Fabricator.",
 	"ORIGIN ARCHIVIST", "Under attack. Press N to look.",
-	# The game's name.
-	"DIGITAL", "AGE"]
+	# The game's name, and the names printed on a controller's buttons.
+	"DIGITAL", "AGE", "Menu", "View", "LB", "RB", "LT", "RT", "LS", "RS"]
 var untranslated: Dictionary = {}
 
 func check_translated(state: String):
@@ -109,7 +109,19 @@ func check_layout():
 				expect(not regions[a].intersects(regions[b]),"reserved regions separated: "+a+" / "+b)
 	layouts.append({"state":label,"controls":game.hud.buttons.size(),"text_lines":game.hud.text_bounds.size(),"layout_usec":game.hud.layout_usec})
 
+var campaign_mission
+var campaign_definition
+
 func scenario(name: String):
+	# The tutorial states borrow the running match: put the campaign's own mission back first.
+	if campaign_mission != null:
+		game.mission = campaign_mission
+		game.mission_definition = campaign_definition
+		game.game_kind = "campaign"
+		campaign_mission = null
+	game.input.device = "kbm"
+	game.input.grid_open = false
+	game.hud.focus_keyboard = false
 	game.hud.clear_overlays()
 	game.hud.message_left = 0
 	game.hud.notifications.clear()
@@ -173,6 +185,28 @@ func scenario(name: String):
 		game.mode = "result"
 		game.sim.winner = 0 if name == "victory" else 1
 	elif name == "confirmation": game.hud.confirm_action("restart")
+	elif name.begins_with("pad") or name.begins_with("tutorial"):
+		for e in game.sim.entities.values():
+			if e.kind == "worker" and e.owner == 0:
+				game.selected = [e.id]
+				break
+		if name.ends_with("pad") or name.begins_with("pad"): game.input.device = "pad"
+		if name == "pad_attack": game.attack_mode = true
+		if name == "pad_grid":
+			game.input.grid_open = true
+			game.input.grid_index = game.input.first_grid_slot()
+			game.input.focus_grid()
+		if name.begins_with("tutorial"):
+			# The longest step, with its command pointed out.
+			campaign_mission = game.mission
+			campaign_definition = game.mission_definition
+			var lesson: DAMissionDefinition = game.mission_catalog.get_definition("tutorial")
+			var guide = DAMissionController.new()
+			guide.setup(game.sim,lesson)
+			for id in ["look","select_worker","gather"]: guide.completed[id] = true
+			game.mission = guide
+			game.mission_definition = lesson
+			game.game_kind = "tutorial"
 	elif name == "empty": pass
 	elif name == "objectives":
 		game.hud.objectives_open = true
@@ -321,7 +355,7 @@ func run():
 		game.sim.spawn(kind,0,Vector2(22,35))
 	game.sim.resources[0] = Vector3(99999999,99999999,99999999)
 	game.sim.ages[0] = 2
-	var states = ["menu","worker","core","fabricator","generator","data_center","tower","depot","lab","scout","sentinel","disruptor","walker","metal","data","group","tech","placement","subtitle","error","pause","settings","bindings","manual","victory","defeat","confirmation","menu_error","disabled","queue","objectives","empty","credits","skirmish","saves_load","saves_save","patrol","alert","ability","warden","mortar","phantom"]
+	var states = ["menu","worker","core","fabricator","generator","data_center","tower","depot","lab","scout","sentinel","disruptor","walker","metal","data","group","tech","placement","subtitle","error","pause","settings","bindings","manual","victory","defeat","confirmation","menu_error","disabled","queue","objectives","empty","credits","skirmish","saves_load","saves_save","patrol","alert","ability","warden","mortar","phantom","pad","pad_attack","pad_grid","tutorial","tutorial_pad"]
 	DirAccess.make_dir_recursive_absolute("res://builds/ui")
 	for resolution in ([] if "--locales-only" in OS.get_cmdline_user_args() else RESOLUTIONS):
 		root.size = resolution

@@ -1,10 +1,12 @@
 # Digital Age: Machine Civilizations
 
 An original, offline, single-player desktop RTS built with Godot 4.6.3 and
-typed GDScript. Lead the Origin Collective through an eight-mission campaign,
-or play a skirmish on any of the eight maps as the Origin Collective, the
-Foundry or the Lattice against an opponent at three difficulty levels.
-Version 1.0.0-rc3. No network services are required to play.
+typed GDScript. Learn the game in a short tutorial, lead the Origin Collective
+through an eight-mission campaign, or play a skirmish on any of the eight maps
+as the Origin Collective, the Foundry or the Lattice against an opponent at
+three difficulty levels. Playable with mouse and keyboard or a gamepad, in
+English, French, Italian, German and Spanish. No network services are required
+to play. The version is in `project.godot` (`python3 tools/version.py`).
 
 ## Play
 
@@ -13,6 +15,10 @@ Version 1.0.0-rc3. No network services are required to play.
   run `./run.sh`. This always launches the current source; use `./run.sh --packaged`
   explicitly to launch the last Linux export.
 - **Windows:** extract `DigitalAge-windows-x86_64.zip` and run `DigitalAge.exe`.
+- **Tutorial** is a guided match of seven steps (about five minutes): move the
+  view, select, gather, build, train, save a control group and win a fight.
+  Each step waits until you have done it. The menu points to it until you have
+  played it or won a mission; it never changes campaign progress.
 - **Launch Campaign** begins the selected mission; a win offers the next one.
   **Skirmish** opens a setup screen: map (with a preview), your faction, the
   rival faction, starting resources, start position and difficulty. Both sides
@@ -140,9 +146,44 @@ the units it meets and uses its units' abilities.
 | F5 / F9 | Quick save / quick load |
 | M / F11 | Sound on or off / fullscreen (both remembered) |
 
-Pause → Settings holds volumes, window mode, resolution, VSync, frame cap,
-graphics profile, shadows, UI scale, reduced effects, subtitles, colour-blind
-side colours and key rebinding. Right-click cancels placement; Shift-click
+### Gamepad
+
+Touching a pad switches every prompt to its buttons (Xbox, PlayStation and
+Steam Deck names; the family is detected, or set in Settings); touching the
+mouse or keyboard switches back. A line under the top bar shows what the
+buttons do at that moment.
+
+| Input (Xbox names) | Action |
+|---|---|
+| Left stick | Move the cursor (pushing it against a screen edge pans) |
+| Right stick | Pan the camera; hold LT and push up or down to zoom |
+| A / hold A and move | Select or confirm / box-select |
+| X | Order: move, gather, attack, repair, rally point |
+| Y | Attack-move, then A on the destination |
+| B | Cancel a mode, or clear the selection; in menus, back |
+| LB (held) | Add to the selection |
+| RT (held) + D-pad, then A | Choose from the command grid |
+| RB (held) + D-pad | Recall control groups 1–4 (up, right, down, left); with LB, save |
+| D-pad | Next idle Worker (up), all combat units (right), last alert (down), Core (left) |
+| Menu / View | Pause / objectives |
+| LS / RS click | Game speed / technology tree |
+| In menus: D-pad or left stick, A, B | Move between controls, activate, back; right stick scrolls |
+
+The face buttons, shoulders, Menu, View and stick clicks can be reassigned in
+Settings → Controller, which also holds cursor speed and the stick dead zone.
+On a Steam Deck the first launch starts fullscreen at 125% interface scale.
+
+### Languages
+
+Settings → Language: System (the default), English, Français, Italiano,
+Deutsch, Español. Text and subtitles are translated; voices are English. The
+four translations are machine drafts awaiting a native-speaker review (every
+entry in `locale/*.po` is marked `NEEDS-NATIVE-REVIEW`).
+
+Pause → Settings holds volumes, language, window mode, resolution, VSync, frame
+cap, graphics profile, shadows, UI scale, reduced effects, subtitles,
+colour-blind side colours, pausing in the background, key rebinding and the
+controller options. Right-click cancels placement; Shift-click
 keeps the building tool active. Orders against enemy units require current
 vision. Destroyed production buildings refund queued units and research.
 
@@ -174,6 +215,17 @@ Git. You can set `GODOT_BIN` to an existing Godot 4.6.3 executable.
   real menu, HUD, input handler, opponent, audio and save code.
 - `tests/interface_test.gd`, `tests/ui_production_test.gd`: input routing and
   every screen laid out at six resolutions and four UI scales.
+- `tests/mission_completion_test.gd`: the computer plays the player's side of
+  every mission on Easy and must win. The Foundry is listed there as unproven:
+  the strategy mirrors the rival and cannot beat one that starts ahead.
+- `tests/localisation_test.gd`: every language complete, placeholders intact,
+  characters covered by the fonts, the setting applied and remembered. The
+  layout suite also runs every screen in a pseudo-language (failing on any text
+  that is still English) and in all four languages (failing on cut-off labels).
+- `tests/gamepad_test.gd`: a match played with synthetic pad events through the
+  real input path; every control on every screen reachable with the D-pad.
+- `tests/tutorial_test.gd`: each tutorial step waits for its action, completes
+  on it, and leaves campaign progress alone.
 - `tests/campaign_test.gd`, `tests/production_foundation_test.gd`,
   `tests/audio_test.gd`, `tests/model_assets_test.gd`,
   `tests/sprite_cards_test.gd`: missions, persistence, sound and art contracts.
@@ -196,6 +248,11 @@ Git. You can set `GODOT_BIN` to an existing Godot 4.6.3 executable.
   camera, terrain, sprite cards, fog, placement preview and effects.
 - `scripts/interface.gd`, `scripts/main.gd`: HUD, menus, skirmish setup, save
   slots, settings, credits, and the input controller.
+- `scripts/input_router.gd`: gamepad play: virtual cursor, button mapping,
+  command grid and menu navigation, button names per pad family.
+- `scripts/text.gd`, `locale/`: translation. English text is the key;
+  `tools/extract_strings.py` rebuilds `locale/digi-age.pot` and merges the
+  language files (run it after changing any player-facing text).
 - `scripts/mission_definition.gd`, `scripts/mission_controller.gd`,
   `scripts/mission_catalog.gd`: campaign contracts and objective flow.
 - `scripts/save_game.gd`, `scripts/settings_service.gd`,
@@ -234,8 +291,9 @@ development tools, not game rules.
 ## Boundaries
 
 The simulation has two sides: there are no allies or three-way matches.
-Multiplayer, campaign co-op, mod tools, mobile, controller support,
-translations, GodotSteam verification and Windows runtime sign-off remain
-outside this release candidate. Voice, music and effects ship as offline MP3s
+Multiplayer, campaign co-op, mod tools, mobile, GodotSteam verification and
+Windows runtime sign-off remain outside this release candidate. The
+translations are unreviewed drafts, and gamepad play has been tested with
+synthetic input only, not on a physical controller or Steam Deck. Voice, music and effects ship as offline MP3s
 and fall back to silence if a clip is missing. See
 `docs/PRODUCTION_STATUS.md`, `assets/CREDITS.md`, and `LICENSE`.

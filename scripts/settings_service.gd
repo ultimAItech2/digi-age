@@ -2,28 +2,48 @@ class_name DASettingsService
 extends RefCounted
 ## Validated preferences, independent from campaign data. Commit before applying.
 const PATH = "user://settings.cfg"
-const DEFAULTS = {"profile": "normal", "ui_scale": 1.0, "reduced_effects": false, "subtitles": true, "window_mode": "windowed", "resolution": "1600x900", "vsync": true, "frame_cap": 0, "shadows": true, "colorblind": false, "pause_unfocused": true, "language": "auto", "muted": false, "master_volume": 1.0, "ui_volume": 1.0, "voice_volume": 1.0, "effects_volume": 1.0, "music_volume": 0.7, "skirmish": {"map": "silent_grid", "player": "origin", "enemy": "foundry", "resources": "standard", "side": "left"}, "bindings": {"fullscreen": KEY_F11, "manual": KEY_F1, "cancel": KEY_ESCAPE, "pause": KEY_SPACE, "speed": KEY_F2, "events": KEY_M, "save": KEY_F5, "load": KEY_F9, "attack": KEY_A, "stop": KEY_S, "home": KEY_HOME, "alert": KEY_N}}
-const CATEGORIES = {"audio": ["master_volume", "music_volume", "effects_volume", "voice_volume", "ui_volume"], "display": ["profile", "ui_scale", "reduced_effects", "subtitles", "window_mode", "resolution", "vsync", "frame_cap", "shadows", "colorblind", "pause_unfocused", "language"], "bindings": ["bindings"]}
+const DEFAULTS = {"profile": "normal", "ui_scale": 1.0, "reduced_effects": false, "subtitles": true, "window_mode": "windowed", "resolution": "1600x900", "vsync": true, "frame_cap": 0, "shadows": true, "colorblind": false, "pause_unfocused": true, "language": "auto", "tutorial_seen": false, "pad_deadzone": 0.2, "pad_cursor_speed": "normal", "pad_glyphs": "auto", "pad_bindings": {"select": JOY_BUTTON_A, "order": JOY_BUTTON_X, "cancel": JOY_BUTTON_B, "attack": JOY_BUTTON_Y, "modifier": JOY_BUTTON_LEFT_SHOULDER, "groups": JOY_BUTTON_RIGHT_SHOULDER, "pause": JOY_BUTTON_START, "objectives": JOY_BUTTON_BACK, "speed": JOY_BUTTON_LEFT_STICK, "tech": JOY_BUTTON_RIGHT_STICK}, "muted": false, "master_volume": 1.0, "ui_volume": 1.0, "voice_volume": 1.0, "effects_volume": 1.0, "music_volume": 0.7, "skirmish": {"map": "silent_grid", "player": "origin", "enemy": "foundry", "resources": "standard", "side": "left"}, "bindings": {"fullscreen": KEY_F11, "manual": KEY_F1, "cancel": KEY_ESCAPE, "pause": KEY_SPACE, "speed": KEY_F2, "events": KEY_M, "save": KEY_F5, "load": KEY_F9, "attack": KEY_A, "stop": KEY_S, "home": KEY_HOME, "alert": KEY_N}}
+const CATEGORIES = {"audio": ["master_volume", "music_volume", "effects_volume", "voice_volume", "ui_volume"], "display": ["profile", "ui_scale", "reduced_effects", "subtitles", "window_mode", "resolution", "vsync", "frame_cap", "shadows", "colorblind", "pause_unfocused", "language"], "bindings": ["bindings"], "controller": ["pad_bindings", "pad_deadzone", "pad_cursor_speed", "pad_glyphs"]}
 const SCALES = [1.0, 1.15, 1.25, 1.5]
 const WINDOW_MODES = ["windowed", "borderless", "fullscreen"]
-const RESOLUTIONS = ["1280x720", "1600x900", "1920x1080", "2560x1440"]
+const RESOLUTIONS = ["1280x720", "1280x800", "1600x900", "1920x1080", "2560x1440"]
 const FRAME_CAPS = [0, 30, 60, 120, 144]
 const SKIRMISH_MAPS = ["silent_grid", "relay_road", "salvage_basin", "transfer_corridor", "blackout_grid", "foundry_fortress", "lattice_web", "inheritance_core"]
 const SKIRMISH_FACTIONS = ["origin", "foundry", "lattice"]
 const SKIRMISH_RESOURCES = {"low": Vector3(300, 150, 0), "standard": Vector3(600, 350, 0), "high": Vector3(1500, 1000, 300)}
 const SKIRMISH_SIDES = ["left", "right", "random"]
+## Buttons a pad action may be bound to. Sticks, triggers and the D-pad keep their jobs.
+const PAD_BUTTONS = [JOY_BUTTON_A, JOY_BUTTON_B, JOY_BUTTON_X, JOY_BUTTON_Y, JOY_BUTTON_BACK, JOY_BUTTON_START, JOY_BUTTON_LEFT_STICK, JOY_BUTTON_RIGHT_STICK, JOY_BUTTON_LEFT_SHOULDER, JOY_BUTTON_RIGHT_SHOULDER]
+const PAD_DEADZONES = [0.1, 0.2, 0.3]
+const PAD_SPEEDS = ["slow", "normal", "fast"]
+const PAD_GLYPHS = ["auto", "xbox", "playstation", "deck"]
+## Keyboard actions that have a pad button of their own, and the two on the D-pad.
+const PAD_EQUIVALENT = {"attack": "attack", "pause": "pause", "speed": "speed", "cancel": "cancel"}
+const PAD_DIRECTIONS = {"home": "←", "alert": "↓"}
 var path = PATH
+## Set by the game: prompts name pad buttons while a pad is in use.
+var input: DAInput
 var values: Dictionary = DEFAULTS.duplicate(true)
 var committed: Dictionary = DEFAULTS.duplicate(true)
 var recovery_notice = ""
 
 func valid_value(key: String, value: Variant) -> bool:
 	if key == "bindings": return value is Dictionary and binding_error(value) == ""
+	if key == "pad_bindings":
+		if not value is Dictionary: return false
+		var seen: Dictionary = {}
+		for action in DEFAULTS.pad_bindings:
+			if not value.has(action) or not value[action] is int or value[action] not in PAD_BUTTONS or seen.has(value[action]): return false
+			seen[value[action]] = true
+		return true
+	if key == "pad_deadzone": return (value is float or value is int) and PAD_DEADZONES.any(func(entry): return is_equal_approx(entry, float(value)))
+	if key == "pad_cursor_speed": return value is String and value in PAD_SPEEDS
+	if key == "pad_glyphs": return value is String and value in PAD_GLYPHS
 	if key == "skirmish":
 		return value is Dictionary and value.get("map") in SKIRMISH_MAPS and value.get("player") in SKIRMISH_FACTIONS and value.get("enemy") in SKIRMISH_FACTIONS and SKIRMISH_RESOURCES.has(value.get("resources")) and value.get("side") in SKIRMISH_SIDES
 	if key == "profile": return value is String and value in ["normal", "low"]
 	if key == "ui_scale": return (value is float or value is int) and value in SCALES
-	if key in ["reduced_effects", "subtitles", "vsync", "shadows", "colorblind", "pause_unfocused", "muted"]: return value is bool
+	if key in ["reduced_effects", "subtitles", "vsync", "shadows", "colorblind", "pause_unfocused", "tutorial_seen", "muted"]: return value is bool
 	if key == "window_mode": return value is String and value in WINDOW_MODES
 	if key == "language": return value is String and (value == "auto" or value in DAText.LANGUAGES)
 	if key == "resolution": return value is String and value in RESOLUTIONS
@@ -60,14 +80,18 @@ func load_settings() -> void:
 			for key in DEFAULTS:
 				if not loaded.has(key): continue
 				var candidate: Variant = loaded[key]
-				if key == "bindings" and candidate is Dictionary:
-					var merged: Dictionary = DEFAULTS.bindings.duplicate(true)
+				if key in ["bindings", "pad_bindings"] and candidate is Dictionary:
+					var merged: Dictionary = DEFAULTS[key].duplicate(true)
 					for action in merged:
 						if candidate.has(action): merged[action] = candidate[action]
 					candidate = merged
 				if valid_value(key, candidate): values[key] = candidate
 				else: recovery_notice = "Some preferences were invalid and have been reset to defaults."
 		else: recovery_notice = "Preferences could not be read. Defaults have been restored."
+	elif on_deck():
+		# First launch on a Steam Deck: its 1280 x 800 screen wants larger text, and no window.
+		values.ui_scale = 1.25
+		values.window_mode = "fullscreen"
 	committed = values.duplicate(true)
 
 func save_settings() -> String:
@@ -103,6 +127,20 @@ func set_binding(action: String, keycode: int) -> String:
 	if error != "": return error
 	return set_value("bindings", candidate)
 
+## Binding a pad button that another action holds swaps the two.
+func set_pad_binding(action: String, button: int) -> String:
+	if not DEFAULTS.pad_bindings.has(action): return "This binding cannot be changed."
+	if button not in PAD_BUTTONS: return "That button cannot be assigned. Sticks, triggers and the D-pad keep their jobs."
+	var candidate: Dictionary = values.pad_bindings.duplicate(true)
+	for other in candidate:
+		if candidate[other] == button: candidate[other] = candidate[action]
+	candidate[action] = button
+	return set_value("pad_bindings", candidate)
+
+## Valve sets SteamDeck=1 for everything it launches on a Steam Deck.
+static func on_deck() -> bool:
+	return OS.get_environment("SteamDeck") == "1"
+
 func reset(category: String = "all") -> String:
 	if category == "all": values = DEFAULTS.duplicate(true)
 	elif CATEGORIES.has(category):
@@ -122,6 +160,9 @@ func binding(action: String, fallback: int) -> int:
 	return int(values.bindings.get(action, fallback))
 
 func prompt(action: String) -> String:
+	if input and input.device == "pad":
+		if PAD_EQUIVALENT.has(action): return input.prompt(PAD_EQUIVALENT[action])
+		if PAD_DIRECTIONS.has(action): return DAText.t("D-pad {direction}", {"direction": PAD_DIRECTIONS[action]})
 	return DAText.t(key_label(binding(action, KEY_NONE)))
 
 ## Key names that are words, so they can be translated.

@@ -46,6 +46,8 @@ def write_mission(spec: dict) -> None:
         "technology_floor",
         "technology_ceiling",
         "time_limit",
+        "sequential",
+        "passive_opponent",
         "dialogue_entries",
         "events",
         "checkpoint_ids",
@@ -59,6 +61,8 @@ def write_mission(spec: dict) -> None:
         "technology_floor": [0, 0],
         "technology_ceiling": [2, 2],
         "time_limit": 0.0,
+        "sequential": False,
+        "passive_opponent": False,
         "dialogue_entries": [],
         "events": [],
         "checkpoint_ids": ["opening"],
@@ -80,6 +84,52 @@ def write_mission(spec: dict) -> None:
 
 
 def main() -> None:
+    # The tutorial: one step at a time, each waiting for the player to do it. "prompt" is
+    # shown to mouse and keyboard players, "prompt_pad" to gamepad players; {names} in
+    # braces become the player's own keys and buttons. It is not part of the campaign.
+    write_mission(
+        {
+            "mission_id": "tutorial",
+            "title": "Tutorial",
+            "briefing": "A short guided match: move the view, put Workers to work, build, train a unit and win a first fight. About five minutes.",
+            "map_id": "silent_grid",
+            "enemy_faction_id": "foundry",
+            "sequential": True,
+            "passive_opponent": True,
+            "technology_ceiling": [0, 0],
+            "starting_resources": [(800.0, 500.0, 0.0), (0.0, 0.0, 0.0)],
+            "objectives": [
+                {"id": "look", "title": "Look around", "kind": "action", "target": "camera", "required": 1, "optional": False,
+                 "prompt": "Move the view with the arrow keys, by pushing the pointer against an edge of the screen, or by dragging with the middle mouse button. The wheel zooms.",
+                 "prompt_pad": "Move the view with the right stick. Hold {zoom} and push the right stick up or down to zoom."},
+                {"id": "select_worker", "title": "Select a Worker", "kind": "action", "target": "select:worker", "required": 1, "optional": False,
+                 "prompt": "Workers gather and build. Left-click one of the small machines beside your Core, or drag a box around several.",
+                 "prompt_pad": "Workers gather and build. Move the cursor onto one of the small machines beside your Core with the left stick and press {select}. Hold {select} and move to box-select several."},
+                {"id": "gather", "title": "Gather salvage", "kind": "action", "target": "command:gather", "required": 1, "optional": False,
+                 "prompt": "With Workers selected, right-click a golden salvage pile. They carry the metal back to the Core on their own.",
+                 "prompt_pad": "With Workers selected, put the cursor on a golden salvage pile and press {order}. They carry the metal back to the Core on their own."},
+                {"id": "build_fabricator", "title": "Build a Fabricator", "kind": "build", "target": "fabricator", "required": 1, "optional": False, "highlight": "build:fabricator:",
+                 "prompt": "Select a Worker and choose Fabricator in the command grid at the bottom right, then click a clear site near your Core. The Worker builds it; send more Workers to build faster.",
+                 "prompt_pad": "Select a Worker, hold {grid}, choose Fabricator with the D-pad and press {select}. Release {grid}, move the cursor to a clear site near your Core and press {select}."},
+                {"id": "train_sentinel", "title": "Train a Sentinel", "kind": "train", "target": "sentinel", "required": 1, "optional": False, "highlight": "train:sentinel:",
+                 "prompt": "Select the finished Fabricator and choose Sentinel in the command grid. Units cost metal and energy, shown in the top bar.",
+                 "prompt_pad": "Select the finished Fabricator, hold {grid}, choose Sentinel with the D-pad and press {select}. Units cost metal and energy, shown in the top bar."},
+                {"id": "save_group", "title": "Save a control group", "kind": "action", "target": "group_save", "required": 1, "optional": False,
+                 "prompt": "Select your Sentinel and press Ctrl+1. From now on, pressing 1 selects it again wherever it is.",
+                 "prompt_pad": "Select your Sentinel, hold {groups} and {modifier}, and press D-pad up. From now on, holding {groups} and pressing D-pad up selects it again."},
+                {"id": "destroy_intruder", "title": "Destroy the intruder", "kind": "destroy", "target": "worker", "required": 1, "optional": False,
+                 "prompt": "A rival Worker has strayed into your ground; the minimap shows it in red. Select your Sentinel and right-click the intruder to attack. {attack} and a click on the ground is an attack-move: the unit fights whatever it meets on the way.",
+                 "prompt_pad": "A rival Worker has strayed into your ground; the minimap shows it in red. Select your Sentinel, put the cursor on the intruder and press {order} to attack. {attack}, then {select} on the ground, is an attack-move: the unit fights whatever it meets on the way."},
+            ],
+            "checkpoint_ids": [],
+            "victory_text": "You can select, gather, build, train and fight. The campaign begins with First Signal.",
+            "defeat_text": "Your Core fell. Restart the tutorial to try again.",
+            "events": [
+                {"id": "intruder", "kind": "spawn_wave", "trigger": {"on_objective": "save_group"}, "side": 1, "pos": (23.0, 37.0), "units": [{"kind": "worker", "count": 1, "offset": (0.0, 0.0)}]},
+                {"id": "intruder_seen", "kind": "reveal", "trigger": {"on_objective": "save_group"}, "side": 0, "pos": (23.0, 37.0), "radius": 5},
+            ],
+        }
+    )
     write_mission(
         {
             "mission_id": "first_signal",

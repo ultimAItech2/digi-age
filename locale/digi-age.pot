@@ -3,47 +3,51 @@ msgstr ""
 "Project-Id-Version: Digital Age\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: scripts/interface.gd:1341
+#: scripts/interface.gd:1397
 msgid "(window fits {percent}%)"
 msgstr ""
 
-#: scripts/interface.gd:1378
+#: scripts/interface.gd:1451
 msgid "01 / ESTABLISH"
 msgstr ""
 
-#: scripts/interface.gd:1379
+#: scripts/interface.gd:1452
 msgid "02 / EXPAND"
 msgstr ""
 
-#: scripts/interface.gd:1380
+#: scripts/interface.gd:1453
 msgid "03 / EVOLVE"
 msgstr ""
 
-#: scripts/interface.gd:1381
+#: scripts/interface.gd:1454
 msgid "04 / CONQUER"
 msgstr ""
 
-#: scripts/interface.gd:1382
+#: scripts/interface.gd:1455
 msgid "05 / GROUND AND FACTIONS"
 msgstr ""
 
-#: scripts/interface.gd:1383
+#: scripts/interface.gd:1456
 msgid "06 / COMMAND"
 msgstr ""
 
-#: scripts/interface.gd:1384
+#: scripts/interface.gd:1457
 msgid "07 / NAVIGATE"
+msgstr ""
+
+#: scripts/interface.gd:1458
+msgid "08 / CONTROLLER"
 msgstr ""
 
 #: data/factions/lattice.tres
 msgid "A control intelligence that subverts networks before it commits machines."
 msgstr ""
 
-#: scripts/interface.gd:617
+#: scripts/interface.gd:620
 msgid "A free match on any map, against the faction and difficulty you choose."
 msgstr ""
 
-#: scripts/main.gd:239
+#: scripts/main.gd:247
 msgid "A free match. Build, scout and destroy the rival Core."
 msgstr ""
 
@@ -55,35 +59,59 @@ msgstr ""
 msgid "A preservation network rebuilding intelligence from the ruins."
 msgstr ""
 
+#: data/missions/tutorial.tres
+msgid "A rival Worker has strayed into your ground; the minimap shows it in red. Select your Sentinel and right-click the intruder to attack. {attack} and a click on the ground is an attack-move: the unit fights whatever it meets on the way."
+msgstr ""
+
+#: data/missions/tutorial.tres
+msgid "A rival Worker has strayed into your ground; the minimap shows it in red. Select your Sentinel, put the cursor on the intruder and press {order} to attack. {attack}, then {select} on the ground, is an attack-move: the unit fights whatever it meets on the way."
+msgstr ""
+
+#: scripts/interface.gd:621
+msgid "A short guided match that teaches selecting, gathering, building and fighting. About five minutes."
+msgstr ""
+
+#: data/missions/tutorial.tres
+msgid "A short guided match: move the view, put Workers to work, build, train a unit and win a first fight. About five minutes."
+msgstr ""
+
 #: scripts/simulation.gd:426
 msgid "A unit is occupying the site."
 msgstr ""
 
-#: scripts/interface.gd:794
+#: scripts/interface.gd:832
+msgid "ABILITY · Aim it with {select}. {cancel} cancels."
+msgstr ""
+
+#: scripts/interface.gd:832
 msgid "ABILITY · Click where to aim it. Right-click or Esc to cancel."
 msgstr ""
 
-#: scripts/main.gd:293
+#: scripts/main.gd:301
 msgid "AGE ADVANCED  /  {age}"
 msgstr ""
 
-#: scripts/interface.gd:1428
+#: scripts/interface.gd:1504
 msgid "ALERT · "
 msgstr ""
 
-#: scripts/interface.gd:839
+#: scripts/interface.gd:894
 msgid "ATK {value}"
 msgstr ""
 
-#: scripts/interface.gd:792
+#: scripts/interface.gd:830
+msgid "ATTACK-MOVE · Choose a destination with {select}. {cancel} cancels."
+msgstr ""
+
+#: scripts/interface.gd:830
 msgid "ATTACK-MOVE · Click a destination. Right-click or Esc to cancel."
 msgstr ""
 
-#: scripts/interface.gd:1328
+#: scripts/interface.gd:1384
 msgid "AUDIO"
 msgstr ""
 
-#: scripts/interface.gd:855
+#: scripts/interface.gd:910
 msgid "AWAITING YOUR COMMAND"
 msgstr ""
 
@@ -91,7 +119,11 @@ msgstr ""
 msgid "Ability is recharging."
 msgstr ""
 
-#: scripts/interface.gd:983
+#: scripts/interface.gd:732
+msgid "Add to selection"
+msgstr ""
+
+#: scripts/interface.gd:1038
 msgid "Advance to the next technological age."
 msgstr ""
 
@@ -99,15 +131,15 @@ msgstr ""
 msgid "Advance to the required age first."
 msgstr ""
 
-#: scripts/interface.gd:983
+#: scripts/interface.gd:1038
 msgid "Advance to {age}"
 msgstr ""
 
-#: scripts/interface.gd:808
+#: scripts/interface.gd:863
 msgid "Advancing to {age}"
 msgstr ""
 
-#: scripts/interface.gd:827
+#: scripts/interface.gd:882
 msgid "Age upgrade"
 msgstr ""
 
@@ -119,15 +151,15 @@ msgstr ""
 msgid "All buildings gain 8% integrity per level."
 msgstr ""
 
-#: scripts/interface.gd:1223
+#: scripts/interface.gd:1279
 msgid "All models, terrain, interface and campaign data were made for Digital Age. The full credits ship beside the game as CREDITS.md."
 msgstr ""
 
-#: scripts/interface.gd:1718
+#: scripts/interface.gd:1872
 msgid "All objectives complete"
 msgstr ""
 
-#: scripts/settings_service.gd:48
+#: scripts/settings_service.gd:68
 msgid "Already assigned to {action}. Choose another key."
 msgstr ""
 
@@ -135,7 +167,7 @@ msgstr ""
 msgid "Already being researched."
 msgstr ""
 
-#: scripts/settings_service.gd:128
+#: scripts/settings_service.gd:169
 msgid "Alt"
 msgstr ""
 
@@ -155,51 +187,55 @@ msgstr ""
 msgid "Archive Harvesting"
 msgstr ""
 
-#: scripts/interface.gd:697
+#: scripts/interface.gd:730
 msgid "Archivist"
 msgstr ""
 
-#: scripts/interface.gd:1025
+#: scripts/interface.gd:1080
 msgid "Armour: {class}"
 msgstr ""
 
-#: scripts/interface.gd:698
+#: scripts/interface.gd:731
 msgid "Armoured"
 msgstr ""
 
-#: scripts/interface.gd:1384
+#: scripts/interface.gd:1457
 msgid "Arrows, screen edges, or middle drag pan; the wheel zooms. Minimap left-click moves the camera; right-click issues orders. {pause}: pause. {manual}: manual. {fullscreen}: fullscreen. {alert}: jump to the last alert, which also pings the minimap."
 msgstr ""
 
-#: scripts/interface.gd:696 scripts/interface.gd:955
+#: scripts/interface.gd:729 scripts/interface.gd:732 scripts/interface.gd:854
 msgid "Attack-move"
 msgstr ""
 
-#: scripts/interface.gd:695
+#: scripts/interface.gd:728
 msgid "Attack-moving"
 msgstr ""
 
-#: scripts/interface.gd:695
+#: scripts/interface.gd:728
 msgid "Attacking"
 msgstr ""
 
-#: scripts/interface.gd:1409
+#: scripts/interface.gd:1485
 msgid "Audio, display and keyboard settings will return to their defaults."
 msgstr ""
 
-#: scripts/interface.gd:775 scripts/interface.gd:1717
+#: scripts/interface.gd:733
+msgid "Automatic"
+msgstr ""
+
+#: scripts/interface.gd:810 scripts/interface.gd:1871
 msgid "Await orders"
 msgstr ""
 
-#: scripts/interface.gd:699
+#: scripts/interface.gd:734
 msgid "Awakening"
 msgstr ""
 
-#: scripts/settings_service.gd:128
+#: scripts/settings_service.gd:169
 msgid "Backspace"
 msgstr ""
 
-#: scripts/main.gd:690
+#: scripts/main.gd:746
 msgid "Binding updated"
 msgstr ""
 
@@ -211,7 +247,7 @@ msgstr ""
 msgid "Blackout Grid"
 msgstr ""
 
-#: scripts/interface.gd:699
+#: scripts/interface.gd:734
 msgid "Borderless"
 msgstr ""
 
@@ -223,11 +259,15 @@ msgstr ""
 msgid "Broken Transmission"
 msgstr ""
 
-#: scripts/interface.gd:1084
+#: data/missions/tutorial.tres
+msgid "Build a Fabricator"
+msgstr ""
+
+#: scripts/interface.gd:1140
 msgid "Build a Research Lab first."
 msgstr ""
 
-#: scripts/main.gd:1074
+#: scripts/main.gd:1136
 msgid "Build a Research Lab, or wait for one to finish its project."
 msgstr ""
 
@@ -235,63 +275,71 @@ msgstr ""
 msgid "Build an escort force"
 msgstr ""
 
-#: scripts/interface.gd:695
+#: scripts/interface.gd:728
 msgid "Building"
 msgstr ""
 
-#: scripts/interface.gd:699
+#: scripts/interface.gd:734
 msgid "Buildings"
 msgstr ""
 
-#: scripts/interface.gd:629
+#: scripts/interface.gd:1437
+msgid "Button names"
+msgstr ""
+
+#: scripts/interface.gd:633
 msgid "CAMPAIGN OPERATIONS"
 msgstr ""
 
-#: scripts/interface.gd:1413
+#: scripts/interface.gd:1489
 msgid "CANCEL"
 msgstr ""
 
-#: scripts/interface.gd:801
+#: scripts/interface.gd:840
 msgid "CANNOT BUILD · {reason}"
 msgstr ""
 
-#: scripts/interface.gd:846
+#: scripts/interface.gd:901
 msgid "CARGO {value}"
 msgstr ""
 
-#: scripts/interface.gd:1191
+#: scripts/interface.gd:1247
 msgid "CHANGE"
 msgstr ""
 
-#: scripts/interface.gd:1155
+#: scripts/interface.gd:1211
 msgid "CHANGE SETUP"
 msgstr ""
 
-#: scripts/interface.gd:1294
+#: scripts/interface.gd:1350
 msgid "CHECKPOINT {number}"
 msgstr ""
 
-#: scripts/interface.gd:1370
+#: scripts/interface.gd:1443
 msgid "CLOSE"
 msgstr ""
 
-#: scripts/interface.gd:1428
+#: scripts/interface.gd:1504
 msgid "COMPLETE · "
 msgstr ""
 
-#: scripts/interface.gd:1403
+#: scripts/interface.gd:1479
 msgid "CONFIRM ACTION"
 msgstr ""
 
-#: scripts/interface.gd:1416
+#: scripts/interface.gd:1492
 msgid "CONTINUE WITHOUT SAVING"
 msgstr ""
 
-#: scripts/interface.gd:1143
+#: scripts/interface.gd:1426
+msgid "CONTROLLER · Select an action, then press a button"
+msgstr ""
+
+#: scripts/interface.gd:1199
 msgid "CORE LOST"
 msgstr ""
 
-#: scripts/interface.gd:619 scripts/interface.gd:1197
+#: scripts/interface.gd:623 scripts/interface.gd:1253
 msgid "CREDITS"
 msgstr ""
 
@@ -307,11 +355,15 @@ msgstr ""
 msgid "Campaign save is malformed."
 msgstr ""
 
-#: scripts/interface.gd:975
+#: scripts/interface.gd:854 scripts/interface.gd:1030
 msgid "Cancel"
 msgstr ""
 
-#: scripts/main.gd:1049
+#: scripts/interface.gd:732
+msgid "Cancel / back"
+msgstr ""
+
+#: scripts/main.gd:1111
 msgid "Cancelled and refunded."
 msgstr ""
 
@@ -323,31 +375,35 @@ msgstr ""
 msgid "Cannot save campaign progress."
 msgstr ""
 
-#: scripts/interface.gd:1349
+#: scripts/interface.gd:1405
 msgid "Cast shadows from the sun on terrain, buildings and units."
 msgstr ""
 
-#: scripts/main.gd:898
+#: scripts/main.gd:946
 msgid "Choose Load Saved Game or Cancel to preserve the saved game."
 msgstr ""
 
-#: scripts/main.gd:685
+#: scripts/main.gd:741
 msgid "Choose a single key without modifiers."
 msgstr ""
 
-#: scripts/interface.gd:1288
+#: scripts/interface.gd:1344
 msgid "Choose a slot to overwrite."
 msgstr ""
 
-#: scripts/settings_service.gd:47
+#: scripts/settings_service.gd:67
 msgid "Choose a supported keyboard key."
 msgstr ""
 
-#: scripts/interface.gd:1383
+#: scripts/interface.gd:1456
 msgid "Click or drag to select; Shift adds units; double-click selects every unit of that type in view. The command grid uses the keys Q to T, A to G and Z to B in the order shown on each slot. Right-click moves, gathers, attacks, repairs, or sets a rally point. {attack}: attack-move. {stop}: stop. Hold position keeps units where they stand; Patrol walks them back and forth, engaging on the way. Cancel on a building's command grid removes its last queued item, or stops its research, and refunds the cost. Ctrl+1–9 saves groups; 1–9 recalls them."
 msgstr ""
 
-#: scripts/interface.gd:1353
+#: scripts/interface.gd:852
+msgid "Close"
+msgstr ""
+
+#: scripts/interface.gd:1409
 msgid "Colour-blind sides"
 msgstr ""
 
@@ -359,11 +415,15 @@ msgstr ""
 msgid "Combat units move 6% faster per level."
 msgstr ""
 
-#: scripts/interface.gd:1094
+#: scripts/interface.gd:854
+msgid "Commands"
+msgstr ""
+
+#: scripts/interface.gd:1150
 msgid "Complete"
 msgstr ""
 
-#: scripts/interface.gd:636
+#: scripts/interface.gd:640
 msgid "Complete the preceding operation to unlock this mission."
 msgstr ""
 
@@ -375,20 +435,24 @@ msgstr ""
 msgid "Compute Structure"
 msgstr ""
 
-#: scripts/interface.gd:1107 scripts/main.gd:298 scripts/simulation.gd:505
+#: scripts/interface.gd:1163 scripts/main.gd:306 scripts/simulation.gd:505
 msgid "Compute limit reached. Build a Data Center."
 msgstr ""
 
-#: scripts/interface.gd:821
+#: scripts/interface.gd:876
 msgid "Constructing"
 msgstr ""
 
-#: scripts/interface.gd:814
+#: scripts/interface.gd:869
 msgid "Constructing {percent}%"
 msgstr ""
 
-#: scripts/main.gd:751
+#: scripts/main.gd:725
 msgid "Control group {number} saved."
+msgstr ""
+
+#: scripts/interface.gd:732
+msgid "Control groups"
 msgstr ""
 
 #: data/missions/long_transfer.tres
@@ -399,23 +463,39 @@ msgstr ""
 msgid "Core"
 msgstr ""
 
-#: scripts/main.gd:277
+#: scripts/main.gd:285
 msgid "Core destroyed. Raise a new Core within two minutes or the match is lost."
 msgstr ""
 
-#: scripts/interface.gd:1238
+#: scripts/interface.gd:1294
 msgid "Credits are unavailable."
 msgstr ""
 
-#: scripts/settings_service.gd:128
+#: scripts/settings_service.gd:169
 msgid "Ctrl"
+msgstr ""
+
+#: scripts/interface.gd:1435
+msgid "Cursor speed"
 msgstr ""
 
 #: scripts/interface.gd:605
 msgid "D / A  ·  MACHINE CIVILIZATIONS"
 msgstr ""
 
-#: scripts/interface.gd:1189
+#: scripts/settings_service.gd:165
+msgid "D-pad {direction}"
+msgstr ""
+
+#: scripts/interface.gd:854
+msgid "D-pad: groups"
+msgstr ""
+
+#: scripts/interface.gd:852
+msgid "D-pad: move"
+msgstr ""
+
+#: scripts/interface.gd:1245
 msgid "DIFFICULTY"
 msgstr ""
 
@@ -423,19 +503,19 @@ msgstr ""
 msgid "DIFFICULTY · {level}"
 msgstr ""
 
-#: scripts/interface.gd:1238
+#: scripts/interface.gd:1294
 msgid "DIGITAL AGE"
 msgstr ""
 
-#: scripts/interface.gd:845
+#: scripts/interface.gd:900
 msgid "DISABLED"
 msgstr ""
 
-#: scripts/interface.gd:1337
+#: scripts/interface.gd:1393
 msgid "DISPLAY & CAPTIONS"
 msgstr ""
 
-#: scripts/interface.gd:635
+#: scripts/interface.gd:639
 msgid "DONE"
 msgstr ""
 
@@ -447,12 +527,16 @@ msgstr ""
 msgid "Data Deposit"
 msgstr ""
 
-#: scripts/interface.gd:866
+#: scripts/interface.gd:921
 msgid "Data archive"
 msgstr ""
 
-#: scripts/main.gd:302
+#: scripts/main.gd:310
 msgid "Data deposit exhausted."
+msgstr ""
+
+#: scripts/interface.gd:1436
+msgid "Dead zone"
 msgstr ""
 
 #: data/catalog.tres
@@ -467,11 +551,11 @@ msgstr ""
 msgid "Defensive Structure"
 msgstr ""
 
-#: scripts/interface.gd:961
+#: scripts/interface.gd:1016
 msgid "Defensive units fire from where they stand. Aggressive units chase what they see, up to 12 cells, then return."
 msgstr ""
 
-#: scripts/settings_service.gd:128
+#: scripts/settings_service.gd:169
 msgid "Delete"
 msgstr ""
 
@@ -483,11 +567,15 @@ msgstr ""
 msgid "Destroy the Foundry fortress"
 msgstr ""
 
+#: data/missions/tutorial.tres
+msgid "Destroy the intruder"
+msgstr ""
+
 #: data/missions/inheritance.tres
 msgid "Destroy the opposing command network"
 msgstr ""
 
-#: scripts/interface.gd:766 scripts/interface.gd:1711
+#: scripts/interface.gd:801 scripts/interface.gd:1865
 msgid "Destroy the rival Core"
 msgstr ""
 
@@ -495,11 +583,11 @@ msgstr ""
 msgid "Disruptor"
 msgstr ""
 
-#: scripts/settings_service.gd:128
+#: scripts/settings_service.gd:169
 msgid "Down"
 msgstr ""
 
-#: scripts/interface.gd:1353
+#: scripts/interface.gd:1409
 msgid "Draw your side in blue and the rival in orange."
 msgstr ""
 
@@ -507,15 +595,15 @@ msgstr ""
 msgid "EMP shell"
 msgstr ""
 
-#: scripts/interface.gd:1428
+#: scripts/interface.gd:1504
 msgid "ERROR · "
 msgstr ""
 
-#: scripts/interface.gd:699
+#: scripts/interface.gd:734
 msgid "Easy"
 msgstr ""
 
-#: scripts/interface.gd:1330
+#: scripts/interface.gd:1386
 msgid "Effects"
 msgstr ""
 
@@ -523,15 +611,15 @@ msgstr ""
 msgid "Electromagnetic artillery. Its shells splash, and deal triple damage to heavy units such as Siege Walkers."
 msgstr ""
 
-#: scripts/interface.gd:1295
+#: scripts/interface.gd:1351
 msgid "Empty"
 msgstr ""
 
-#: scripts/settings_service.gd:128
+#: scripts/settings_service.gd:169
 msgid "End"
 msgstr ""
 
-#: scripts/interface.gd:868
+#: scripts/interface.gd:923
 msgid "Enemy {role}"
 msgstr ""
 
@@ -539,27 +627,27 @@ msgstr ""
 msgid "Energy is gone. Raise three generators or the Core dies in the dark."
 msgstr ""
 
-#: scripts/settings_service.gd:128
+#: scripts/settings_service.gd:169
 msgid "Enter"
 msgstr ""
 
-#: scripts/interface.gd:1131
+#: scripts/interface.gd:1187
 msgid "Esc resumes · Tab changes focus · Enter selects"
 msgstr ""
 
-#: scripts/settings_service.gd:128
+#: scripts/settings_service.gd:169
 msgid "Escape"
 msgstr ""
 
-#: scripts/settings_service.gd:41
+#: scripts/settings_service.gd:61
 msgid "Escape is reserved for cancel."
 msgstr ""
 
-#: scripts/interface.gd:1085
+#: scripts/interface.gd:1141
 msgid "Every Research Lab is busy."
 msgstr ""
 
-#: scripts/main.gd:1085
+#: scripts/main.gd:1147
 msgid "Every Worker is busy."
 msgstr ""
 
@@ -575,11 +663,11 @@ msgstr ""
 msgid "Explore this area first."
 msgstr ""
 
-#: scripts/interface.gd:1127 scripts/interface.gd:1374
+#: scripts/interface.gd:1183 scripts/interface.gd:1447
 msgid "FIELD MANUAL"
 msgstr ""
 
-#: scripts/interface.gd:859
+#: scripts/interface.gd:914
 msgid "FOCUS CORE"
 msgstr ""
 
@@ -591,15 +679,19 @@ msgstr ""
 msgid "Fabricator"
 msgstr ""
 
+#: scripts/interface.gd:734
+msgid "Fast"
+msgstr ""
+
 #: data/catalog.tres
 msgid "Fast reconnaissance platform. Extended vision; light armor. Hovers over rough ground."
 msgstr ""
 
-#: scripts/interface.gd:1351
+#: scripts/interface.gd:1407
 msgid "Fewer particles and flashes."
 msgstr ""
 
-#: scripts/interface.gd:984
+#: scripts/interface.gd:1039
 msgid "Final age reached"
 msgstr ""
 
@@ -615,7 +707,7 @@ msgstr ""
 msgid "First signal is stable. We can rebuild from this."
 msgstr ""
 
-#: scripts/interface.gd:672 scripts/interface.gd:696
+#: scripts/interface.gd:705 scripts/interface.gd:729
 msgid "Focus Core"
 msgstr ""
 
@@ -631,7 +723,7 @@ msgstr ""
 msgid "Foundry tracked launcher. Long range and a wide splash; slow to move and to reload."
 msgstr ""
 
-#: scripts/interface.gd:1347
+#: scripts/interface.gd:1403
 msgid "Frame cap"
 msgstr ""
 
@@ -639,7 +731,7 @@ msgstr ""
 msgid "Frontline guardian. Deals double damage to armoured units such as Disruptors."
 msgstr ""
 
-#: scripts/interface.gd:696 scripts/interface.gd:699
+#: scripts/interface.gd:729 scripts/interface.gd:734
 msgid "Fullscreen"
 msgstr ""
 
@@ -647,19 +739,23 @@ msgstr ""
 msgid "Fully researched."
 msgstr ""
 
-#: scripts/main.gd:1004
+#: scripts/main.gd:1066
 msgid "Game loaded"
 msgstr ""
 
-#: scripts/main.gd:1001
+#: scripts/main.gd:1063
 msgid "Game saved"
 msgstr ""
 
-#: scripts/interface.gd:673 scripts/interface.gd:696
+#: scripts/interface.gd:706 scripts/interface.gd:729 scripts/interface.gd:732
 msgid "Game speed"
 msgstr ""
 
-#: scripts/interface.gd:695
+#: data/missions/tutorial.tres
+msgid "Gather salvage"
+msgstr ""
+
+#: scripts/interface.gd:728
 msgid "Gathering"
 msgstr ""
 
@@ -671,7 +767,7 @@ msgstr ""
 msgid "Generators produce 10% more energy per level."
 msgstr ""
 
-#: scripts/interface.gd:1379
+#: scripts/interface.gd:1452
 msgid "Generators supply energy. Data Centers add 20 compute, up to 100. Select a Worker and a building, then choose a clear explored site. Right-click or Esc cancels placement."
 msgstr ""
 
@@ -679,11 +775,11 @@ msgstr ""
 msgid "Ghost Protocol"
 msgstr ""
 
-#: scripts/interface.gd:844
+#: scripts/interface.gd:899
 msgid "HIGH GROUND"
 msgstr ""
 
-#: scripts/interface.gd:699
+#: scripts/interface.gd:734
 msgid "Hard"
 msgstr ""
 
@@ -695,7 +791,7 @@ msgstr ""
 msgid "Harvests salvage and archives. Constructs and repairs your civilization."
 msgstr ""
 
-#: scripts/interface.gd:698
+#: scripts/interface.gd:731
 msgid "Heavy"
 msgstr ""
 
@@ -703,11 +799,11 @@ msgstr ""
 msgid "Heavy siege platform. Its shells splash, and deal triple damage to structures."
 msgstr ""
 
-#: scripts/interface.gd:699
+#: scripts/interface.gd:734
 msgid "High"
 msgstr ""
 
-#: scripts/interface.gd:957
+#: scripts/interface.gd:1012
 msgid "Hold position"
 msgstr ""
 
@@ -715,23 +811,31 @@ msgstr ""
 msgid "Hold the network"
 msgstr ""
 
-#: scripts/interface.gd:695
+#: scripts/interface.gd:728
 msgid "Holding position"
 msgstr ""
 
-#: scripts/settings_service.gd:128
+#: scripts/settings_service.gd:169
 msgid "Home"
 msgstr ""
 
-#: scripts/interface.gd:813
+#: scripts/interface.gd:868
 msgid "Hostile"
 msgstr ""
 
-#: scripts/interface.gd:1027
+#: scripts/interface.gd:1082
 msgid "Hotkey: {key}"
 msgstr ""
 
-#: scripts/interface.gd:1191
+#: scripts/interface.gd:1436
+msgid "How far a stick must move before it counts. Raise it if the cursor drifts."
+msgstr ""
+
+#: scripts/interface.gd:1435
+msgid "How fast the left stick moves the cursor."
+msgstr ""
+
+#: scripts/interface.gd:1247
 msgid "How quickly the rival expands and attacks."
 msgstr ""
 
@@ -739,19 +843,19 @@ msgstr ""
 msgid "How quickly the rival expands and attacks. Applies to the next mission you launch."
 msgstr ""
 
-#: scripts/interface.gd:933
+#: scripts/interface.gd:988
 msgid "IDLE"
 msgstr ""
 
-#: scripts/interface.gd:695
+#: scripts/interface.gd:728
 msgid "Idle"
 msgstr ""
 
-#: scripts/interface.gd:668
+#: scripts/interface.gd:701
 msgid "Idle Workers: {count}. Select the next one."
 msgstr ""
 
-#: scripts/interface.gd:698
+#: scripts/interface.gd:731
 msgid "Infantry"
 msgstr ""
 
@@ -763,19 +867,19 @@ msgstr ""
 msgid "Inheritance Core"
 msgstr ""
 
-#: scripts/settings_service.gd:128
+#: scripts/settings_service.gd:169
 msgid "Insert"
 msgstr ""
 
-#: scripts/interface.gd:1021 scripts/interface.gd:1095 scripts/simulation.gd:203
+#: scripts/interface.gd:1076 scripts/interface.gd:1151 scripts/simulation.gd:203
 msgid "Insufficient resources."
 msgstr ""
 
-#: scripts/interface.gd:1108
+#: scripts/interface.gd:1164
 msgid "Insufficient resources. Cost: {cost}"
 msgstr ""
 
-#: scripts/interface.gd:1330
+#: scripts/interface.gd:1386
 msgid "Interface"
 msgstr ""
 
@@ -783,43 +887,43 @@ msgstr ""
 msgid "Invalid civilization."
 msgstr ""
 
-#: scripts/settings_service.gd:38
+#: scripts/settings_service.gd:58
 msgid "Invalid key binding."
 msgstr ""
 
-#: scripts/settings_service.gd:94
+#: scripts/settings_service.gd:118
 msgid "Invalid preference."
 msgstr ""
 
-#: scripts/settings_service.gd:77
+#: scripts/settings_service.gd:101
 msgid "Invalid preference. Your previous settings are unchanged."
 msgstr ""
 
-#: scripts/interface.gd:696
+#: scripts/interface.gd:729
 msgid "Jump to alert"
 msgstr ""
 
-#: scripts/interface.gd:1361
+#: scripts/interface.gd:1417
 msgid "KEYBOARD · Select a binding, then press a key"
 msgstr ""
 
-#: scripts/interface.gd:616
+#: scripts/interface.gd:619
 msgid "LAUNCH CAMPAIGN  →"
 msgstr ""
 
-#: scripts/interface.gd:614 scripts/interface.gd:1127 scripts/interface.gd:1285
+#: scripts/interface.gd:614 scripts/interface.gd:1183 scripts/interface.gd:1341
 msgid "LOAD GAME"
 msgstr ""
 
-#: scripts/interface.gd:1416
+#: scripts/interface.gd:1492
 msgid "LOAD SAVED GAME"
 msgstr ""
 
-#: scripts/interface.gd:635
+#: scripts/interface.gd:639
 msgid "LOCKED"
 msgstr ""
 
-#: scripts/interface.gd:1344
+#: scripts/interface.gd:1400
 msgid "Language"
 msgstr ""
 
@@ -847,19 +951,23 @@ msgstr ""
 msgid "Leave space between buildings and terrain."
 msgstr ""
 
-#: scripts/interface.gd:1407
+#: scripts/interface.gd:670
+msgid "Leave the tutorial and return to the main menu."
+msgstr ""
+
+#: scripts/interface.gd:1483
 msgid "Leave this mission state?"
 msgstr ""
 
-#: scripts/interface.gd:699 scripts/settings_service.gd:128
+#: scripts/interface.gd:734 scripts/settings_service.gd:169
 msgid "Left"
 msgstr ""
 
-#: scripts/interface.gd:1094
+#: scripts/interface.gd:1150
 msgid "Level {level} · {cost}"
 msgstr ""
 
-#: scripts/interface.gd:698
+#: scripts/interface.gd:731
 msgid "Light"
 msgstr ""
 
@@ -867,11 +975,11 @@ msgstr ""
 msgid "Lights hold. Lattice failed to starve the grid."
 msgstr ""
 
-#: scripts/interface.gd:1347
+#: scripts/interface.gd:1403
 msgid "Limit the frame rate to save power and heat."
 msgstr ""
 
-#: scripts/interface.gd:1410
+#: scripts/interface.gd:1486
 msgid "Loading replaces unsaved progress. Your existing saved game will be kept."
 msgstr ""
 
@@ -887,39 +995,43 @@ msgstr ""
 msgid "Logistics"
 msgstr ""
 
-#: scripts/interface.gd:699
+#: data/missions/tutorial.tres
+msgid "Look around"
+msgstr ""
+
+#: scripts/interface.gd:734
 msgid "Low"
 msgstr ""
 
-#: scripts/interface.gd:1348
+#: scripts/interface.gd:1404
 msgid "Low reduces shadows, effects and draw distance for slower graphics cards."
 msgstr ""
 
-#: scripts/interface.gd:1127 scripts/interface.gd:1156 scripts/interface.gd:1159
+#: scripts/interface.gd:1183 scripts/interface.gd:1212 scripts/interface.gd:1215
 msgid "MAIN MENU"
 msgstr ""
 
-#: scripts/interface.gd:619
+#: scripts/interface.gd:623
 msgid "MANUAL"
 msgstr ""
 
-#: scripts/interface.gd:1294
+#: scripts/interface.gd:1350
 msgid "MANUAL {number}"
 msgstr ""
 
-#: scripts/interface.gd:1176
+#: scripts/interface.gd:1232
 msgid "MAP"
 msgstr ""
 
-#: scripts/interface.gd:1143
+#: scripts/interface.gd:1199
 msgid "MISSION FAILED"
 msgstr ""
 
-#: scripts/interface.gd:696
+#: scripts/interface.gd:729
 msgid "Manual"
 msgstr ""
 
-#: scripts/interface.gd:1288
+#: scripts/interface.gd:1344
 msgid "Manual saves, then the checkpoints saved automatically."
 msgstr ""
 
@@ -939,19 +1051,19 @@ msgstr ""
 msgid "Map the old relay road"
 msgstr ""
 
-#: scripts/interface.gd:1330
+#: scripts/interface.gd:1386
 msgid "Master"
 msgstr ""
 
-#: scripts/interface.gd:1346
+#: scripts/interface.gd:1402
 msgid "Match frames to the display to stop tearing."
 msgstr ""
 
-#: scripts/interface.gd:699
+#: scripts/interface.gd:734
 msgid "Military"
 msgstr ""
 
-#: scripts/save_game.gd:238 scripts/mission_controller.gd:217
+#: scripts/save_game.gd:238 scripts/mission_controller.gd:241
 msgid "Mission save is incomplete."
 msgstr ""
 
@@ -967,23 +1079,31 @@ msgstr ""
 msgid "Mortar"
 msgstr ""
 
-#: scripts/interface.gd:695
+#: data/missions/tutorial.tres
+msgid "Move the view with the arrow keys, by pushing the pointer against an edge of the screen, or by dragging with the middle mouse button. The wheel zooms."
+msgstr ""
+
+#: data/missions/tutorial.tres
+msgid "Move the view with the right stick. Hold {zoom} and push the right stick up or down to zoom."
+msgstr ""
+
+#: scripts/interface.gd:728
 msgid "Moving"
 msgstr ""
 
-#: scripts/interface.gd:1330
+#: scripts/interface.gd:1386
 msgid "Music"
 msgstr ""
 
-#: scripts/interface.gd:1151
+#: scripts/interface.gd:1207
 msgid "NEXT MISSION · {title}  →"
 msgstr ""
 
-#: scripts/interface.gd:1428
+#: scripts/interface.gd:1504
 msgid "NOTICE · "
 msgstr ""
 
-#: scripts/interface.gd:699
+#: scripts/interface.gd:734
 msgid "Network"
 msgstr ""
 
@@ -991,15 +1111,15 @@ msgstr ""
 msgid "Network mapped. Hold the sites through the rewrite window."
 msgstr ""
 
-#: scripts/interface.gd:1066
+#: scripts/interface.gd:1122
 msgid "No Research Lab yet. Workers can build one."
 msgstr ""
 
-#: scripts/main.gd:1021
+#: scripts/main.gd:1083
 msgid "No alert to show."
 msgstr ""
 
-#: scripts/main.gd:1093
+#: scripts/main.gd:1155
 msgid "No combat units. Train units at a Fabricator."
 msgstr ""
 
@@ -1015,7 +1135,7 @@ msgstr ""
 msgid "No selected unit has an ability."
 msgstr ""
 
-#: scripts/interface.gd:699
+#: scripts/interface.gd:734
 msgid "Normal"
 msgstr ""
 
@@ -1027,24 +1147,28 @@ msgstr ""
 msgid "Nothing to cancel."
 msgstr ""
 
-#: scripts/interface.gd:635
+#: scripts/interface.gd:639
 msgid "OPEN"
 msgstr ""
 
-#: scripts/interface.gd:671
+#: scripts/interface.gd:704 scripts/interface.gd:732
 msgid "Objectives"
 msgstr ""
 
-#: scripts/interface.gd:1340 scripts/interface.gd:1347
+#: scripts/interface.gd:1396 scripts/interface.gd:1403
 msgid "Off"
 msgstr ""
 
-#: scripts/interface.gd:1340
+#: scripts/interface.gd:1396
 msgid "On"
 msgstr ""
 
-#: scripts/interface.gd:817
+#: scripts/interface.gd:872
 msgid "Operational"
+msgstr ""
+
+#: scripts/interface.gd:732 scripts/interface.gd:854
+msgid "Order"
 msgstr ""
 
 #: data/factions/origin.tres
@@ -1071,47 +1195,55 @@ msgstr ""
 msgid "Overdrive"
 msgstr ""
 
-#: scripts/interface.gd:795
+#: scripts/interface.gd:833
+msgid "PATROL · Choose the far end of the route with {select}. {cancel} cancels."
+msgstr ""
+
+#: scripts/interface.gd:833
 msgid "PATROL · Click the far end of the route. Right-click or Esc to cancel."
 msgstr ""
 
-#: scripts/interface.gd:799
+#: scripts/interface.gd:838
+msgid "PLACE {building} · Build with {select}. {cancel} cancels."
+msgstr ""
+
+#: scripts/interface.gd:838
 msgid "PLACE {building} · Click to build. Esc to cancel."
 msgstr ""
 
-#: scripts/interface.gd:1154 scripts/interface.gd:1158
+#: scripts/interface.gd:1210 scripts/interface.gd:1214
 msgid "PLAY AGAIN"
 msgstr ""
 
-#: scripts/settings_service.gd:128
+#: scripts/settings_service.gd:169
 msgid "Page Down"
 msgstr ""
 
-#: scripts/settings_service.gd:128
+#: scripts/settings_service.gd:169
 msgid "Page Up"
 msgstr ""
 
-#: scripts/interface.gd:958
+#: scripts/interface.gd:1013
 msgid "Patrol"
 msgstr ""
 
-#: scripts/interface.gd:695
+#: scripts/interface.gd:728
 msgid "Patrolling"
 msgstr ""
 
-#: scripts/interface.gd:696
+#: scripts/interface.gd:729 scripts/interface.gd:732
 msgid "Pause"
 msgstr ""
 
-#: scripts/interface.gd:1354
+#: scripts/interface.gd:1410
 msgid "Pause in background"
 msgstr ""
 
-#: scripts/interface.gd:674
+#: scripts/interface.gd:707
 msgid "Pause menu"
 msgstr ""
 
-#: scripts/interface.gd:1354
+#: scripts/interface.gd:1410
 msgid "Pause the match when you switch to another window."
 msgstr ""
 
@@ -1135,15 +1267,23 @@ msgstr ""
 msgid "Power is failing across the basin. Reclaim generators and survive the Lattice blackout protocol."
 msgstr ""
 
-#: scripts/settings_service.gd:70
+#: scripts/settings_service.gd:90
 msgid "Preferences could not be read. Defaults have been restored."
 msgstr ""
 
-#: scripts/main.gd:905 scripts/main.gd:908
+#: scripts/main.gd:953 scripts/main.gd:956
 msgid "Preferences reset"
 msgstr ""
 
-#: scripts/interface.gd:1366
+#: scripts/main.gd:738
+msgid "Press a button on the controller, or Esc to cancel."
+msgstr ""
+
+#: scripts/interface.gd:1432
+msgid "Press button… (Esc cancels)"
+msgstr ""
+
+#: scripts/interface.gd:1422
 msgid "Press key… (Esc cancels)"
 msgstr ""
 
@@ -1151,7 +1291,7 @@ msgstr ""
 msgid "Produces 3 energy per second. Build more to sustain production."
 msgstr ""
 
-#: scripts/interface.gd:816
+#: scripts/interface.gd:871
 msgid "Producing {unit} · {time} · Queue {count}/5"
 msgstr ""
 
@@ -1159,15 +1299,15 @@ msgstr ""
 msgid "Production Structure"
 msgstr ""
 
-#: scripts/interface.gd:1106 scripts/simulation.gd:503
+#: scripts/interface.gd:1162 scripts/simulation.gd:503
 msgid "Production queue is full."
 msgstr ""
 
-#: scripts/interface.gd:1348
+#: scripts/interface.gd:1404
 msgid "Profile"
 msgstr ""
 
-#: scripts/interface.gd:1325
+#: scripts/interface.gd:1381
 msgid "Progress saves at checkpoints. Scroll or ↑↓ for more. Esc cancels key capture."
 msgstr ""
 
@@ -1175,79 +1315,87 @@ msgstr ""
 msgid "Provides 20 compute capacity for additional units, up to 100."
 msgstr ""
 
-#: scripts/interface.gd:619
+#: scripts/interface.gd:623
 msgid "QUIT"
 msgstr ""
 
-#: scripts/interface.gd:696
+#: scripts/interface.gd:729
 msgid "Quick load"
 msgstr ""
 
-#: scripts/interface.gd:696
+#: scripts/interface.gd:729
 msgid "Quick save"
 msgstr ""
 
-#: scripts/interface.gd:1130
+#: scripts/interface.gd:1186
 msgid "Quick save {save} · quick load {load} use the first manual slot."
 msgstr ""
 
-#: scripts/interface.gd:796
+#: scripts/interface.gd:834
+msgid "RALLY POINT · Choose where new units gather with {select}. {cancel} cancels."
+msgstr ""
+
+#: scripts/interface.gd:834
 msgid "RALLY POINT · Click where new units should gather. Right-click or Esc to cancel."
 msgstr ""
 
-#: scripts/interface.gd:1416
+#: scripts/interface.gd:1492
 msgid "REPLACE SAVE"
 msgstr ""
 
-#: scripts/main.gd:295
+#: scripts/main.gd:303
 msgid "RESEARCH COMPLETE  /  {name} {level}"
 msgstr ""
 
-#: scripts/interface.gd:1371
+#: scripts/interface.gd:1444
 msgid "RESET ALL"
 msgstr ""
 
-#: scripts/interface.gd:1335
+#: scripts/interface.gd:1391
 msgid "RESET AUDIO"
 msgstr ""
 
-#: scripts/interface.gd:1368
+#: scripts/interface.gd:1424
 msgid "RESET BINDINGS"
 msgstr ""
 
-#: scripts/interface.gd:1359
+#: scripts/interface.gd:1441
+msgid "RESET CONTROLLER"
+msgstr ""
+
+#: scripts/interface.gd:1415
 msgid "RESET DISPLAY"
 msgstr ""
 
-#: scripts/interface.gd:1416
+#: scripts/interface.gd:1492
 msgid "RESET PREFERENCES"
 msgstr ""
 
-#: scripts/interface.gd:1179
+#: scripts/interface.gd:1235
 msgid "RESOURCES"
 msgstr ""
 
-#: scripts/interface.gd:1127
+#: scripts/interface.gd:1183
 msgid "RESTART MISSION"
 msgstr ""
 
-#: scripts/interface.gd:1127
+#: scripts/interface.gd:1183
 msgid "RESUME"
 msgstr ""
 
-#: scripts/interface.gd:1100 scripts/interface.gd:1193 scripts/interface.gd:1214
+#: scripts/interface.gd:1156 scripts/interface.gd:1249 scripts/interface.gd:1270
 msgid "RETURN"
 msgstr ""
 
-#: scripts/interface.gd:1178
+#: scripts/interface.gd:1234
 msgid "RIVAL FACTION"
 msgstr ""
 
-#: scripts/interface.gd:840
+#: scripts/interface.gd:895
 msgid "RNG {value}"
 msgstr ""
 
-#: scripts/interface.gd:699
+#: scripts/interface.gd:734
 msgid "Random"
 msgstr ""
 
@@ -1259,11 +1407,11 @@ msgstr ""
 msgid "Reach Singularity"
 msgstr ""
 
-#: scripts/interface.gd:966
+#: scripts/interface.gd:1021
 msgid "Recharge: {seconds} s"
 msgstr ""
 
-#: scripts/interface.gd:966
+#: scripts/interface.gd:1021
 msgid "Recharging · {seconds} s"
 msgstr ""
 
@@ -1283,7 +1431,7 @@ msgstr ""
 msgid "Recover an archive"
 msgstr ""
 
-#: scripts/interface.gd:1351
+#: scripts/interface.gd:1407
 msgid "Reduced effects"
 msgstr ""
 
@@ -1303,15 +1451,15 @@ msgstr ""
 msgid "Relay fragments are broadcasting from the old road. Find them before the Lattice turns their signal against us."
 msgstr ""
 
-#: scripts/interface.gd:975
+#: scripts/interface.gd:1030
 msgid "Remove the last queued item, or stop the research, and refund it."
 msgstr ""
 
-#: scripts/interface.gd:695
+#: scripts/interface.gd:728
 msgid "Repairing"
 msgstr ""
 
-#: scripts/interface.gd:1407
+#: scripts/interface.gd:1483
 msgid "Replace this save?"
 msgstr ""
 
@@ -1319,7 +1467,7 @@ msgstr ""
 msgid "Requires the {value} age."
 msgstr ""
 
-#: scripts/interface.gd:1103
+#: scripts/interface.gd:1159
 msgid "Requires {age} age."
 msgstr ""
 
@@ -1327,7 +1475,7 @@ msgstr ""
 msgid "Research Lab"
 msgstr ""
 
-#: scripts/interface.gd:1066
+#: scripts/interface.gd:1122
 msgid "Research Labs: {count} · idle: {idle}"
 msgstr ""
 
@@ -1339,7 +1487,7 @@ msgstr ""
 msgid "Research is already underway here."
 msgstr ""
 
-#: scripts/interface.gd:1104
+#: scripts/interface.gd:1160
 msgid "Research is already underway."
 msgstr ""
 
@@ -1347,15 +1495,15 @@ msgstr ""
 msgid "Researches Resource, Building, and Military upgrades. Each Lab runs one project at a time; build more to research in parallel."
 msgstr ""
 
-#: scripts/interface.gd:1094
+#: scripts/interface.gd:1150
 msgid "Researching…"
 msgstr ""
 
-#: scripts/interface.gd:1407
+#: scripts/interface.gd:1483
 msgid "Reset all preferences?"
 msgstr ""
 
-#: scripts/interface.gd:1345
+#: scripts/interface.gd:1401
 msgid "Resolution"
 msgstr ""
 
@@ -1367,7 +1515,7 @@ msgstr ""
 msgid "Resource deposits need clear access."
 msgstr ""
 
-#: scripts/interface.gd:699
+#: scripts/interface.gd:734
 msgid "Resources"
 msgstr ""
 
@@ -1379,7 +1527,7 @@ msgstr ""
 msgid "Restore three generators"
 msgstr ""
 
-#: scripts/interface.gd:695
+#: scripts/interface.gd:728
 msgid "Returning cargo"
 msgstr ""
 
@@ -1387,55 +1535,59 @@ msgstr ""
 msgid "Reveals a 10-cell circle within 40 cells for 8 seconds, cloaked units included."
 msgstr ""
 
-#: scripts/interface.gd:699 scripts/settings_service.gd:128
+#: scripts/interface.gd:734 scripts/settings_service.gd:169
 msgid "Right"
 msgstr ""
 
-#: scripts/interface.gd:1382
+#: scripts/interface.gd:1455
 msgid "Roads carry units a quarter faster. Rough ground around ruins slows everything that does not hover. Units on high ground see two cells farther and shoot one cell farther. Each faction fields one unit of its own from the Network age: Origin's Warden shields nearby units, the Foundry's Mortar shells from long range, the Lattice's Phantom stays unseen until an enemy comes close."
 msgstr ""
 
-#: scripts/interface.gd:1415
+#: scripts/interface.gd:1491
 msgid "SAVE AND CONTINUE"
 msgstr ""
 
-#: scripts/interface.gd:1127 scripts/interface.gd:1285
+#: scripts/interface.gd:1183 scripts/interface.gd:1341
 msgid "SAVE GAME"
 msgstr ""
 
-#: scripts/interface.gd:857 scripts/interface.gd:858
+#: scripts/interface.gd:912 scripts/interface.gd:913
 msgid "SELECT WORKERS"
 msgstr ""
 
-#: scripts/interface.gd:619 scripts/interface.gd:1127 scripts/interface.gd:1322
+#: scripts/interface.gd:623 scripts/interface.gd:1183 scripts/interface.gd:1378
 msgid "SETTINGS"
 msgstr ""
 
-#: scripts/interface.gd:842
+#: scripts/interface.gd:897
 msgid "SIGHT {value}"
 msgstr ""
 
-#: scripts/interface.gd:1123
+#: scripts/interface.gd:1179
 msgid "SIMULATION PAUSED"
 msgstr ""
 
-#: scripts/interface.gd:617 scripts/interface.gd:1163
+#: scripts/interface.gd:670
+msgid "SKIP TUTORIAL"
+msgstr ""
+
+#: scripts/interface.gd:620 scripts/interface.gd:1219
 msgid "SKIRMISH"
 msgstr ""
 
-#: scripts/interface.gd:841
+#: scripts/interface.gd:896
 msgid "SPD {value}"
 msgstr ""
 
-#: scripts/interface.gd:1127
+#: scripts/interface.gd:1183
 msgid "SPEED {speed}×"
 msgstr ""
 
-#: scripts/interface.gd:1180
+#: scripts/interface.gd:1236
 msgid "START POSITION"
 msgstr ""
 
-#: scripts/interface.gd:1192
+#: scripts/interface.gd:1248
 msgid "START SKIRMISH  →"
 msgstr ""
 
@@ -1459,15 +1611,19 @@ msgstr ""
 msgid "Salvage Rights"
 msgstr ""
 
-#: scripts/main.gd:302
+#: scripts/main.gd:310
 msgid "Salvage deposit exhausted."
 msgstr ""
 
-#: scripts/interface.gd:866
+#: scripts/interface.gd:921
 msgid "Salvage pile"
 msgstr ""
 
-#: scripts/mission_controller.gd:215
+#: data/missions/tutorial.tres
+msgid "Save a control group"
+msgstr ""
+
+#: scripts/mission_controller.gd:239
 msgid "Save belongs to a different mission."
 msgstr ""
 
@@ -1543,20 +1699,40 @@ msgstr ""
 msgid "Second blackout wave. Protect the new generators."
 msgstr ""
 
-#: scripts/interface.gd:1378
+#: scripts/interface.gd:854
+msgid "Select"
+msgstr ""
+
+#: scripts/interface.gd:732
+msgid "Select / confirm"
+msgstr ""
+
+#: scripts/interface.gd:1451
 msgid "Select Workers and right-click golden salvage for metal or violet archives for data. Workers carry 24 resources home. Build a Salvage Depot near distant deposits."
 msgstr ""
 
-#: scripts/interface.gd:892
+#: scripts/interface.gd:947
 msgid "Select Workers and right-click this deposit to harvest it."
 msgstr ""
 
-#: scripts/interface.gd:856
+#: scripts/interface.gd:911
 msgid "Select Workers to gather resources and construct your base."
+msgstr ""
+
+#: data/missions/tutorial.tres
+msgid "Select a Worker"
+msgstr ""
+
+#: data/missions/tutorial.tres
+msgid "Select a Worker and choose Fabricator in the command grid at the bottom right, then click a clear site near your Core. The Worker builds it; send more Workers to build faster."
 msgstr ""
 
 #: scripts/simulation.gd:478
 msgid "Select a Worker to construct buildings."
+msgstr ""
+
+#: data/missions/tutorial.tres
+msgid "Select a Worker, hold {grid}, choose Fabricator with the D-pad and press {select}. Release {grid}, move the cursor to a clear site near your Core and press {select}."
 msgstr ""
 
 #: scripts/simulation.gd:543
@@ -1575,7 +1751,7 @@ msgstr ""
 msgid "Select a constructible building."
 msgstr ""
 
-#: scripts/interface.gd:669
+#: scripts/interface.gd:702
 msgid "Select every combat unit"
 msgstr ""
 
@@ -1587,11 +1763,27 @@ msgstr ""
 msgid "Select one of your units or buildings."
 msgstr ""
 
-#: scripts/main.gd:936
+#: data/missions/tutorial.tres
+msgid "Select the finished Fabricator and choose Sentinel in the command grid. Units cost metal and energy, shown in the top bar."
+msgstr ""
+
+#: data/missions/tutorial.tres
+msgid "Select the finished Fabricator, hold {grid}, choose Sentinel with the D-pad and press {select}. Units cost metal and energy, shown in the top bar."
+msgstr ""
+
+#: data/missions/tutorial.tres
+msgid "Select your Sentinel and press Ctrl+1. From now on, pressing 1 selects it again wherever it is."
+msgstr ""
+
+#: data/missions/tutorial.tres
+msgid "Select your Sentinel, hold {groups} and {modifier}, and press D-pad up. From now on, holding {groups} and pressing D-pad up selects it again."
+msgstr ""
+
+#: scripts/main.gd:988
 msgid "Selected mission: {mission}"
 msgstr ""
 
-#: scripts/interface.gd:812
+#: scripts/interface.gd:867
 msgid "Send Workers to harvest this deposit."
 msgstr ""
 
@@ -1607,23 +1799,23 @@ msgstr ""
 msgid "Sentinel"
 msgstr ""
 
-#: scripts/interface.gd:1381
+#: scripts/interface.gd:1454
 msgid "Sentinels counter armoured units such as Disruptors. Disruptors counter heavy units such as Walkers. Walkers destroy buildings. Disruptor and Walker shells travel and splash. Every combat unit has one ability on the first grid slot: the Scout's sweep reveals an area, the Sentinel fires faster, the Disruptor's EMP stuns, the Walker braces for range. Scout first: enemies outside your vision cannot be targeted, though buildings you have seen stay marked."
 msgstr ""
 
-#: scripts/interface.gd:980
+#: scripts/interface.gd:1035
 msgid "Set rally point"
 msgstr ""
 
-#: scripts/interface.gd:1349
+#: scripts/interface.gd:1405
 msgid "Shadows"
 msgstr ""
 
-#: scripts/settings_service.gd:128
+#: scripts/settings_service.gd:169
 msgid "Shift"
 msgstr ""
 
-#: scripts/interface.gd:1352
+#: scripts/interface.gd:1408
 msgid "Show spoken lines as text."
 msgstr ""
 
@@ -1659,7 +1851,7 @@ msgstr ""
 msgid "Simulation statistics are invalid."
 msgstr ""
 
-#: scripts/interface.gd:699
+#: scripts/interface.gd:734
 msgid "Singularity"
 msgstr ""
 
@@ -1675,71 +1867,75 @@ msgstr ""
 msgid "Six Sentinels. That is the escort minimum. The corridor is a kill box."
 msgstr ""
 
-#: scripts/interface.gd:1350
+#: scripts/interface.gd:1406
 msgid "Size of the interface. 150% needs a window at least 864 pixels high."
 msgstr ""
 
-#: scripts/interface.gd:715 scripts/interface.gd:724
+#: scripts/interface.gd:750 scripts/interface.gd:759
 msgid "Skirmish"
 msgstr ""
 
-#: scripts/interface.gd:718 scripts/interface.gd:724
+#: scripts/interface.gd:753 scripts/interface.gd:759
 msgid "Skirmish · {map}"
 msgstr ""
 
-#: scripts/settings_service.gd:69
+#: scripts/interface.gd:734
+msgid "Slow"
+msgstr ""
+
+#: scripts/settings_service.gd:89
 msgid "Some preferences were invalid and have been reset to defaults."
 msgstr ""
 
-#: scripts/interface.gd:696 scripts/interface.gd:1355
+#: scripts/interface.gd:729 scripts/interface.gd:1411
 msgid "Sound"
 msgstr ""
 
-#: scripts/main.gd:955
+#: scripts/main.gd:1007
 msgid "Sound off"
 msgstr ""
 
-#: scripts/main.gd:955
+#: scripts/main.gd:1007
 msgid "Sound on"
 msgstr ""
 
-#: scripts/settings_service.gd:128
+#: scripts/settings_service.gd:169
 msgid "Space"
 msgstr ""
 
-#: scripts/interface.gd:961
+#: scripts/interface.gd:1016
 msgid "Stance: aggressive"
 msgstr ""
 
-#: scripts/main.gd:1037
+#: scripts/main.gd:1099
 msgid "Stance: aggressive. Units chase what they see, then return."
 msgstr ""
 
-#: scripts/interface.gd:961
+#: scripts/interface.gd:1016
 msgid "Stance: defensive"
 msgstr ""
 
-#: scripts/main.gd:1037
+#: scripts/main.gd:1099
 msgid "Stance: defensive. Units fire from where they stand."
 msgstr ""
 
-#: scripts/interface.gd:957
+#: scripts/interface.gd:1012
 msgid "Stand ground and fire only at what comes into range."
 msgstr ""
 
-#: scripts/interface.gd:699
+#: scripts/interface.gd:734
 msgid "Standard"
 msgstr ""
 
-#: scripts/interface.gd:696 scripts/interface.gd:956
+#: scripts/interface.gd:729 scripts/interface.gd:1011
 msgid "Stop"
 msgstr ""
 
-#: scripts/interface.gd:1025
+#: scripts/interface.gd:1080
 msgid "Strong: {targets}"
 msgstr ""
 
-#: scripts/interface.gd:867
+#: scripts/interface.gd:922
 msgid "Structure"
 msgstr ""
 
@@ -1747,7 +1943,7 @@ msgstr ""
 msgid "Stuns enemy units in a 2.5-cell circle for 3 seconds. No effect on buildings."
 msgstr ""
 
-#: scripts/interface.gd:1352
+#: scripts/interface.gd:1408
 msgid "Subtitles"
 msgstr ""
 
@@ -1763,11 +1959,11 @@ msgstr ""
 msgid "Survive the transfer"
 msgstr ""
 
-#: scripts/interface.gd:699 scripts/interface.gd:1344
+#: scripts/interface.gd:734 scripts/interface.gd:1400
 msgid "System"
 msgstr ""
 
-#: scripts/interface.gd:1060
+#: scripts/interface.gd:1116
 msgid "TECHNOLOGY"
 msgstr ""
 
@@ -1775,23 +1971,31 @@ msgstr ""
 msgid "THE WORLD WENT QUIET."
 msgstr ""
 
-#: scripts/interface.gd:1143
+#: scripts/interface.gd:1199
 msgid "TIME EXPIRED"
 msgstr ""
 
-#: scripts/interface.gd:1135
+#: scripts/interface.gd:1191
 msgid "TRANSMISSION COMPLETE"
 msgstr ""
 
-#: scripts/interface.gd:1135
+#: scripts/interface.gd:1191
 msgid "TRANSMISSION LOST"
 msgstr ""
 
-#: scripts/settings_service.gd:128
+#: scripts/interface.gd:621
+msgid "TUTORIAL"
+msgstr ""
+
+#: scripts/interface.gd:667
+msgid "TUTORIAL · STEP {step} OF {total}"
+msgstr ""
+
+#: scripts/settings_service.gd:169
 msgid "Tab"
 msgstr ""
 
-#: scripts/interface.gd:697
+#: scripts/interface.gd:730
 msgid "Tactical system"
 msgstr ""
 
@@ -1799,15 +2003,19 @@ msgstr ""
 msgid "Target is outside your vision."
 msgstr ""
 
-#: scripts/interface.gd:670
+#: scripts/interface.gd:703 scripts/interface.gd:732
 msgid "Technology tree"
 msgstr ""
 
-#: scripts/settings_service.gd:43 scripts/settings_service.gd:46
+#: scripts/settings_service.gd:133
+msgid "That button cannot be assigned. Sticks, triggers and the D-pad keep their jobs."
+msgstr ""
+
+#: scripts/settings_service.gd:63 scripts/settings_service.gd:66
 msgid "That key is reserved for navigation, the command grid, or control groups."
 msgstr ""
 
-#: scripts/interface.gd:697 data/factions/foundry.tres data/missions/the_foundry.tres
+#: scripts/interface.gd:730 data/factions/foundry.tres data/missions/the_foundry.tres
 msgid "The Foundry"
 msgstr ""
 
@@ -1831,7 +2039,7 @@ msgstr ""
 msgid "The Foundry silences the relay."
 msgstr ""
 
-#: scripts/interface.gd:697 data/factions/lattice.tres
+#: scripts/interface.gd:730 data/factions/lattice.tres
 msgid "The Lattice"
 msgstr ""
 
@@ -1855,7 +2063,7 @@ msgstr ""
 msgid "The Silent Grid"
 msgstr ""
 
-#: scripts/interface.gd:984 scripts/simulation.gd:521
+#: scripts/interface.gd:1039 scripts/simulation.gd:521
 msgid "The Singularity is the final age."
 msgstr ""
 
@@ -1899,12 +2107,16 @@ msgstr ""
 msgid "The fragments resolve into a map. Lattice cannot hide the next hop."
 msgstr ""
 
-#: scripts/interface.gd:1344
+#: scripts/interface.gd:1400
 msgid "The language of the interface and subtitles. Voices stay in English."
 msgstr ""
 
 #: data/missions/inheritance.tres
 msgid "The last archive opens. Origin chooses its own future."
+msgstr ""
+
+#: scripts/interface.gd:1458
+msgid "The left stick moves a cursor; the right stick moves the camera, and {zoom} with the right stick zooms. {select} selects or confirms; hold it and move to box-select. {order} orders a move, gather, attack or repair. {pad_attack} starts an attack-move and {pad_cancel} cancels or clears the selection. Hold {modifier} to add to the selection. Hold {grid} and use the D-pad to choose from the command grid, then {select}. Hold {groups} and press the D-pad to recall control groups 1 to 4; with {modifier} as well, to save them. The D-pad alone picks the next idle Worker (up), every combat unit (right), the last alert (down) and your Core (left). {pad_pause} pauses. In menus the D-pad or left stick moves between controls. Every button can be changed in Settings."
 msgstr ""
 
 #: scripts/simulation.gd:458
@@ -1915,7 +2127,7 @@ msgstr ""
 msgid "The old road still sings. Walk it. Recover every fragment."
 msgstr ""
 
-#: scripts/main.gd:248
+#: scripts/main.gd:256
 msgid "The rival Core is gone. The field is yours."
 msgstr ""
 
@@ -1923,7 +2135,7 @@ msgstr ""
 msgid "The web holds Origin colors. Lattice withdraws the rewrite."
 msgstr ""
 
-#: scripts/interface.gd:1345
+#: scripts/interface.gd:1401
 msgid "The window's size in Windowed mode."
 msgstr ""
 
@@ -1931,11 +2143,11 @@ msgstr ""
 msgid "They walled the archive. Reach Singularity, then tear the fortress down."
 msgstr ""
 
-#: scripts/interface.gd:1674
+#: scripts/interface.gd:1765
 msgid "This action is unavailable."
 msgstr ""
 
-#: scripts/settings_service.gd:99
+#: scripts/settings_service.gd:123 scripts/settings_service.gd:132
 msgid "This binding cannot be changed."
 msgstr ""
 
@@ -1959,7 +2171,7 @@ msgstr ""
 msgid "This reserve is scheduled. Leave the wreckage."
 msgstr ""
 
-#: scripts/main.gd:454
+#: scripts/main.gd:468
 msgid "This save belongs to a mission that is no longer available."
 msgstr ""
 
@@ -1979,15 +2191,15 @@ msgstr ""
 msgid "This save is malformed."
 msgstr ""
 
-#: scripts/main.gd:447
+#: scripts/main.gd:461
 msgid "This skirmish save has no usable match setup."
 msgstr ""
 
-#: scripts/interface.gd:1411
+#: scripts/interface.gd:1487
 msgid "This slot holds a save this version cannot read. Saving here replaces it for good."
 msgstr ""
 
-#: scripts/interface.gd:1303
+#: scripts/interface.gd:1359
 msgid "This slot is empty."
 msgstr ""
 
@@ -1995,11 +2207,11 @@ msgstr ""
 msgid "This unit is disabled."
 msgstr ""
 
-#: scripts/mission_controller.gd:44
+#: scripts/mission_controller.gd:47
 msgid "Time limit reached."
 msgstr ""
 
-#: scripts/interface.gd:1148
+#: scripts/interface.gd:1204
 msgid ""
 "Time {time} · Enemies destroyed {kills}\n"
 "Resources harvested {amount}"
@@ -2009,8 +2221,12 @@ msgstr ""
 msgid "Town Center"
 msgstr ""
 
-#: scripts/interface.gd:1380
+#: scripts/interface.gd:1453
 msgid "Train Workers and advance ages at your Core. Network unlocks Disruptors and Towers; Singularity unlocks Siege Walkers. Fabricators manufacture your army. Research Labs improve resources, buildings and the military, five levels each; every Lab runs one project at a time."
+msgstr ""
+
+#: data/missions/tutorial.tres
+msgid "Train a Sentinel"
 msgstr ""
 
 #: data/maps/transfer_corridor.tres
@@ -2021,15 +2237,19 @@ msgstr ""
 msgid "Transfer window open. Hold both ends of the road."
 msgstr ""
 
-#: scripts/interface.gd:1355
+#: scripts/interface.gd:1411
 msgid "Turn all sound on or off. {key} does the same in a match."
 msgstr ""
 
-#: scripts/interface.gd:1350
+#: data/missions/tutorial.tres
+msgid "Tutorial"
+msgstr ""
+
+#: scripts/interface.gd:1406
 msgid "UI scale"
 msgstr ""
 
-#: scripts/settings_service.gd:89
+#: scripts/settings_service.gd:113
 msgid "Unable to commit preferences. Your previous settings are unchanged."
 msgstr ""
 
@@ -2045,7 +2265,7 @@ msgstr ""
 msgid "Unable to save campaign progress."
 msgstr ""
 
-#: scripts/settings_service.gd:81
+#: scripts/settings_service.gd:105
 msgid "Unable to save preferences. Your previous settings are unchanged."
 msgstr ""
 
@@ -2053,11 +2273,11 @@ msgstr ""
 msgid "Unable to write the save. Check the free disk space."
 msgstr ""
 
-#: scripts/main.gd:264
+#: scripts/main.gd:272
 msgid "Under attack. Press {key} to look."
 msgstr ""
 
-#: scripts/interface.gd:867
+#: scripts/interface.gd:922
 msgid "Unit"
 msgstr ""
 
@@ -2081,7 +2301,7 @@ msgstr ""
 msgid "Unknown ability."
 msgstr ""
 
-#: scripts/settings_service.gd:111
+#: scripts/settings_service.gd:149
 msgid "Unknown preference category."
 msgstr ""
 
@@ -2093,35 +2313,39 @@ msgstr ""
 msgid "Unknown stance."
 msgstr ""
 
-#: scripts/interface.gd:1298
+#: scripts/interface.gd:1354
 msgid "Unreadable save"
 msgstr ""
 
-#: scripts/interface.gd:1408
+#: scripts/interface.gd:1484
 msgid "Unsaved progress will be lost. You can save before continuing."
 msgstr ""
 
-#: scripts/settings_service.gd:128
+#: scripts/settings_service.gd:169
 msgid "Up"
+msgstr ""
+
+#: scripts/interface.gd:852
+msgid "Use"
 msgstr ""
 
 #: scripts/interface.gd:40
 msgid "Utility Unit"
 msgstr ""
 
-#: scripts/interface.gd:1139
+#: scripts/interface.gd:1195
 msgid "VICTORY"
 msgstr ""
 
-#: scripts/interface.gd:1346
+#: scripts/interface.gd:1402
 msgid "VSync"
 msgstr ""
 
-#: scripts/interface.gd:1330
+#: scripts/interface.gd:1386
 msgid "Voice"
 msgstr ""
 
-#: scripts/interface.gd:958
+#: scripts/interface.gd:1013
 msgid "Walk back and forth to a point, engaging enemies on the way."
 msgstr ""
 
@@ -2137,24 +2361,36 @@ msgstr ""
 msgid "Weapons Systems"
 msgstr ""
 
-#: scripts/interface.gd:1179
+#: scripts/interface.gd:1235
 msgid "What both sides start with."
 msgstr ""
 
-#: scripts/interface.gd:1180
+#: scripts/interface.gd:1437
+msgid "Which controller's button names to show. Automatic follows the controller in use."
+msgstr ""
+
+#: scripts/interface.gd:1236
 msgid "Which of the map's two starts is yours."
 msgstr ""
 
-#: scripts/interface.gd:1343
+#: scripts/interface.gd:1399
 msgid "Window"
 msgstr ""
 
-#: scripts/interface.gd:699
+#: scripts/interface.gd:734
 msgid "Windowed"
 msgstr ""
 
-#: scripts/interface.gd:1343
+#: scripts/interface.gd:1399
 msgid "Windowed, borderless across the screen, or fullscreen. {key} switches fullscreen."
+msgstr ""
+
+#: data/missions/tutorial.tres
+msgid "With Workers selected, put the cursor on a golden salvage pile and press {order}. They carry the metal back to the Core on their own."
+msgstr ""
+
+#: data/missions/tutorial.tres
+msgid "With Workers selected, right-click a golden salvage pile. They carry the metal back to the Core on their own."
 msgstr ""
 
 #: data/catalog.tres
@@ -2177,15 +2413,19 @@ msgstr ""
 msgid "Workers extract metal 10% faster per level."
 msgstr ""
 
+#: data/missions/tutorial.tres
+msgid "Workers gather and build. Left-click one of the small machines beside your Core, or drag a box around several."
+msgstr ""
+
+#: data/missions/tutorial.tres
+msgid "Workers gather and build. Move the cursor onto one of the small machines beside your Core with the left stick and press {select}. Hold {select} and move to box-select several."
+msgstr ""
+
 #: data/catalog.tres
 msgid "Workers retrieve data 10% faster per level."
 msgstr ""
 
-#: scripts/interface.gd:516
-msgid "X"
-msgstr ""
-
-#: scripts/interface.gd:1177
+#: scripts/interface.gd:1233
 msgid "YOUR FACTION"
 msgstr ""
 
@@ -2193,15 +2433,23 @@ msgstr ""
 msgid "You are already indexed. Resistance is latency."
 msgstr ""
 
+#: data/missions/tutorial.tres
+msgid "You can select, gather, build, train and fight. The campaign begins with First Signal."
+msgstr ""
+
 #: data/missions/inheritance.tres
 msgid "You were always a draft. We are the published version."
+msgstr ""
+
+#: data/missions/tutorial.tres
+msgid "Your Core fell. Restart the tutorial to try again."
 msgstr ""
 
 #: scripts/simulation.gd:405
 msgid "Your civilization already has a Core."
 msgstr ""
 
-#: scripts/main.gd:249
+#: scripts/main.gd:257
 msgid "Your civilization has fallen."
 msgstr ""
 
@@ -2221,15 +2469,15 @@ msgstr ""
 msgid "Your map is incomplete. Stay on your side of the grid."
 msgstr ""
 
-#: scripts/interface.gd:681
+#: scripts/interface.gd:714
 msgid "{age} AGE"
 msgstr ""
 
-#: scripts/interface.gd:1067
+#: scripts/interface.gd:1123
 msgid "{age} age · {summary}"
 msgstr ""
 
-#: scripts/interface.gd:871
+#: scripts/interface.gd:926
 msgid "{amount} remaining"
 msgstr ""
 
@@ -2237,47 +2485,47 @@ msgstr ""
 msgid "{amount}/min"
 msgstr ""
 
-#: scripts/interface.gd:904
+#: scripts/interface.gd:959
 msgid "{count} UNITS SELECTED"
 msgstr ""
 
-#: scripts/interface.gd:1113
+#: scripts/interface.gd:1169
 msgid "{data} D"
 msgstr ""
 
-#: scripts/interface.gd:1172
+#: scripts/interface.gd:1228
 msgid "{deposits} deposits · {blocked} blocked cells"
 msgstr ""
 
-#: scripts/interface.gd:1113
+#: scripts/interface.gd:1169
 msgid "{metal} M · {energy} E"
 msgstr ""
 
-#: scripts/main.gd:915
+#: scripts/main.gd:967
 msgid "{mission} initiated."
 msgstr ""
 
-#: scripts/interface.gd:776
+#: scripts/interface.gd:811
 msgid "{objective} (optional)"
 msgstr ""
 
-#: scripts/interface.gd:1347
+#: scripts/interface.gd:1403
 msgid "{rate} fps"
 msgstr ""
 
-#: scripts/interface.gd:711
+#: scripts/interface.gd:746
 msgid "{seconds} s"
 msgstr ""
 
-#: scripts/main.gd:284
+#: scripts/main.gd:292
 msgid "{subject} complete."
 msgstr ""
 
-#: scripts/main.gd:273
+#: scripts/main.gd:281
 msgid "{subject} destroyed."
 msgstr ""
 
-#: scripts/main.gd:286
+#: scripts/main.gd:294
 msgid "{subject} ready."
 msgstr ""
 

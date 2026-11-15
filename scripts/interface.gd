@@ -128,7 +128,7 @@ func load_title_font() -> Font:
 	return variation
 
 func _process(dt: float) -> void:
-	mouse = get_viewport().get_mouse_position()
+	mouse = game.input.pointer()
 	message_left = maxf(0, message_left-dt)
 	subtitle_left = maxf(0, subtitle_left-dt)
 	for item in pings: item.left -= dt
@@ -513,7 +513,7 @@ func button(rect: Rect2, title: String, action: String, payload: Dictionary = {}
 	# A longer translation is set smaller before it is ever cut short.
 	var title_area = Vector2(rect.size.x-20,rect.size.y-14 if subtitle == "" else 27)
 	var title_px: int = 16
-	while title_px > 12 and text_height(title,title_area.x,title_px) > maxf(title_area.y,text_height("X",title_area.x,title_px)):
+	while title_px > 12 and text_height(title,title_area.x,title_px) > maxf(title_area.y,text_height("0",title_area.x,title_px)):
 		title_px -= 1
 	text(title,Rect2(rect.position+Vector2(10,7+(16-title_px)*.5),title_area),title_px,TEXT if enabled else MUTED)
 	if subtitle != "":
@@ -556,7 +556,7 @@ func prepare_layout(force: bool = false) -> void:
 	if size.x < 1 or size.y < 1: return
 	var fitted = clampf(minf(requested_scale, size.y/MIN_LAYOUT_HEIGHT), 1.0, 1.5)
 	if not is_equal_approx(fitted, ui_scale): ui_scale = fitted
-	var signature = str([DAText.language,DAText.pseudo,game.ability_mode,game.settings.values.skirmish,game.game_kind,size,ui_scale,game.mode,manual,settings_open,tech_open,panel_open,saves_mode,confirmation,rebind_action,scroll_offset,game.selected,game.build_kind,game.attack_mode,game.rally_mode,game.patrol_mode,objectives_open,game.speed,game.campaign.selected_difficulty])
+	var signature = str([DAText.language,DAText.pseudo,game.input.device,game.input.family,game.input.grid_open,game.settings.values.pad_glyphs,game.ability_mode,game.settings.values.skirmish,game.game_kind,size,ui_scale,game.mode,manual,settings_open,tech_open,panel_open,saves_mode,confirmation,rebind_action,scroll_offset,game.selected,game.build_kind,game.attack_mode,game.rally_mode,game.patrol_mode,objectives_open,game.speed,game.campaign.selected_difficulty])
 	if not force and signature == layout_signature and layout_elapsed < .1: return
 	var started = Time.get_ticks_usec()
 	layout_signature = signature
@@ -612,9 +612,13 @@ func layout_menu() -> void:
 	var hw = (column-8)/2
 	button(Rect2(x,h-194,hw,46),DAText.t("DIFFICULTY · {level}",{"level":DAText.upper(str(game.campaign.selected_difficulty).capitalize())}),"difficulty",{"tooltip":"How quickly the rival expands and attacks. Applies to the next mission you launch."})
 	button(Rect2(x+hw+8,h-194,hw,46),"LOAD GAME","saves",{"id":"load"})
-	var lw = roundf(column*.6)
-	button(Rect2(x,h-138,lw,52),"LAUNCH CAMPAIGN  →","start",{},"",true,true)
-	button(Rect2(x+lw+8,h-138,column-lw-8,52),"SKIRMISH","skirmish",{"tooltip":"A free match on any map, against the faction and difficulty you choose."})
+	# Until the tutorial has been played or a mission won, it is the control the menu points to.
+	var newcomer: bool = not bool(game.settings.values.get("tutorial_seen",false)) and game.campaign.completed_missions.is_empty()
+	var lw = roundf(column*.46)
+	var sw = roundf((column-lw-16)/2)
+	button(Rect2(x,h-138,lw,52),"LAUNCH CAMPAIGN  →","start",{},"",true,not newcomer)
+	button(Rect2(x+lw+8,h-138,sw,52),"SKIRMISH","skirmish",{"tooltip":"A free match on any map, against the faction and difficulty you choose."})
+	button(Rect2(x+lw+sw+16,h-138,column-lw-sw-16,52),"TUTORIAL","tutorial",{"tooltip":"A short guided match that teaches selecting, gathering, building and fighting. About five minutes."},"",true,newcomer)
 	# The four share the row in proportion to their labels, so a long word in one language still fits.
 	var row = [["MANUAL","help"],["SETTINGS","settings"],["CREDITS","credits"],["QUIT","quit"]]
 	var natural: Array = row.map(func(entry): return label_width(entry[0])+28)
@@ -639,8 +643,37 @@ func layout_menu() -> void:
 func layout_hud() -> void:
 	layout_top_bar()
 	layout_dock()
-	layout_objectives()
+	if game.game_kind == "tutorial": layout_tutorial()
+	else: layout_objectives()
 	layout_strips()
+
+## The tutorial's current step: what to do, in the words of the device in use.
+func layout_tutorial() -> void:
+	if game.mode != "playing" or not game.mission or not game.mission.active: return
+	var items: Array = game.mission_definition.objectives
+	var step: Dictionary = game.mission.current_objective()
+	if step.is_empty(): return
+	var pad: bool = game.input.device == "pad"
+	var keys: Dictionary = {"attack":game.settings.prompt("attack")}
+	if pad:
+		for action in ["select","order","modifier","groups","grid","zoom","cancel"]: keys[action] = game.input.prompt(action)
+	var instruction: String = DAText.t(str(step.get("prompt_pad" if pad and step.has("prompt_pad") else "prompt","")),keys)
+	var tw = minf(430,span*.44)
+	var body_h = text_height(instruction,tw-28,15)
+	var r = Rect2(left+EDGE,TOP_H+12,tw,84+body_h+44)
+	panel(r,Color(PANEL.r,PANEL.g,PANEL.b,.92),true,GOLD)
+	blocked_regions.append(to_view(r))
+	reserved_regions.objectives = to_view(r)
+	text(DAText.t("TUTORIAL · STEP {step} OF {total}",{"step":items.find(step)+1,"total":items.size()}),Rect2(r.position+Vector2(14,9),Vector2(tw-28,22)),13,GOLD)
+	text(str(step.get("title","")),Rect2(r.position+Vector2(14,32),Vector2(tw-28,30)),20)
+	text(instruction,Rect2(r.position+Vector2(14,68),Vector2(tw-28,body_h+4)),15,MUTED)
+	button(Rect2(r.position.x+14,r.end.y-50,minf(tw-28,maxf(190,label_width("SKIP TUTORIAL")+28)),40),"SKIP TUTORIAL","tutorial_skip",{"tooltip":"Leave the tutorial and return to the main menu."})
+	# Point out the control this step is about.
+	var wanted: String = str(step.get("highlight",""))
+	if wanted != "":
+		for b in buttons:
+			if b.id == wanted:
+				operations.append({"type":"outline","rect":b.rect.grow(3*ui_scale),"color":Color(GOLD.r,GOLD.g,GOLD.b,.55+.45*sin(Time.get_ticks_msec()*.006)),"width":2.5*ui_scale})
 
 func layout_top_bar() -> void:
 	gradient(Rect2(0,0,w,TOP_H),Color("1a2632f2"),Color("0b1016f2"))
@@ -696,7 +729,9 @@ const ORDER_NAMES = {"idle":"Idle","move":"Moving","attack_move":"Attack-moving"
 const BINDING_NAMES = {"pause":"Pause","manual":"Manual","save":"Quick save","load":"Quick load","attack":"Attack-move","stop":"Stop","speed":"Game speed","events":"Sound","home":"Focus Core","fullscreen":"Fullscreen","alert":"Jump to alert"}
 const SPEAKERS = {"archivist":"Archivist","system":"Tactical system","foundry":"The Foundry","lattice":"The Lattice"}
 const ARMOR_LABELS = {"light":"Light","infantry":"Infantry","armored":"Armoured","heavy":"Heavy"}
-const VALUE_NAMES = ["Easy","Normal","Hard","Low","Standard","High","Left","Right","Random","Windowed","Borderless","Fullscreen","Awakening","Network","Singularity","Resources","Buildings","Military","System"]
+const PAD_ACTION_NAMES = {"select":"Select / confirm","order":"Order","cancel":"Cancel / back","attack":"Attack-move","modifier":"Add to selection","groups":"Control groups","pause":"Pause","objectives":"Objectives","speed":"Game speed","tech":"Technology tree"}
+const PAD_GLYPH_NAMES = {"auto":"Automatic","xbox":"Xbox","playstation":"PlayStation","deck":"Steam Deck"}
+const VALUE_NAMES = ["Slow","Fast","Easy","Normal","Hard","Low","Standard","High","Left","Right","Random","Windowed","Borderless","Fullscreen","Awakening","Network","Singularity","Resources","Buildings","Military","System"]
 
 func age_label(index: int) -> String:
 	return DAText.t(str(game.sim.catalog.ages[clampi(index,0,game.sim.catalog.ages.size()-1)]).capitalize())
@@ -777,6 +812,7 @@ func layout_objectives() -> void:
 		text(objective_text,Rect2(r.position+Vector2(36,40+i*26),Vector2(ow-50,24)),14,MUTED if complete else TEXT)
 
 func layout_strips() -> void:
+	layout_pad_hints()
 	var strip_w = minf(760,span-2*EDGE)
 	var strip_x = left+(span-strip_w)/2
 	var notice_rect = Rect2(strip_x,bottom-54,strip_w,44)
@@ -789,20 +825,39 @@ func layout_strips() -> void:
 		text(speaker_label(subtitle_speaker).to_upper(),Rect2(sr.position+Vector2(14,8),Vector2(strip_w-28,24)),14,GOLD)
 		text(subtitle_text,Rect2(sr.position+Vector2(14,34),Vector2(strip_w-28,sh-38)),16)
 	if game.build_kind != "" or game.attack_mode or game.rally_mode or game.patrol_mode or game.ability_mode:
-		var value = "ATTACK-MOVE · Click a destination. Right-click or Esc to cancel."
+		var pad: bool = game.input.device == "pad"
+		var keys = {"select":game.input.prompt("select"),"cancel":game.input.prompt("cancel")}
+		var value = DAText.t("ATTACK-MOVE · Choose a destination with {select}. {cancel} cancels.",keys) if pad else "ATTACK-MOVE · Click a destination. Right-click or Esc to cancel."
 		var color = ACCENT
-		if game.ability_mode: value = "ABILITY · Click where to aim it. Right-click or Esc to cancel."
-		if game.patrol_mode: value = "PATROL · Click the far end of the route. Right-click or Esc to cancel."
-		if game.rally_mode: value = "RALLY POINT · Click where new units should gather. Right-click or Esc to cancel."
+		if game.ability_mode: value = DAText.t("ABILITY · Aim it with {select}. {cancel} cancels.",keys) if pad else "ABILITY · Click where to aim it. Right-click or Esc to cancel."
+		if game.patrol_mode: value = DAText.t("PATROL · Choose the far end of the route with {select}. {cancel} cancels.",keys) if pad else "PATROL · Click the far end of the route. Right-click or Esc to cancel."
+		if game.rally_mode: value = DAText.t("RALLY POINT · Choose where new units gather with {select}. {cancel} cancels.",keys) if pad else "RALLY POINT · Click where new units should gather. Right-click or Esc to cancel."
 		if game.build_kind != "":
 			var error: String = game.sim.placement_error(0,game.build_kind,game.field.ground_at(mouse))
-			value = DAText.t("PLACE {building} · Click to build. Esc to cancel.",{"building":DAText.upper(game.sim.catalog.buildings[game.build_kind].name)})
+			keys["building"] = DAText.upper(game.sim.catalog.buildings[game.build_kind].name)
+			value = DAText.t("PLACE {building} · Build with {select}. {cancel} cancels.",keys) if pad else DAText.t("PLACE {building} · Click to build. Esc to cancel.",keys)
 			if error != "":
 				value = DAText.t("CANNOT BUILD · {reason}",{"reason":DAText.t(error)})
 				color = GOLD
 		panel(notice_rect,Color(BG.r,BG.g,BG.b,.92))
 		text(value,Rect2(notice_rect.position+Vector2(12,4),notice_rect.size-Vector2(24,8)),14,color)
 		blocked_regions.append(to_view(notice_rect))
+
+## While a pad is in use: what its buttons do right now, in one line under the top bar.
+func layout_pad_hints() -> void:
+	if game.input.device != "pad" or game.mode != "playing": return
+	var pad: DAInput = game.input
+	var parts: Array = []
+	if pad.grid_open:
+		parts = [DAText.t("D-pad: move"),pad.prompt("select")+" "+DAText.t("Use"),pad.prompt("cancel")+" "+DAText.t("Close")]
+	else:
+		parts = [pad.prompt("select")+" "+DAText.t("Select"),pad.prompt("order")+" "+DAText.t("Order"),pad.prompt("attack")+" "+DAText.t("Attack-move"),pad.prompt("cancel")+" "+DAText.t("Cancel"),pad.prompt("grid")+" "+DAText.t("Commands"),pad.prompt("groups")+" + "+DAText.t("D-pad: groups")]
+	var value: String = "   ".join(parts)
+	var hw = minf(span-2*EDGE,font.get_string_size(value,HORIZONTAL_ALIGNMENT_LEFT,-1,roundi(13*ui_scale)).x/ui_scale+24)
+	var r = Rect2(left+span-EDGE-hw,TOP_H+8,hw,26)
+	panel(r,Color(BG.r,BG.g,BG.b,.78),true,LINE_SOFT)
+	fitted_text(value,Rect2(r.position+Vector2(12,3),Vector2(hw-24,20)),13,MUTED)
+	blocked_regions.append(to_view(r))
 
 func research_name(side: int, id: String) -> String:
 	if id == "age": return DAText.t("Advancing to {age}",{"age":age_label(mini(2,game.sim.ages[side]+1))})
@@ -1024,8 +1079,11 @@ func layout_grid(rect: Rect2, slot: float, gap: float, selected: Array) -> void:
 				var strong: String = game.sim.catalog.counter_text(item.kind)
 				tooltip += "\n"+DAText.t("Armour: {class}",{"class":armor_label(str(item.d.get("armor","light")))})+(" · "+DAText.t("Strong: {targets}",{"targets":strong}) if strong != "" else "")
 		var hotkey: String = str(item.get("hotkey",DASettingsService.key_label(GRID_KEYS[i])))
-		var payload = {"tooltip":tooltip+"\n"+DAText.t("Hotkey: {key}",{"key":hotkey}),"reason":reason}
+		# On a pad the grid is reached with the trigger and D-pad; only attack-move has a button of its own.
+		if game.input.device == "pad": hotkey = game.input.prompt("attack") if item.action == "attack_mode" else ""
+		var payload = {"tooltip":tooltip+("\n"+DAText.t("Hotkey: {key}",{"key":hotkey}) if hotkey != "" else ""),"reason":reason}
 		if item.has("kind"): payload.kind = item.kind
+		payload.slot = i
 		if not item.get("bound",false): payload.grid = GRID_KEYS[i]
 		var b = register(cell,title,item.action,payload,reason == "",item.get("primary",false))
 		if b.is_empty(): continue
@@ -1034,7 +1092,7 @@ func layout_grid(rect: Rect2, slot: float, gap: float, selected: Array) -> void:
 		if item.has("icon"): icon(item.icon,cell.grow(-inset),TEXT if enabled else Color(MUTED.r,MUTED.g,MUTED.b,.6))
 		else: thumb(item.kind,cell.grow(-inset),Color.WHITE if enabled else Color(1,1,1,.4))
 		text_control = b.id
-		text(hotkey.left(3),Rect2(cell.position+Vector2(4,0),Vector2(slot-8,15)),11,GOLD if enabled else MUTED)
+		if hotkey != "": text(hotkey.left(3),Rect2(cell.position+Vector2(4,0),Vector2(slot-8,15)),11,GOLD if enabled else MUTED)
 		var badge = ""
 		if queued.has(item.get("kind","")) and item.action == "train": badge = "×"+str(queued[item.kind])
 		elif item.get("count","") != "": badge = str(item.count)
@@ -1323,7 +1381,7 @@ func layout_settings() -> void:
 	var x = rect.position.x+24
 	var cw = rect.size.x-48
 	text("Progress saves at checkpoints. Scroll or ↑↓ for more. Esc cancels key capture.",Rect2(x,rect.position.y+62,cw,42),14,MUTED)
-	begin_scroll(Rect2(x,rect.position.y+110,cw,rect.size.y-206),1248)
+	begin_scroll(Rect2(x,rect.position.y+110,cw,rect.size.y-206),1770)
 	var y = rect.position.y+110-scroll_offset
 	text("AUDIO",Rect2(x,y,cw,28),18,ACCENT)
 	y += 36
@@ -1366,6 +1424,23 @@ func layout_settings() -> void:
 		button(Rect2(x+(i%2)*(cw/2+4),y+floori(i/2.0)*52,cw/2-4,44),DAText.t(str(BINDING_NAMES.get(action,action.capitalize())))+" · "+(DAText.t("Press key… (Esc cancels)") if rebind_action == action else game.settings.prompt(action)),"rebind",{"action":action},"",true,rebind_action==action)
 	y += 322
 	button(Rect2(x,y,220,42),"RESET BINDINGS","reset_category",{"category":"bindings"})
+	y += 62
+	text("CONTROLLER · Select an action, then press a button",Rect2(x,y,cw,28),16,ACCENT)
+	y += 38
+	var pad_actions: Array = DASettingsService.DEFAULTS.pad_bindings.keys()
+	for i in pad_actions.size():
+		var action: String = pad_actions[i]
+		var waiting: bool = rebind_action == "pad:"+action
+		button(Rect2(x+(i%2)*(cw/2+4),y+floori(i/2.0)*52,cw/2-4,44),DAText.t(str(PAD_ACTION_NAMES.get(action,action)))+" · "+(DAText.t("Press button… (Esc cancels)") if waiting else game.input.label(game.input.button_for(action))),"rebind",{"action":"pad:"+action},"",true,waiting)
+	y += ceili(pad_actions.size()/2.0)*52+4
+	var pad_options = [
+		[DAText.t("Cursor speed")+" · "+DAText.t(str(v.pad_cursor_speed).capitalize()),"pad_cursor_speed","How fast the left stick moves the cursor."],
+		[DAText.t("Dead zone")+" · "+str(roundi(float(v.pad_deadzone)*100))+"%","pad_deadzone","How far a stick must move before it counts. Raise it if the cursor drifts."],
+		[DAText.t("Button names")+" · "+DAText.t(str(PAD_GLYPH_NAMES.get(str(v.pad_glyphs),v.pad_glyphs))),"pad_glyphs","Which controller's button names to show. Automatic follows the controller in use."]]
+	for i in pad_options.size():
+		button(Rect2(x+(i%2)*(cw/2+4),y+floori(i/2.0)*54,cw/2-4,44),pad_options[i][0],pad_options[i][1],{"tooltip":pad_options[i][2]})
+	y += ceili(pad_options.size()/2.0)*54+4
+	button(Rect2(x,y,260,42),"RESET CONTROLLER","reset_category",{"category":"controller"})
 	end_scroll()
 	button(Rect2(x,rect.end.y-68,cw/2-6,44),"CLOSE","settings",{},"",true,true)
 	button(Rect2(x+cw/2+6,rect.end.y-68,cw/2-6,44),"RESET ALL","reset_all")
@@ -1381,10 +1456,13 @@ func layout_manual() -> void:
 		["04 / CONQUER","Sentinels counter armoured units such as Disruptors. Disruptors counter heavy units such as Walkers. Walkers destroy buildings. Disruptor and Walker shells travel and splash. Every combat unit has one ability on the first grid slot: the Scout's sweep reveals an area, the Sentinel fires faster, the Disruptor's EMP stuns, the Walker braces for range. Scout first: enemies outside your vision cannot be targeted, though buildings you have seen stay marked."],
 		["05 / GROUND AND FACTIONS","Roads carry units a quarter faster. Rough ground around ruins slows everything that does not hover. Units on high ground see two cells farther and shoot one cell farther. Each faction fields one unit of its own from the Network age: Origin's Warden shields nearby units, the Foundry's Mortar shells from long range, the Lattice's Phantom stays unseen until an enemy comes close."],
 		["06 / COMMAND","Click or drag to select; Shift adds units; double-click selects every unit of that type in view. The command grid uses the keys Q to T, A to G and Z to B in the order shown on each slot. Right-click moves, gathers, attacks, repairs, or sets a rally point. {attack}: attack-move. {stop}: stop. Hold position keeps units where they stand; Patrol walks them back and forth, engaging on the way. Cancel on a building's command grid removes its last queued item, or stops its research, and refunds the cost. Ctrl+1–9 saves groups; 1–9 recalls them."],
-		["07 / NAVIGATE","Arrows, screen edges, or middle drag pan; the wheel zooms. Minimap left-click moves the camera; right-click issues orders. {pause}: pause. {manual}: manual. {fullscreen}: fullscreen. {alert}: jump to the last alert, which also pings the minimap."]
+		["07 / NAVIGATE","Arrows, screen edges, or middle drag pan; the wheel zooms. Minimap left-click moves the camera; right-click issues orders. {pause}: pause. {manual}: manual. {fullscreen}: fullscreen. {alert}: jump to the last alert, which also pings the minimap."],
+		["08 / CONTROLLER","The left stick moves a cursor; the right stick moves the camera, and {zoom} with the right stick zooms. {select} selects or confirms; hold it and move to box-select. {order} orders a move, gather, attack or repair. {pad_attack} starts an attack-move and {pad_cancel} cancels or clears the selection. Hold {modifier} to add to the selection. Hold {grid} and use the D-pad to choose from the command grid, then {select}. Hold {groups} and press the D-pad to recall control groups 1 to 4; with {modifier} as well, to save them. The D-pad alone picks the next idle Worker (up), every combat unit (right), the last alert (down) and your Core (left). {pad_pause} pauses. In menus the D-pad or left stick moves between controls. Every button can be changed in Settings."]
 	]
 	var keys: Dictionary = {}
-	for action in ["attack","stop","pause","manual","fullscreen","alert"]: keys[action] = game.settings.prompt(action)
+	for action in ["attack","stop","pause","manual","fullscreen","alert"]: keys[action] = DAText.t(DASettingsService.key_label(game.settings.binding(action,KEY_NONE)))
+	for action in ["select","order","modifier","groups","grid","zoom"]: keys[action] = game.input.prompt(action)
+	for action in ["attack","cancel","pause"]: keys["pad_"+action] = game.input.prompt(action)
 	for section in sections: section[1] = DAText.t(section[1],keys)
 	var total = 0.0
 	for section in sections:
@@ -1523,6 +1601,7 @@ func _draw() -> void:
 			"map": draw_minimap(op.rect)
 			"preview": draw_preview(op)
 	if not modal_active(): draw_world_overlay()
+	draw_pad_cursor()
 
 func refresh_map() -> void:
 	if not game or not map_image: return
@@ -1618,6 +1697,20 @@ func draw_world_overlay() -> void:
 		draw_rect(r,Color(.4,.9,.8,.12))
 		draw_rect(r,ACCENT,false,1)
 
+var cursor_textures: Dictionary = {}
+
+## The pad's cursor, drawn by the game because the system pointer is hidden.
+func draw_pad_cursor() -> void:
+	if game.input.device != "pad" or modal_active(): return
+	var kind: String = game.cursor_kind if game.cursor_kind != "" else "default"
+	if not cursor_textures.has(kind):
+		var image: Image = cursor_image(kind)
+		cursor_textures[kind] = ImageTexture.create_from_image(image) if image else null
+	var texture: Texture2D = cursor_textures[kind]
+	var hotspot = Vector2(16,16) if kind == "attack" else Vector2(4,3)
+	if texture: draw_texture(texture,game.input.cursor-hotspot)
+	else: draw_circle(game.input.cursor,5,ACCENT)
+
 func is_world(p: Vector2) -> bool:
 	if modal_active() or not world_rect.has_point(p): return false
 	for region in blocked_regions:
@@ -1706,6 +1799,69 @@ func keyboard(event: InputEventKey) -> bool:
 		prepare_layout(true)
 		return true
 	return false
+
+## Move the focus to the nearest control in a direction (D-pad or stick in a menu).
+func focus_move(direction: Vector2) -> void:
+	prepare_layout(true)
+	if focus_controls.is_empty(): return
+	var current: Dictionary = {}
+	for b in focus_controls:
+		if b.id == focused: current = b
+	var target: Dictionary = {}
+	if current.is_empty():
+		# Nothing focused yet: the primary control, else the first.
+		for b in focus_controls:
+			if b.primary and target.is_empty(): target = b
+		if target.is_empty(): target = focus_controls[0]
+	else:
+		# A scrolling list is walked from end to end before the focus leaves it for the
+		# buttons around it; entering a list lands on something that is on screen.
+		var listed: bool = current.clip.has_area()
+		target = focus_nearest(current,focus_controls.filter(func(b): return b.clip.has_area() == listed),direction)
+		if target.is_empty():
+			var others: Array = focus_controls.filter(func(b): return b.clip.has_area() != listed)
+			if not listed:
+				var shown: Array = others.filter(func(b): return b.clip.encloses(b.rect))
+				others = shown if not shown.is_empty() else others.slice(0,1)
+			target = focus_nearest(current,others,direction)
+		if target.is_empty(): return
+	focused = target.id
+	focus_keyboard = true
+	if target.clip.has_area() and not target.clip.encloses(target.rect):
+		if target.rect.position.y < target.clip.position.y: scroll_offset += (target.rect.position.y-target.clip.position.y)/ui_scale
+		else: scroll_offset += (target.rect.end.y-target.clip.end.y)/ui_scale
+		scroll_offset = clampf(scroll_offset,0,scroll_max)
+	prepare_layout(true)
+
+func focus_nearest(current: Dictionary, candidates: Array, direction: Vector2) -> Dictionary:
+	var from: Vector2 = current.rect.get_center()
+	var best: float = INF
+	var target: Dictionary = {}
+	for b in candidates:
+		if b.id == current.id: continue
+		var offset: Vector2 = b.rect.get_center()-from
+		var along: float = offset.dot(direction)
+		if along <= 1.0: continue
+		# Prefer what lies straight ahead: sideways distance counts double.
+		var score: float = along+2.0*absf(offset.dot(Vector2(-direction.y,direction.x)))
+		if score < best:
+			best = score
+			target = b
+	return target
+
+## Activate the focused control; with none focused, the primary one takes the focus.
+func focus_activate() -> void:
+	prepare_layout(true)
+	for b in buttons:
+		if b.id == focused:
+			activate(b)
+			return
+	focus_move(Vector2.DOWN)
+
+func scroll_by(amount: float) -> void:
+	if scroll_max <= 0: return
+	scroll_offset = clampf(scroll_offset+amount,0,scroll_max)
+	prepare_layout(true)
 
 func mission_directive() -> String:
 	if not game.mission or not game.mission_definition: return "Destroy the rival Core"

@@ -21,14 +21,14 @@ LANGUAGES = {"fr": "French", "it": "Italian", "de": "German", "es": "Spanish"}
 SCRIPTS = ["text.gd", "interface.gd", "main.gd", "simulation.gd", "save_game.gd", "settings_service.gd", "catalog.gd", "mission_controller.gd"]
 STRING = re.compile(r'"((?:[^"\\]|\\.)*)"')
 # Data fields that hold text a player reads.
-FIELDS = re.compile(r'"(?:name|description|title|text)": "((?:[^"\\]|\\.)*)"')
+FIELDS = re.compile(r'"(?:name|description|title|text|prompt|prompt_pad)": "((?:[^"\\]|\\.)*)"')
 PROPERTIES = re.compile(r'^(?:title|briefing|victory_text|defeat_text|display_name|description) = "((?:[^"\\]|\\.)*)"', re.M)
 # Literals that look like prose but are not shown: asserts, log lines, paths, identifiers.
 IGNORE = re.compile(
     r"^(res://|user://|/|#|--|\.|BENCHMARK|UI_EXPORT_SMOKE|Screenshot saved|Audio clip missing|DASV|Rajdhani|Cinzel|"
     r"Digital Age: Machine Civilizations|PRODUCTION_UI|[A-Z]+_[A-Z_]+$|[a-z0-9_.:/%{}\-\s]*$|%[0-9.]*[dfs]|x$)"
 )
-NOT_TEXT = {"Menu", "View", "Cross", "Circle", "Square", "Triangle", "Options", "Create", "English", "Français", "Italiano", "Deutsch", "Español", "Requires the ", " age.", "This operation is limited to the ", "AGE ADVANCED  /  ", "RESEARCH COMPLETE  /  ", "A", "B", "C", "T", "DIGITAL", "AGE", "Insufficient", "Time limit", "Skirmish · ", "Requires the ", "Steam", "Master", "Music", "Effects", "Voice", "UI", "Dummy", "Forward Plus", "X11", "AWAKENING", "NETWORK", "SINGULARITY", "DAInterface"}
+NOT_TEXT = {"SteamDeck", "PlayStation", "Xbox", "Steam Deck", "Menu", "View", "Cross", "Circle", "Square", "Triangle", "Options", "Create", "English", "Français", "Italiano", "Deutsch", "Español", "Requires the ", " age.", "This operation is limited to the ", "AGE ADVANCED  /  ", "RESEARCH COMPLETE  /  ", "A", "B", "C", "T", "DIGITAL", "AGE", "Insufficient", "Time limit", "Skirmish · ", "Requires the ", "Steam", "Master", "Music", "Effects", "Voice", "UI", "Dummy", "Forward Plus", "X11", "AWAKENING", "NETWORK", "SINGULARITY", "DAInterface"}
 # Bus names are shown in settings; keep those that double as labels.
 KEEP = {"Master", "Music", "Effects", "Voice"}
 
@@ -137,6 +137,12 @@ def parse(path: Path) -> tuple[dict[str, str], dict[str, list[str]]]:
     return entries, comments
 
 
+def parse_ids(path: Path) -> list[str]:
+    """Every msgid of a template (its msgstr are empty, which parse() skips nothing for)."""
+    entries, _ = parse(path)
+    return list(entries)
+
+
 def render(found: dict[str, list[str]], translations: dict[str, str] | None, comments: dict[str, list[str]], language: str = "") -> str:
     header = ['msgid ""', 'msgstr ""', '"Project-Id-Version: Digital Age\\n"', '"Content-Type: text/plain; charset=UTF-8\\n"']
     if language:
@@ -158,8 +164,12 @@ def main() -> None:
     template = render(found, None, {})
     target = LOCALE / "digi-age.pot"
     if "--check" in sys.argv:
-        if not target.exists() or target.read_text() != template:
-            raise SystemExit("locale/digi-age.pot is out of date. Run tools/extract_strings.py.")
+        # Only the strings matter: a line that moved in a script is not a change.
+        current = set(parse_ids(target)) if target.exists() else set()
+        if current != set(found):
+            added = sorted(set(found) - current)[:5]
+            removed = sorted(current - set(found))[:5]
+            raise SystemExit(f"locale/digi-age.pot is out of date. Run tools/extract_strings.py. New: {added} Gone: {removed}")
         print(f"{len(found)} strings, template up to date")
         return
     target.write_text(template)

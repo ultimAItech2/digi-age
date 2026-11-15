@@ -1,5 +1,37 @@
 # Production status
 
+## Added after 1.0.0-rc3 (unreleased)
+
+- **Save safety:** saves carry a checked header, are verified before they
+  replace the previous file, and keep that file as a backup that is used when
+  the main file is damaged. Campaign progress is written the same way; a damaged
+  progress file is set aside and reported. Unreadable slots are shown as such
+  and ask before being overwritten. A load is validated before the running
+  match is touched and never re-locks missions.
+- **Mission fixes:** gather objectives count delivered resources (Salvage
+  Rights no longer completes its first objective on the starting stock); First
+  Signal's survival clock starts with the counterattack; Ghost Protocol's wave
+  cannot arrive in the first four minutes; the opponent builds a Generator
+  first when it has no power.
+- **Release hardening:** development switches are ignored by release builds;
+  the match pauses when the window loses focus; the menu shows the version; key
+  labels follow the keyboard layout; grid keys cannot be rebound away.
+- **Tutorial:** a guided seven-step match outside the campaign, with separate
+  instructions for mouse and for gamepad.
+- **Gamepad:** full play on a pad with a virtual cursor, a command-grid layer,
+  control groups, menu navigation, rebinding and per-family button names;
+  first launch on a Steam Deck starts fullscreen at 125% scale; 1280 x 800 is
+  in the resolution list and the layout matrix.
+- **Languages:** French, Italian, German and Spanish text and subtitles
+  (machine drafts, marked for native review); voices remain English.
+- **Release pipeline:** one version source; builds carry the font, engine and
+  Poly Haven licences and a build identity; packages are verified, including
+  that development switches do nothing; CI builds both platforms and a tag
+  drafts a release; the long suites run nightly.
+- **Tests:** mission completion by the computer player (seven of eight
+  missions on Easy), localisation, gamepad and tutorial suites; the layout
+  matrix in a pseudo-language and four languages.
+
 ## Added in 1.0.0-rc3
 
 - **Skirmish:** a setup screen (map with preview, both factions, resources,
@@ -72,18 +104,33 @@
   AgX tonemap, depth fog and glow on emissive machine parts. `low` and reduced-effects profiles drop
   glow, fog, water animation and most of the scatter.
 
-## Remaining gates (not claimed by this RC)
+## Remaining gates (not claimed)
 
-- GodotSteam verification on a real Steam client (achievements, overlay, Auto-Cloud).
-- Windows runtime playtest on physical hardware.
-- Outside usability playtests of the full eight-mission campaign.
-- Performance sign-off at 200 units / 1080p on the documented recommended PC.
-- Hands-on balance: faction win rates are measured only opponent against
-  opponent (`tests/balance_test.gd`), not with human players.
+- **Steam:** no AppID or depot IDs, GodotSteam is not integrated, and
+  `scripts/platform_service.gd` is a stub that no export enables. Achievements
+  are requested by id but defined nowhere. Store assets do not exist.
+- **Windows:** the build is produced, hashed and its contents verified, but it
+  has never been run on Windows, and it is not code-signed.
+- **Playtesting:** nobody has played this build by hand. No outside playtest of
+  the campaign or the tutorial.
+- **The Foundry (mission 6):** not proven winnable by the automated player; it
+  needs a human playtest. Balance elsewhere is measured only computer against
+  computer.
+- **Performance:** measured on one workstation (RTX 3070); no minimum-spec
+  measurement and no published system requirements.
+- **Translations:** drafted by machine; not reviewed by native speakers.
+- **Gamepad:** verified with synthetic input only. Real pad names, stick feel
+  and legibility on a physical Steam Deck are untested. Button names are text
+  ("A", "Cross"), not glyph images.
+- **Legal:** a named copyright holder; whether MIT is intended for the art and
+  audio; evidence of the ElevenLabs commercial licence; an EULA or privacy
+  statement if the store requires one; the Age of Empires mention in the
+  credits.
+- **Support:** no support contact or bug-report path for players.
 
 ## Out of scope
 
-Three or more sides, allies, multiplayer, controller support and translations.
+Three or more sides, allies, multiplayer, and translated voices.
 
 ## Audio provenance
 

@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Added
+- Tutorial: a guided seven-step match, reachable from the main menu.
+- Gamepad support: virtual cursor, command grid on the trigger and D-pad,
+  control groups, menu navigation, rebinding, Xbox / PlayStation / Steam Deck
+  button names, Steam Deck defaults and 1280 x 800.
+- French, Italian, German and Spanish text and subtitles (machine drafts
+  awaiting native review), with a Language setting.
+
 ### Fixed
 - Saves are verified before they replace the previous file, and the previous
   file is kept as a backup. A damaged save falls back to its backup; a damaged

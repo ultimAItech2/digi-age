@@ -17,6 +17,12 @@ extends Resource
 @export var symmetric_start: bool = false
 ## Skirmish: the player takes the map's second start.
 @export var swap_sides: bool = false
+## Tutorial: objectives are worked through one at a time, in order. An objective may then
+## carry "prompt" and "prompt_pad" (what to do, for mouse and for gamepad) and "highlight"
+## (the id of the control to point out).
+@export var sequential: bool = false
+## Tutorial: the rival does nothing on its own.
+@export var passive_opponent: bool = false
 @export var dialogue_entries: Array[Dictionary] = []
 @export var events: Array[Dictionary] = []
 @export var checkpoint_ids: Array[String] = ["opening", "first_signal", "counterattack"]

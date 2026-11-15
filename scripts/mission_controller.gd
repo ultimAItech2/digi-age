@@ -18,6 +18,8 @@ var active: bool = true
 var mission_won: bool = false
 var checkpoint: String = "opening"
 var fired_events: Dictionary = {}
+## Objectives of kind "action" that the player has carried out (sequential missions).
+var actions: Dictionary = {}
 ## When each fired event happened, in mission seconds.
 var event_times: Dictionary = {}
 
@@ -28,6 +30,7 @@ func setup(world: DASimulation, mission: DAMissionDefinition) -> void:
 	completed.clear()
 	fired_events.clear()
 	event_times.clear()
+	actions.clear()
 	active = true
 	mission_won = false
 	elapsed = 0.0
@@ -47,6 +50,9 @@ func tick(dt: float) -> void:
 	for objective in definition.objectives:
 		if completed.get(objective.id, false):
 			continue
+		# In a sequential mission only the current step is watched.
+		if definition.sequential and objective != current_objective():
+			break
 		var progress = progress_for(objective)
 		objective_state[objective.id] = progress
 		objective_updated.emit(objective.id, progress, float(objective.get("required", 1.0)))
@@ -58,6 +64,22 @@ func tick(dt: float) -> void:
 		complete()
 	elif sim.winner == 1:
 		fail(definition.defeat_text)
+
+## The first objective not yet complete; {} when all are done.
+func current_objective() -> Dictionary:
+	for objective in definition.objectives:
+		if not completed.get(objective.get("id", ""), false):
+			return objective
+	return {}
+
+## Something the player did ("select:worker", "command:gather", "camera", "group_save").
+## It counts only for the current step of a sequential mission, and only when that step asks for it.
+func note(action: String) -> void:
+	if not active or definition == null or not definition.sequential:
+		return
+	var objective: Dictionary = current_objective()
+	if objective.get("kind", "") == "action" and str(objective.get("target", "")) == action:
+		actions[objective.id] = true
 
 func evaluate_events() -> void:
 	if definition == null:
@@ -159,6 +181,8 @@ func progress_for(objective: Dictionary) -> float:
 			return float(sim.stats[0].get("gathered_" + ("data" if target == "data" else "metal"), banked))
 		"train":
 			return sim.entities.values().filter(func(e): return e.owner == 0 and e.kind == target).size()
+		"action":
+			return 1.0 if actions.get(objective.get("id", ""), false) else 0.0
 		"survive":
 			# "after" names the event the clock starts from; without it, the mission start.
 			var after: String = str(objective.get("after", ""))
@@ -208,7 +232,7 @@ func fail(reason: String) -> void:
 	mission_failed.emit(reason)
 
 func serialize_state() -> Dictionary:
-	return {"mission_id": definition.mission_id if definition else "", "objective_state": objective_state.duplicate(true), "completed": completed.duplicate(true), "elapsed": elapsed, "active": active, "mission_won": mission_won, "checkpoint": checkpoint, "fired_events": fired_events.duplicate(true), "event_times": event_times.duplicate(true)}
+	return {"mission_id": definition.mission_id if definition else "", "objective_state": objective_state.duplicate(true), "completed": completed.duplicate(true), "elapsed": elapsed, "active": active, "mission_won": mission_won, "checkpoint": checkpoint, "fired_events": fired_events.duplicate(true), "event_times": event_times.duplicate(true), "actions": actions.duplicate(true)}
 
 func restore_state(state: Dictionary) -> String:
 	if definition == null or state.get("mission_id", "") != definition.mission_id:
@@ -222,6 +246,7 @@ func restore_state(state: Dictionary) -> String:
 	mission_won = bool(state.get("mission_won", false))
 	checkpoint = str(state.get("checkpoint", "opening"))
 	fired_events = state.get("fired_events", {}).duplicate(true)
+	actions = state.get("actions", {}).duplicate(true) if state.get("actions", {}) is Dictionary else {}
 	event_times = state.get("event_times", {}).duplicate(true) if state.get("event_times", {}) is Dictionary else {}
 	# Older saves did not record when events fired: use the authored time, else now.
 	for event in definition.events:
