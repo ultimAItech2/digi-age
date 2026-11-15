@@ -23,8 +23,10 @@ Version 1.0.0-rc3. No network services are required to play.
   abilities, terrain and controls. **Credits** shows the shipped credits file.
 
 The desktop builds are self-contained; players do not need Godot installed.
-Windows runtime testing status and measured performance are in
-`docs/VALIDATION.md` in the source project (or `VALIDATION.md` in a desktop archive).
+Each archive carries this manual, the licence, the credits, the third-party
+licences (`licenses/`) and `BUILD_ID.json`, which names the exact source it was
+built from. Windows runtime testing status and measured performance are in
+`docs/VALIDATION.md` in the source project.
 
 ### Saving
 
@@ -155,7 +157,8 @@ with a connected ElevenLabs account: `python3 tools/generate_audio.py`.
 ./tools/godot.sh --editor    # open project in Godot
 ./tools/test.sh              # every suite below except the long ones
 ./tools/test.sh --soak       # also three bot-vs-bot matches and a skirmish on every map
-./tools/build.sh             # Linux + Windows exports, archives and SHA-256 hashes
+./tools/build.sh             # Linux + Windows exports, archives, SHA-256 hashes, package verification
+python3 tools/version.py     # the version; it is set once, in project.godot
 ```
 
 `setup.sh` downloads official engine binaries and the export template bundle

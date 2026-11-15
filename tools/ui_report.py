@@ -1,24 +1,16 @@
 """Create a local, self-contained index of actual Godot verification captures."""
-import hashlib
 import html
 import json
 from pathlib import Path
+
+import build_id
 
 root = Path(__file__).resolve().parents[1]
 output = root / "builds" / "ui"
 captures = sorted(p.name for p in output.glob("*.png"))
 report = json.loads((output / "layout-report.json").read_text())
-source_hash = hashlib.sha256()
-for folder in ("scripts", "assets", "data", "scenes"):
-    for path in sorted((root / folder).rglob("*")):
-        if path.is_file() and not path.name.endswith(".import"):
-            source_hash.update(str(path.relative_to(root)).encode())
-            source_hash.update(hashlib.sha256(path.read_bytes()).digest())
-source_hash.update((root / "project.godot").read_bytes())
-identity = {"version": "1.0.0-rc3", "runtime_source_sha256": source_hash.hexdigest(),
-            "renderer": report["renderer"], "rendered_checks": report["checks"],
-            "rendered_failures": report["failures"], "screenshots": len(captures)}
-(root / "builds" / "BUILD_ID.json").write_text(json.dumps(identity, indent=2)+"\n")
+identity = build_id.write({"renderer": report["renderer"], "rendered_checks": report["checks"],
+                           "rendered_failures": report["failures"], "screenshots": len(captures)})
 cards = "\n".join(f'<a href="{html.escape(name)}" data-name="{html.escape(name)}"><img loading="lazy" src="{html.escape(name)}" alt="{html.escape(name)}"><span>{html.escape(name[:-4])}</span></a>' for name in captures)
 page = '''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width">
 <title>Digital Age · UI verification</title><style>

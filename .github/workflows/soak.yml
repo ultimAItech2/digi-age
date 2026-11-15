@@ -1,0 +1,27 @@
+name: Soak
+# The long suites: three bot-vs-bot matches and a skirmish on every map.
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+jobs:
+  soak:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Godot 4.6.3
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y unzip curl
+          ./tools/setup.sh
+      - name: Import resources
+        run: ./tools/godot.sh --headless --editor --import --quit 2>&1 | tee builds/import.log
+      - name: All tests, including soak and skirmish
+        run: ./tools/test.sh --soak
+      - name: Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: soak-logs
+          path: builds/*.log

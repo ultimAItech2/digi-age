@@ -3,7 +3,7 @@
 "AppBuild"
 {
     "AppID" "<YOUR_STEAM_APP_ID>"
-    "Desc" "Digital Age 1.0.0-rc3"
+    "Desc" "Digital Age"
     "BuildOutput" "builds/steam"
     "ContentRoot" "."
     "Depots"

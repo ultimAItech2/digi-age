@@ -1,0 +1,39 @@
+name: Release
+# A tag such as v1.0.0 or v1.0.0-rc4 runs every suite including the long ones,
+# builds both platforms, verifies the packages and attaches them to a draft release.
+on:
+  push:
+    tags: ["v*"]
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tag matches the project version
+        run: test "v$(python3 tools/version.py --check)" = "$GITHUB_REF_NAME"
+      - name: Install Godot 4.6.3
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y unzip curl xvfb libgl1-mesa-dri mesa-vulkan-drivers libvulkan1
+          ./tools/setup.sh
+      - name: Verify committed CC0 assets
+        run: python3 -I tools/fetch_cc0_assets.py --verify
+      - name: Import resources
+        run: ./tools/godot.sh --headless --editor --import --quit 2>&1 | tee builds/import.log
+      - name: All tests, including soak and skirmish
+        run: ./tools/test.sh --soak
+      - name: Rendered UI matrix
+        run: ./tools/render_ui.sh
+      - name: Build, package and verify Linux and Windows
+        run: ./tools/build.sh
+      - name: Draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" --draft --title "Digital Age ${GITHUB_REF_NAME#v}" \
+            --notes "See CHANGELOG.md. The Windows build is unsigned and has not been run on Windows hardware by this pipeline." \
+            builds/DigitalAge-linux-x86_64.tar.gz builds/DigitalAge-windows-x86_64.zip \
+            builds/SHA256SUMS builds/BUILD_ID.json builds/package-verification.json

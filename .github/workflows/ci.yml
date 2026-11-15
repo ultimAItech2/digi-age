@@ -38,8 +38,18 @@ jobs:
         with:
           name: ui-verification
           path: builds/ui/
-      - name: Linux export smoke
-        run: |
-          ./tools/godot.sh --headless --export-release "Linux Desktop"
-          test -x builds/linux/DigitalAge.x86_64
-          XDG_DATA_HOME="$(mktemp -d)" ./builds/linux/DigitalAge.x86_64 --headless -- --ui-smoke
+      - name: Version fields agree
+        run: python3 tools/version.py --check
+      - name: Build, package and verify Linux and Windows
+        run: ./tools/build.sh
+      - name: Packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: digital-age-${{ github.sha }}
+          path: |
+            builds/DigitalAge-linux-x86_64.tar.gz
+            builds/DigitalAge-windows-x86_64.zip
+            builds/SHA256SUMS
+            builds/BUILD_ID.json
+            builds/package-verification.json
+          retention-days: 14
